@@ -19,6 +19,18 @@ angular.module('itrustoor.controllers', [])
 
 .controller('StudentCtrl', function ($scope, Student) {
     $scope.students = Student.all();
+
+    $scope.remove = function (student) {
+        var confirmPopup = $ionicPopup.confirm({
+            title: '提示',
+            template: '确定要删除学生吗?'
+        });
+        confirmPopup.then(function (res) {
+            if (res) {
+                Student.remove(student);
+            }
+        });
+    };
 })
 
 .controller('CreateStudentCtrl', function ($scope, Student) {
