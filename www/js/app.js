@@ -55,8 +55,19 @@ angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.servic
         }
     });
 
-    $urlRouterProvider.when('/login', {
-        templateUrl: 'templates/login.html',
-        controller: 'LoginCtrl'
-    });
+    //$urlRouterProvider.when('/login', {
+    //    templateUrl: 'templates/login.html',
+    //    controller: 'LoginCtrl'
+    //});
+
+    $urlRouterProvider.
+       //when('/notices', {
+       //    templateUrl: 'partials/notice-list.html',
+       //    controller: 'NoticeListCtrl'
+       //}).
+       //when('/settings', {
+       //    templateUrl: 'partials/settings.html',
+       //    controller: 'SettingsCtrl'
+       //}).
+       otherwise('/tab/dash');
 });
