@@ -3,14 +3,14 @@ angular.module('itrustoor.controllers', [])
 .controller('DashCtrl', function ($scope) { })
 
 .controller('NewsCtrl', function ($scope, News) {
-    $scope.chats = News.all();
-    $scope.remove = function (chat) {
-        News.remove(chat);
-    }
+    $scope.news = News.all();
+    $scope.remove = function (item) {
+        News.remove(item);
+    };
 })
 
 .controller('NewsDetailCtrl', function ($scope, $stateParams, News) {
-    $scope.chat = News.get($stateParams.chatId);
+    $scope.new = News.get($stateParams);
 })
 
 .controller('SettingCtrl', function ($scope) {

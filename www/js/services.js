@@ -1,46 +1,33 @@
 ﻿angular.module('itrustoor.services', [])
 
 .factory('News', function () {
-    // Might use a resource here that returns a JSON array
-
-    // Some fake testing data
     var news = [{
         id: 0,
-        name: 'Ben Sparrow',
-        lastText: 'You on your way?',
-        face: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+        title: '系统升级',
+        time: '2015-09-08 10:00:55',
+        content: '系统于明日凌晨 01:00升级，所有服务将暂停'
     }, {
         id: 1,
-        name: 'Max Lynx',
-        lastText: 'Hey, it\'s me',
-        face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+        title: '新版本',
+        time: '2015-09-08 10:00:55',
+        content: '小叮当APP发布新版本啦，赶紧升级吧'
     }, {
         id: 2,
-        name: 'Andrew Jostlin',
-        lastText: 'Did you get the ice cream?',
-        face: 'https://pbs.twimg.com/profile_images/491274378181488640/Tti0fFVJ.jpeg'
-    }, {
-        id: 3,
-        name: 'Adam Bradleyson',
-        lastText: 'I should buy a boat',
-        face: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
-    }, {
-        id: 4,
-        name: 'Perry Governor',
-        lastText: 'Look at my mukluks!',
-        face: 'https://pbs.twimg.com/profile_images/491995398135767040/ie2Z_V6e.jpeg'
+        title: '故障通知',
+        time: '2015-09-08 10:00:55',
+        content: '系统于今日 12:00发生故障，现已修复，不便之处请见谅'
     }];
 
     return {
         all: function () {
             return news;
         },
-        remove: function (chat) {
-            news.splice(news.indexOf(chat), 1);
+        remove: function (item) {
+            news.splice(news.indexOf(item), 1);
         },
-        get: function (chatId) {
+        get: function (newsId) {
             for (var i = 0; i < news.length; i++) {
-                if (news[i].id === parseInt(chatId)) {
+                if (news[i].id === parseInt(newsId)) {
                     return news[i];
                 }
             }
