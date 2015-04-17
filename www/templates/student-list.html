@@ -1,0 +1,36 @@
+﻿<ion-view view-title="学生">
+    <ion-nav-buttons side="right">
+        <a class="button button-clear" href="#/create-students">
+            添加
+        </a>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-list>
+            <div ng-repeat="student in students">
+                <div class="list card">
+                    <div class="item item-avatar">
+                        <img ng-src="{{student.picture}}">
+                        <h2>{{student.stu_name}}</h2>
+                        <p>{{student.gender | gender}}</p>
+                    </div>
+
+                    <div class="item item-body">
+                        <p>生日：{{student.birthday}}</p>
+                        <p>学校：{{student.sch_name}}</p>
+                    </div>
+
+                    <div class="item tabs tabs-secondary tabs-icon-left">
+                        <a class="tab-item" href="#">
+                            <i class="icon ion-trash-a"></i>
+                            删除
+                        </a>
+                        <a class="tab-item" href="#">
+                            <i class="icon ion-edit"></i>
+                            修改
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>

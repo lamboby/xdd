@@ -14,9 +14,11 @@ angular.module('itrustoor.controllers', [])
 })
 
 .controller('SettingCtrl', function ($scope) {
-    $scope.settings = {
-        enableFriends: true
-    };
+
+})
+
+.controller('StudentCtrl', function ($scope, Student) {
+    $scope.students = Student.all();
 })
 
 .controller('LoginCtrl', function ($scope) {

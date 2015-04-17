@@ -1,4 +1,4 @@
-angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.services'])
+angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.services', 'itrustoor.filters'])
 
 .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -53,21 +53,16 @@ angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.servic
                 controller: 'SettingCtrl'
             }
         }
+    })
+    .state('tab.students', {
+        url: '/setting/students',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/student-list.html',
+                controller: 'StudentCtrl'
+            }
+        }
     });
 
-    //$urlRouterProvider.when('/login', {
-    //    templateUrl: 'templates/login.html',
-    //    controller: 'LoginCtrl'
-    //});
-
-    $urlRouterProvider.
-       //when('/notices', {
-       //    templateUrl: 'partials/notice-list.html',
-       //    controller: 'NoticeListCtrl'
-       //}).
-       //when('/settings', {
-       //    templateUrl: 'partials/settings.html',
-       //    controller: 'SettingsCtrl'
-       //}).
-       otherwise('/tab/dash');
+    $urlRouterProvider.otherwise('/tab/dash');
 });

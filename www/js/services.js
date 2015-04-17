@@ -1,4 +1,4 @@
-angular.module('itrustoor.services', [])
+﻿angular.module('itrustoor.services', [])
 
 .factory('News', function () {
     // Might use a resource here that returns a JSON array
@@ -42,6 +42,67 @@ angular.module('itrustoor.services', [])
             for (var i = 0; i < news.length; i++) {
                 if (news[i].id === parseInt(chatId)) {
                     return news[i];
+                }
+            }
+            return null;
+        }
+    };
+})
+
+.factory("Student", function () {
+    var students = [{
+        stu_id: 1,
+        stu_name: 'Ben Sparrow',
+        gender: 0,
+        birthday: '2014-8-9',
+        sch_id: 1,
+        sch_name: '中心小学',
+        picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    }, {
+        stu_id: 1,
+        stu_name: 'Mike',
+        gender: 1,
+        birthday: '2014-8-10',
+        sch_id: 1,
+        sch_name: '中心小学',
+        picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    }, {
+        stu_id: 1,
+        stu_name: 'Ben Sparrow',
+        gender: 0,
+        birthday: '2014-8-9',
+        sch_id: 1,
+        sch_name: '广州市第三小学',
+        picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    }, {
+        stu_id: 1,
+        stu_name: 'Ben Sparrow',
+        gender: 0,
+        birthday: '2014-8-9',
+        sch_id: 1,
+        sch_name: '中心小学',
+        picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    }, {
+        stu_id: 1,
+        stu_name: 'Ben Sparrow',
+        gender: 0,
+        birthday: '2014-8-9',
+        sch_id: 1,
+        sch_name: '中心小学',
+        picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    }];
+
+    return {
+        all: function () {
+            return students;
+        },
+        remove: function (student) {
+            students.splice(students.indexOf(student), 1);
+        },
+        get: function (studentId) {
+            for (var i = 0; i < students.length; i++) {
+                if (students[i].stu_id === parseInt(studentId)) {
+                    return students[i];
                 }
             }
             return null;
