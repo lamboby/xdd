@@ -37,7 +37,7 @@ angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.servic
         }
     })
       .state('tab.news-detail', {
-          url: '/news/:chatId',
+          url: '/news/:newId',
           views: {
               'tab-news': {
                   templateUrl: 'templates/news-detail.html',
@@ -60,6 +60,15 @@ angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.servic
             'tab-setting': {
                 templateUrl: 'templates/student-list.html',
                 controller: 'StudentCtrl'
+            }
+        }
+    })
+    .state('tab.create-student', {
+        url: '/setting/create-student',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/create-student.html',
+                controller: 'CreateStudentCtrl'
             }
         }
     });

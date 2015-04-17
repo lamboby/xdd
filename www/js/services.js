@@ -93,6 +93,9 @@
                 }
             }
             return null;
+        },
+        put: function (student) {
+            students.push(student);
         }
     };
 });

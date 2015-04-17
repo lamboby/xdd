@@ -10,7 +10,7 @@ angular.module('itrustoor.controllers', [])
 })
 
 .controller('NewsDetailCtrl', function ($scope, $stateParams, News) {
-    $scope.new = News.get($stateParams);
+    $scope.new = News.get($stateParams.newId);
 })
 
 .controller('SettingCtrl', function ($scope) {
@@ -19,6 +19,27 @@ angular.module('itrustoor.controllers', [])
 
 .controller('StudentCtrl', function ($scope, Student) {
     $scope.students = Student.all();
+})
+
+.controller('CreateStudentCtrl', function ($scope, Student) {
+    $scope.student = {
+        stu_name: "",
+        gender: "",
+        birthday: ""
+    };
+
+    $scope.save = function (data) {
+        var student = {
+            stu_id: 5,
+            stu_name: data.stu_name,
+            gender: data.gender,
+            birthday: data.birthday,
+            sch_id: 1,
+            sch_name: 'First Middle School',
+            picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+        };
+        Student.put(student);
+    };
 })
 
 .controller('LoginCtrl', function ($scope) {
