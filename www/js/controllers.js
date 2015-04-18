@@ -5,9 +5,9 @@
         $state.go('tab.signin');
 })
 
-.controller('SigninCtrl', function ($scope, $ionicPopup, $ionicLoading, Auth) {
+.controller('SigninCtrl', function ($scope, $ionicPopup, $ionicLoading, $window, Auth) {
     if (itru_isLogin) {
-        window.history.back();
+        $window.history.back();
         return;
     }
 
@@ -31,11 +31,8 @@
         else {
             $ionicLoading.show({ template: '登录中...' });
             Auth.login(user, function (data, status) {
-                if (!status && data.Code === 0) {
-                    itru_isLogin = true;
-                    itru_userId(data.Data[0].user_id);
-                    itru_loginToken(data.Data[0].token);
-                    window.history.back();
+                if (status == 0) {
+                    $window.history.back();
                     return;
                 }
 

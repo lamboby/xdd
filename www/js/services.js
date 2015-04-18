@@ -104,14 +104,35 @@
 })
 
 .factory("Auth", function ($http, $ionicLoading) {
+    var accessToken = function (callback) {
+        var url = itru_serviceUrl + "users/accessToken?callback=JSON_CALLBACK&token=" + itru_loginToken();
+        $http.jsonp(url).success(function (data) {
+            if (data.Code == 0)
+                itru_accessToken = data.Data[0].access_token;
+
+            if (callback)
+                callback(data, data.Code);
+        }).error(function (data, statusText) {
+            if (callback)
+                callback(data, statusText);
+        }).finally(function () {
+            $ionicLoading.hide();
+        });
+    };
+
     return {
         login: function (user, callback) {
             var phone = encodeURIComponent(itru_encrypt(user.phone));
             var pwd = encodeURIComponent(itru_encrypt(user.password));
             var url = itru_serviceUrl + "users/tickets?callback=JSON_CALLBACK&username=" + phone + "&password=" + pwd;
             $http.jsonp(url).success(function (data) {
-                if (callback)
-                    callback(data);
+                if (data.Code == 0) {
+                    itru_isLogin = true;
+                    itru_userId(data.Data[0].user_id);
+                    itru_loginToken(data.Data[0].token);
+                    console.debug(data.Data[0].token);
+                }
+                accessToken(callback);
             }).error(function (data, statusText) {
                 if (callback)
                     callback(data, statusText);
@@ -119,8 +140,6 @@
                 $ionicLoading.hide();
             });
         },
-        getAccessToken: function (callback) {
-
-        }
+        getAccessToken: accessToken
     }
 });
