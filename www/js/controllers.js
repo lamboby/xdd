@@ -103,7 +103,7 @@
     };
 })
 
-.controller('CreateStudentCtrl', function ($scope, Student) {
+.controller('CreateStudentCtrl', function ($scope, $window, Student) {
     $scope.student = {
         stu_name: "",
         gender: "",
@@ -121,6 +121,6 @@
             picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
         };
         Student.put(student);
-        window.history.back();
+        $window.history.back();
     };
 });
