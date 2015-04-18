@@ -136,8 +136,6 @@
             }).error(function (data, statusText) {
                 if (callback)
                     callback(data, statusText);
-            }).finally(function () {
-                $ionicLoading.hide();
             });
         },
         getAccessToken: accessToken
