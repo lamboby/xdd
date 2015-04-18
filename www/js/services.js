@@ -103,6 +103,25 @@
     };
 })
 
+.factory("Family", function ($http, $ionicLoading) {
+    return {
+        getFamilySelectList: function (callback) {
+            var params = { token: itru_accessToken, id: itru_userId() };
+            var url = itru_builUrl("families/loginList", params);
+
+            $http.jsonp(url).success(function (data) {
+                if (callback)
+                    callback(data, data.Code);
+            }).error(function (data, statusText) {
+                if (callback)
+                    callback(data, statusText);
+            }).finally(function () {
+                $ionicLoading.hide();
+            });
+        }
+    }
+})
+
 .factory("Auth", function ($http, $ionicLoading) {
     var accessToken = function (callback) {
         var url = itru_builUrl("users/accessToken", { token: itru_loginToken() });

@@ -1,0 +1,14 @@
+﻿<ion-view view-title="选择家庭" hide-back-button="true">
+    <ion-content>
+        <ion-list>
+            <label class="item item-radio" ng-repeat="family in familys">
+                <input type="radio" name="group" ng-model="familyId" value="{{family.fml_id}}">
+                <div class="item-content">
+                    {{family.fml_name}}
+                </div>
+                <i class="radio-icon ion-checkmark"></i>
+            </label>
+        </ion-list>
+        <button class="button button-block button-balanced" ng-click="selected()">确 定</button>
+    </ion-content>
+</ion-view>

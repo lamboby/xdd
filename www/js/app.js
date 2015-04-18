@@ -76,6 +76,11 @@ angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.servic
         url: '/signin',
         templateUrl: 'templates/signin.html',
         controller: 'SigninCtrl'
+    })
+    .state('select-family', {
+        url: '/select-family',
+        templateUrl: 'templates/select-family.html',
+        controller: 'SelectFamilyCtrl'
     });
 
     $urlRouterProvider.otherwise('/tab/dash');

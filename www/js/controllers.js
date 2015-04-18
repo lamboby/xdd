@@ -28,15 +28,43 @@
             $ionicLoading.show({ template: '登录中...' });
             Auth.login(user, function (data, status) {
                 if (status == 0) {
-                    $window.history.back();
+                    //$window.history.back();
+                    $window.location.hash = "#/select-family";
                     return;
                 }
 
-                var msg = status ? status : data.Code + " " + data.Msg;
+                var msg = data ? data.Code + " " + data.Msg : status;
                 $scope.showAlert("登录失败，错误码：" + msg);
             });
         }
     }
+})
+
+.controller('SelectFamilyCtrl', function ($scope, $ionicLoading, $ionicPopup, $window, Family) {
+    $scope.showAlert = function (msg) {
+        $ionicPopup.alert({
+            title: '提示',
+            template: msg
+        });
+    };
+
+    $ionicLoading.show({ template: '获取家庭列表中...' });
+    Family.getFamilySelectList(function (data, status) {
+        if (status == 0) {
+            $scope.familys = data.Data;
+            if ($scope.familys && $scope.familys.length > 0)
+                $scope.familyId = $scope.familys[0].fml_id;
+        }
+        else {
+            var msg = data ? data.Code + " " + data.Msg : status;
+            $scope.showAlert("获取家庭列表失败，错误码：" + msg);
+        }
+    });
+
+    $scope.selected = function () {
+        itru_familyId($scope.familyId);
+        $window.history.go(-2);
+    };
 })
 
 .controller('NewsCtrl', function ($scope, News) {
