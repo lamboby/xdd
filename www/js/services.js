@@ -46,7 +46,7 @@
         gender: 0,
         birthday: '2014-8-9',
         sch_id: 1,
-        sch_name: '中心小学',
+        sch_name: '中心一小',
         picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
     }, {
         stu_id: 1,
@@ -58,27 +58,11 @@
         picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
     }, {
         stu_id: 1,
-        stu_name: 'Ben Sparrow',
+        stu_name: 'Eva',
         gender: 0,
         birthday: '2014-8-9',
         sch_id: 1,
         sch_name: '广州市第三小学',
-        picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-    }, {
-        stu_id: 1,
-        stu_name: 'Ben Sparrow',
-        gender: 0,
-        birthday: '2014-8-9',
-        sch_id: 1,
-        sch_name: '中心小学',
-        picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-    }, {
-        stu_id: 1,
-        stu_name: 'Ben Sparrow',
-        gender: 0,
-        birthday: '2014-8-9',
-        sch_id: 1,
-        sch_name: '中心小学',
         picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
     }];
 
@@ -124,11 +108,23 @@
 
 .factory("Auth", function ($http, $ionicLoading) {
     var accessToken = function (callback) {
-        var url = itru_builUrl("users/accessToken", { token: itru_loginToken() });
-        $http.jsonp(url).success(function (data) {
-            if (data.Code == 0)
-                itru_accessToken = data.Data[0].access_token;
+        if (itru_lastGetTokenTime) {
+            var nowTicks = Date.parse(new Date());
+            var lastGetTicks = Date.parse(itru_lastGetTokenTime);
+            if ((nowTicks - lastGetTicks) / 1000 < 7080) {
+                if (callback)
+                    callback(null, 0);
+                return;
+            }
+        }
 
+        var url = itru_builUrl("users/accessToken", { token: itru_loginToken() });
+        var now = new Date();
+        $http.jsonp(url).success(function (data) {
+            if (data.Code == 0) {
+                itru_accessToken = data.Data[0].access_token;
+                itru_lastGetTokenTime = now;
+            }
             if (callback)
                 callback(data, data.Code);
         }).error(function (data, statusText) {
@@ -160,5 +156,19 @@
             });
         },
         getAccessToken: accessToken
+    }
+})
+
+.factory("Utils", function ($ionicPopup, $ionicLoading) {
+    return {
+        alert: function (msg) {
+            $ionicPopup.alert({
+                title: '提示',
+                template: msg
+            });
+        },
+        loading: function (msg) {
+            $ionicLoading.show({ template: msg });
+        }
     }
 });

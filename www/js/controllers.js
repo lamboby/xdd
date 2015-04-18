@@ -1,31 +1,33 @@
 ﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope, $window) {
+.controller('DashCtrl', function ($scope, $window, Auth, Utils) {
     if (!itru_isLogin) {
-        $window.location.hash = "#/signin";
+        if (!itru_loginToken())
+            $window.location.hash = "#/signin";
+        else {
+            Auth.getAccessToken(function (data, status) {
+                if (status != 0) {
+                    Utils.alert("验证身份信息失败，请重新登录");
+                    $window.location.hash = "#/signin";
+                }
+            });
+        }
     }
 })
 
-.controller('SigninCtrl', function ($scope, $ionicPopup, $ionicLoading, $window, Auth) {
+.controller('SigninCtrl', function ($scope, $window, Auth, Utils) {
     $scope.user = {
         phone: '18627228035',
         password: '1234567890'
     };
 
-    $scope.showAlert = function (msg) {
-        $ionicPopup.alert({
-            title: '提示',
-            template: msg
-        });
-    };
-
     $scope.signin = function (user) {
         if (!user.phone)
-            $scope.showAlert("请输入手机号");
+            Utils.alert("请输入手机号");
         else if (!user.password)
-            $scope.showAlert("请输入密码");
+            Utils.alert("请输入密码");
         else {
-            $ionicLoading.show({ template: '登录中...' });
+            Utils.loading('登录中...');
             Auth.login(user, function (data, status) {
                 if (status == 0) {
                     //$window.history.back();
@@ -34,21 +36,14 @@
                 }
 
                 var msg = data ? data.Code + " " + data.Msg : status;
-                $scope.showAlert("登录失败，错误码：" + msg);
+                Utils.alert("登录失败，错误码：" + msg);
             });
         }
     }
 })
 
-.controller('SelectFamilyCtrl', function ($scope, $ionicLoading, $ionicPopup, $window, Family) {
-    $scope.showAlert = function (msg) {
-        $ionicPopup.alert({
-            title: '提示',
-            template: msg
-        });
-    };
-
-    $ionicLoading.show({ template: '获取家庭列表中...' });
+.controller('SelectFamilyCtrl', function ($scope, $window, Family, Utils) {
+    Utils.loading('获取家庭列表中...');
     Family.getFamilySelectList(function (data, status) {
         if (status == 0) {
             $scope.familys = data.Data;
@@ -57,7 +52,7 @@
         }
         else {
             var msg = data ? data.Code + " " + data.Msg : status;
-            $scope.showAlert("获取家庭列表失败，错误码：" + msg);
+            Utils.alert("获取家庭列表失败，错误码：" + msg);
         }
     });
 

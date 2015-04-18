@@ -2,6 +2,8 @@
     var itru_isLogin = false;
     var itru_serviceUrl = "http://121.41.49.137:8080/api/";
     var itru_accessToken = "";
+    var itru_lastGetTokenTime = null;
+    var itru_tokenExpires = 7200;
     var itru_encryptKey = "itrustor";
 
     var itru_loginToken = function (token) {
