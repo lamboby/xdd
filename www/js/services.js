@@ -105,7 +105,7 @@
 
 .factory("Auth", function ($http, $ionicLoading) {
     var accessToken = function (callback) {
-        var url = itru_serviceUrl + "users/accessToken?callback=JSON_CALLBACK&token=" + itru_loginToken();
+        var url = itru_builUrl("users/accessToken", { token: itru_loginToken() });
         $http.jsonp(url).success(function (data) {
             if (data.Code == 0)
                 itru_accessToken = data.Data[0].access_token;
@@ -122,15 +122,16 @@
 
     return {
         login: function (user, callback) {
-            var phone = encodeURIComponent(itru_encrypt(user.phone));
-            var pwd = encodeURIComponent(itru_encrypt(user.password));
-            var url = itru_serviceUrl + "users/tickets?callback=JSON_CALLBACK&username=" + phone + "&password=" + pwd;
+            var phone = itru_encrypt(user.phone);
+            var pwd = itru_encrypt(user.password);
+            var params = { username: phone, password: pwd };
+            var url = itru_builUrl("users/tickets", params);
+
             $http.jsonp(url).success(function (data) {
                 if (data.Code == 0) {
                     itru_isLogin = true;
                     itru_userId(data.Data[0].user_id);
                     itru_loginToken(data.Data[0].token);
-                    console.debug(data.Data[0].token);
                 }
                 accessToken(callback);
             }).error(function (data, statusText) {

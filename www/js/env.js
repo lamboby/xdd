@@ -27,4 +27,10 @@
         });
         return encrypted.toString();
     };
+    var itru_builUrl = function (path, params) {
+        var url = itru_serviceUrl + path + "?callback=JSON_CALLBACK";
+        for (var item in params)
+            url += "&" + item + "=" + encodeURIComponent(params[item]);
+        return url;
+    };
 }
