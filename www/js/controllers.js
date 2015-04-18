@@ -1,8 +1,9 @@
 ﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope, $state) {
-    if (!itru_isLogin)
-        $state.go('tab.signin');
+.controller('DashCtrl', function ($scope, $window) {
+    if (!itru_isLogin) {
+        $window.location.hash = "#/signin";
+    }
 })
 
 .controller('SigninCtrl', function ($scope, $ionicPopup, $ionicLoading, $window, Auth) {
