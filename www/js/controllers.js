@@ -1,7 +1,49 @@
 ﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope) {
+.controller('DashCtrl', function ($scope, $state) {
+    if (!itru_isLogin)
+        $state.go('tab.signin');
+})
 
+.controller('SigninCtrl', function ($scope, $ionicPopup, $ionicLoading, Auth) {
+    if (itru_isLogin) {
+        window.history.back();
+        return;
+    }
+
+    $scope.user = {
+        phone: '18627228035',
+        password: '1234567890'
+    };
+
+    $scope.showAlert = function (msg) {
+        $ionicPopup.alert({
+            title: '提示',
+            template: msg
+        });
+    };
+
+    $scope.signin = function (user) {
+        if (!user.phone)
+            $scope.showAlert("请输入手机号");
+        else if (!user.password)
+            $scope.showAlert("请输入密码");
+        else {
+            $ionicLoading.show({ template: '登录中...' });
+            Auth.login(user, function (data, status) {
+                if (!status && data.Code === 0) {
+                    itru_isLogin = true;
+                    itru_userId(data.Data[0].user_id);
+                    itru_loginToken(data.Data[0].token);
+                    window.history.back();
+                    return;
+                }
+
+                var msg = status ? status : data.Code + " " + data.Msg;
+                $scope.showAlert("登录失败，错误码：" + msg);
+            });
+        }
+    }
 })
 
 .controller('NewsCtrl', function ($scope, News) {
@@ -64,15 +106,5 @@
         };
         Student.put(student);
         window.history.back();
-    };
-})
-
-.controller('LoginCtrl', function ($scope) {
-    $scope.phone = "";
-    $scope.password = "";
-    $scope.remark = "";
-
-    $scope.login = function () {
-        $scope.remark = "sdfwefwe";
     };
 });

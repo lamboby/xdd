@@ -27,6 +27,15 @@ angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.servic
             }
         }
     })
+    .state('tab.signin', {
+        url: '/signin',
+        views: {
+            'tab-dash': {
+                templateUrl: 'templates/signin.html',
+                controller: 'SigninCtrl'
+            }
+        }
+    })
     .state('tab.news', {
         url: '/news',
         views: {

@@ -101,4 +101,26 @@
             students.push(student);
         }
     };
+})
+
+.factory("Auth", function ($http, $ionicLoading) {
+    return {
+        login: function (user, callback) {
+            var phone = encodeURIComponent(itru_encrypt(user.phone));
+            var pwd = encodeURIComponent(itru_encrypt(user.password));
+            var url = itru_serviceUrl + "users/tickets?callback=JSON_CALLBACK&username=" + phone + "&password=" + pwd;
+            $http.jsonp(url).success(function (data) {
+                if (callback)
+                    callback(data);
+            }).error(function (data, statusText) {
+                if (callback)
+                    callback(data, statusText);
+            }).finally(function () {
+                $ionicLoading.hide();
+            });
+        },
+        getAccessToken: function (callback) {
+
+        }
+    }
 });
