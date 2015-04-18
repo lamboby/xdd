@@ -1,12 +1,24 @@
-angular.module('itrustoor.controllers', [])
+﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope) { })
+.controller('DashCtrl', function ($scope) {
+
+})
 
 .controller('NewsCtrl', function ($scope, News) {
     $scope.news = News.all();
     $scope.remove = function (item) {
         News.remove(item);
     };
+    $scope.doRefresh = function () {
+        var item = {
+            id: 4,
+            title: '测试数据',
+            time: '2015-09-08 10:00:55',
+            content: '测试测试测试测试测试测试测试测试测试测试'
+        };
+        News.put(item);
+        $scope.$broadcast('scroll.refreshComplete');
+    }
 })
 
 .controller('NewsDetailCtrl', function ($scope, $stateParams, News) {
@@ -17,13 +29,13 @@ angular.module('itrustoor.controllers', [])
 
 })
 
-.controller('StudentCtrl', function ($scope, Student) {
+.controller('StudentCtrl', function ($scope, $ionicPopup, Student) {
     $scope.students = Student.all();
 
     $scope.remove = function (student) {
         var confirmPopup = $ionicPopup.confirm({
-            title: '��ʾ',
-            template: 'ȷ��Ҫɾ��ѧ����?'
+            title: '提示',
+            template: '确定要删除学生吗?'
         });
         confirmPopup.then(function (res) {
             if (res) {
@@ -51,6 +63,7 @@ angular.module('itrustoor.controllers', [])
             picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
         };
         Student.put(student);
+        window.history.back();
     };
 })
 

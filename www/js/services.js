@@ -32,6 +32,9 @@
                 }
             }
             return null;
+        },
+        put: function (item) {
+            news.push(item);
         }
     };
 })
