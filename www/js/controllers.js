@@ -7,11 +7,6 @@
 })
 
 .controller('SigninCtrl', function ($scope, $ionicPopup, $ionicLoading, $window, Auth) {
-    if (itru_isLogin) {
-        $window.history.back();
-        return;
-    }
-
     $scope.user = {
         phone: '18627228035',
         password: '1234567890'
