@@ -21,18 +21,4 @@
             window.localStorage.setItem("USERID", userId);
         return window.localStorage.getItem("USERID");
     };
-    var itru_encrypt = function (text) {
-        var keyHex = CryptoJS.enc.Utf8.parse(itru_encryptKey);
-        var encrypted = CryptoJS.DES.encrypt(text, keyHex, {
-            mode: CryptoJS.mode.ECB,
-            padding: CryptoJS.pad.ZeroPadding
-        });
-        return encrypted.toString();
-    };
-    var itru_builUrl = function (path, params) {
-        var url = itru_serviceUrl + path + "?callback=JSON_CALLBACK";
-        for (var item in params)
-            url += "&" + item + "=" + encodeURIComponent(params[item]);
-        return url;
-    };
 }

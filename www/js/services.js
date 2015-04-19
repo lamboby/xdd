@@ -87,11 +87,11 @@
     };
 })
 
-.factory("Family", function ($http, $ionicLoading) {
+.factory("Family", function ($http, Utils) {
     return {
         getFamilySelectList: function (callback) {
             var params = { token: itru_accessToken, id: itru_userId() };
-            var url = itru_builUrl("families/loginList", params);
+            var url = Utils.buildUrl("families/loginList", params);
 
             $http.jsonp(url).success(function (data) {
                 if (callback)
@@ -100,13 +100,13 @@
                 if (callback)
                     callback(data, statusText);
             }).finally(function () {
-                $ionicLoading.hide();
+                Utils.hideLoading();
             });
         }
     }
 })
 
-.factory("Auth", function ($http, $ionicLoading) {
+.factory("Auth", function ($http, Utils) {
     var accessToken = function (callback) {
         if (itru_lastGetTokenTime) {
             var nowTicks = Date.parse(new Date());
@@ -118,7 +118,7 @@
             }
         }
 
-        var url = itru_builUrl("users/accessToken", { token: itru_loginToken() });
+        var url = Utils.buildUrl("users/accessToken", { token: itru_loginToken() });
         var now = new Date();
         $http.jsonp(url).success(function (data) {
             if (data.Code == 0) {
@@ -131,16 +131,16 @@
             if (callback)
                 callback(data, statusText);
         }).finally(function () {
-            $ionicLoading.hide();
+            Utils.hideLoading();
         });
     };
 
     return {
         login: function (user, callback) {
-            var phone = itru_encrypt(user.phone);
-            var pwd = itru_encrypt(user.password);
+            var phone = Utils.encrypt(user.phone);
+            var pwd = Utils.encrypt(user.password);
             var params = { username: phone, password: pwd };
-            var url = itru_builUrl("users/tickets", params);
+            var url = Utils.buildUrl("users/tickets", params);
 
             $http.jsonp(url).success(function (data) {
                 if (data.Code == 0) {
@@ -150,7 +150,7 @@
                 }
                 accessToken(callback);
             }).error(function (data, statusText) {
-                $ionicLoading.hide();
+                Utils.hideLoading();
                 if (callback)
                     callback(data, statusText);
             });
@@ -169,6 +169,23 @@
         },
         loading: function (msg) {
             $ionicLoading.show({ template: msg });
+        },
+        hideLoading: function () {
+            $ionicLoading.hide();
+        },
+        encrypt: function (src) {
+            var keyHex = CryptoJS.enc.Utf8.parse(itru_encryptKey);
+            var encrypted = CryptoJS.DES.encrypt(src, keyHex, {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.ZeroPadding
+            });
+            return encrypted.toString();
+        },
+        buildUrl: function (path, params) {
+            var url = itru_serviceUrl + path + "?callback=JSON_CALLBACK";
+            for (var item in params)
+                url += "&" + item + "=" + encodeURIComponent(params[item]);
+            return url;
         }
     }
 });
