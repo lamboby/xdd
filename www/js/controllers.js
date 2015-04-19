@@ -21,14 +21,14 @@
         password: '1234567890'
     };
 
-    $scope.signin = function (user) {
-        if (!user.phone)
+    $scope.signin = function () {
+        if (!$scope.user.phone)
             Utils.alert("请输入手机号");
-        else if (!user.password)
+        else if (!$scope.user.password)
             Utils.alert("请输入密码");
         else {
             Utils.loading('登录中...');
-            Auth.login(user, function (data, status) {
+            Auth.login($scope.user, function (data, status) {
                 if (status == 0) {
                     //$window.history.back();
                     $window.location.hash = "#/select-family";
@@ -103,24 +103,28 @@
     };
 })
 
-.controller('CreateStudentCtrl', function ($scope, $state, Student) {
+.controller('CreateStudentCtrl', function ($scope, $state, Student, Utils) {
     $scope.student = {
         stu_name: "",
         gender: 0,
         birthday: ""
     };
 
-    $scope.save = function (data) {
-        var student = {
-            stu_id: 5,
-            stu_name: data.stu_name,
-            gender: data.gender,
-            birthday: data.birthday,
-            sch_id: 1,
-            sch_name: 'First Middle School',
-            picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-        };
-        Student.put(student);
-        $state.go("tab.student");
+    $scope.save = function () {
+        if (!$scope.student.stu_name)
+            Utils.alert("请输入姓名");
+        else {
+            var student = {
+                stu_id: 5,
+                stu_name: $scope.student.stu_name,
+                gender: $scope.student.gender,
+                birthday: $scope.student.birthday,
+                sch_id: 1,
+                sch_name: '北京第一小学',
+                picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+            };
+            Student.put(student);
+            $state.go("tab.student");
+        }
     };
 });
