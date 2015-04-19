@@ -14,7 +14,7 @@ angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.servic
 .config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     $ionicConfigProvider.tabs.position('bottom');
     $ionicConfigProvider.tabs.style('standard');
-    $ionicConfigProvider.backButton.icon("ion-ios-arrow-left");
+    $ionicConfigProvider.backButton.icon("ion-ios-arrow-back");
 
     $stateProvider
       .state('tab', {
