@@ -106,7 +106,7 @@
 .controller('CreateStudentCtrl', function ($scope, $state, Student) {
     $scope.student = {
         stu_name: "",
-        gender: "",
+        gender: 0,
         birthday: ""
     };
 
