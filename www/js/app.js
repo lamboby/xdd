@@ -58,8 +58,8 @@ angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.servic
             }
         }
     })
-    .state('tab.students', {
-        url: '/setting/students',
+    .state('tab.student', {
+        url: '/setting/student',
         views: {
             'tab-setting': {
                 templateUrl: 'templates/student-list.html',
