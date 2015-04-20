@@ -122,6 +122,7 @@
         var now = new Date();
         $http.jsonp(url).success(function (data) {
             if (data.Code == 0) {
+                itru_isLogin = true;
                 itru_accessToken = data.Data[0].access_token;
                 itru_lastGetTokenTime = now;
             }
@@ -163,8 +164,21 @@
     return {
         alert: function (msg) {
             $ionicPopup.alert({
-                title: '提示',
-                template: msg
+                title: '<strong>提示</strong>',
+                template: msg,
+                okText: '确定'
+            });
+        },
+        confirm: function (msg, callback) {
+            var confirmPopup = $ionicPopup.confirm({
+                title: '<strong>提示</strong>',
+                template: msg,
+                okText: '确定',
+                cancelText: '取消'
+            });
+            confirmPopup.then(function (res) {
+                if (callback)
+                    callback(res);
             });
         },
         loading: function (msg) {

@@ -1,6 +1,6 @@
-angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.services', 'itrustoor.filters'])
+﻿angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.services', 'itrustoor.filters'])
 
-.run(function ($ionicPlatform) {
+.run(function ($ionicPlatform, $location, $ionicHistory, Utils) {
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -8,6 +8,20 @@ angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.servic
         if (window.StatusBar) {
             StatusBar.styleLightContent();
         }
+
+        //处理android返回键
+        $ionicPlatform.registerBackButtonAction(function (e) {
+            e.preventDefault();
+            if (!itru_isLogin || $location.path() == '/tab/dash' || $location.path() == "/select-family") {
+                Utils.confirm("确定退出应用吗?", function (res) {
+                    if (res)
+                        ionic.Platform.exitApp();
+                });
+            }
+            else
+                $ionicHistory.goBack();
+            return false;
+        }, 101);
     });
 })
 
