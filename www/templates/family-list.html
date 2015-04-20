@@ -1,0 +1,16 @@
+﻿<ion-view view-title="家庭列表">
+    <ion-nav-buttons side="right">
+        <a class="button button-clear icon ion-android-add" href="#/tab/setting/create-family"></a>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-list>
+            <ion-item class="item-icon-right" href="#/tab/setting/family/{{family.fml_id}}" ng-repeat="family in familys">
+                {{family.fml_name}}
+                <i class="icon ion-ios-arrow-right"></i>
+                <ion-option-button class="button-energized" ng-click="switch(new)">
+                    切换
+                </ion-option-button>
+            </ion-item>
+        </ion-list>
+    </ion-content>
+</ion-view>

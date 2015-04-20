@@ -44,7 +44,7 @@
 
 .controller('SelectFamilyCtrl', function ($scope, $window, Family, Utils) {
     Utils.loading('获取家庭列表中...');
-    Family.getFamilySelectList(function (data, status) {
+    Family.all(function (data, status) {
         if (status == 0) {
             $scope.familys = data.Data;
             if ($scope.familys && $scope.familys.length > 0)
@@ -127,4 +127,25 @@
             $state.go("tab.student");
         }
     };
+})
+
+.controller('FamilyCtrl', function ($scope, $ionicPopup, Family, Utils) {
+    Utils.loading('获取家庭列表中...');
+    Family.all(function (data, status) {
+        if (status == 0)
+            $scope.familys = data.Data;
+        else {
+            var msg = data ? data.Code + " " + data.Msg : status;
+            Utils.alert("获取家庭列表失败，错误码：" + msg);
+        }
+    });
+
+})
+
+.controller('CreateFamilyCtrl', function ($scope, $state, Family, Utils) {
+
+})
+
+.controller('EditFamilyCtrl', function ($scope, $state, Family, Utils) {
+
 });

@@ -4,10 +4,11 @@
                        on-refresh="doRefresh()">
         </ion-refresher>
         <ion-list>
-            <ion-item ng-repeat="new in news" type="item-text-wrap" href="#/tab/news/{{new.id}}">
+            <ion-item ng-repeat="new in news" type="item-text-wrap" class="item-icon-right" href="#/tab/news/{{new.id}}">
                 <h2>{{new.title}}</h2>
                 <p>{{new.time}}</p>
                 <p>{{new.content}}</p>
+                <i class="icon ion-ios-arrow-right"></i>
                 <ion-option-button class="button-assertive" ng-click="remove(new)">
                     删除
                 </ion-option-button>

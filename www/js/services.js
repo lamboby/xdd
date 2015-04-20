@@ -89,7 +89,7 @@
 
 .factory("Family", function ($http, Utils) {
     return {
-        getFamilySelectList: function (callback) {
+        all: function (callback) {
             var params = { token: itru_accessToken, id: itru_userId() };
             var url = Utils.buildUrl("families/loginList", params);
 

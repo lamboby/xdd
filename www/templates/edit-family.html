@@ -1,0 +1,14 @@
+﻿<ion-view view-title="修改家庭">
+    <ion-content>
+        <form ng-submit="save()" novalidate>
+            <br />
+            <label class="item item-input">
+                <span class="input-label">家庭名称</span>
+                <input type="text" placeholder="家庭名称" ng-model="family.fml_name" minlength="3" maxlength="20" required>
+            </label>
+            <div class="padding">
+                <button class="button button-block button-balanced" type="submit">保 存</button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

@@ -90,6 +90,33 @@
             }
         }
     })
+    .state('tab.family', {
+        url: '/setting/family',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/family-list.html',
+                controller: 'FamilyCtrl'
+            }
+        }
+    })
+    .state('tab.create-family', {
+        url: '/setting/create-family',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/create-family.html',
+                controller: 'CreateFamilyCtrl'
+            }
+        }
+    })
+    .state('tab.edit-family', {
+        url: '/setting/family/:familyId',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/edit-family.html',
+                controller: 'EditFamilyCtrl'
+            }
+        }
+    })
     .state('signin', {
         url: '/signin',
         templateUrl: 'templates/signin.html',
