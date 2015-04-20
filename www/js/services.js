@@ -88,10 +88,53 @@
 })
 
 .factory("Family", function ($http, Utils) {
+    var familys = [];
+
     return {
         all: function (callback) {
             var params = { token: itru_accessToken, id: itru_userId() };
             var url = Utils.buildUrl("families/loginList", params);
+
+            $http.jsonp(url).success(function (data) {
+                if (data.Code == 0)
+                    familys = data.Data;
+                if (callback)
+                    callback(data, data.Code);
+            }).error(function (data, statusText) {
+                if (callback)
+                    callback(data, statusText);
+            }).finally(function () {
+                Utils.hideLoading();
+            });
+        },
+        create: function (family, callback) {
+            var params = { token: itru_accessToken, id: itru_userId(), name: family.fml_name };
+            var url = Utils.buildUrl("families/create", params);
+
+            $http.jsonp(url).success(function (data) {
+                if (data.Code == 0) {
+                    family.fml_id = data.Data[0].id;
+                    familys.push(family);
+                }
+                if (callback)
+                    callback(data, data.Code);
+            }).error(function (data, statusText) {
+                if (callback)
+                    callback(data, statusText);
+            }).finally(function () {
+                Utils.hideLoading();
+            });
+        },
+        get: function (familyId) {
+            for (var i = 0; i < familys.length; i++) {
+                if (familys[i].fml_id == parseInt(familyId)) {
+                    return familys[i];
+                }
+            }
+        },
+        update: function (family, callback) {
+            var params = { token: itru_accessToken, id: family.fml_id, name: family.fml_name };
+            var url = Utils.buildUrl("families/update", params);
 
             $http.jsonp(url).success(function (data) {
                 if (callback)

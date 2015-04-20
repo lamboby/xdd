@@ -129,7 +129,7 @@
     };
 })
 
-.controller('FamilyCtrl', function ($scope, $ionicPopup, Family, Utils) {
+.controller('FamilyCtrl', function ($scope, Family, Utils) {
     Utils.loading('获取家庭列表中...');
     Family.all(function (data, status) {
         if (status == 0)
@@ -143,9 +143,47 @@
 })
 
 .controller('CreateFamilyCtrl', function ($scope, $state, Family, Utils) {
-
+    $scope.family = { fml_name: "" };
+    $scope.save = function () {
+        if (!$scope.family.fml_name)
+            Utils.alert("请输入家庭名称");
+        else if ($scope.family.fml_name.length < 3)
+            Utils.alert("家庭名称不能少于3个字符");
+        else if ($scope.family.fml_name.length > 20)
+            Utils.alert("家庭名称不能超过20个字符");
+        else {
+            Utils.loading("保存中...");
+            Family.create($scope.family, function (data, status) {
+                if (status == 0)
+                    $state.go("tab.family");
+                else {
+                    var msg = data ? data.Code + " " + data.Msg : status;
+                    Utils.alert("添加家庭失败，错误码：" + msg);
+                }
+            });
+        }
+    };
 })
 
-.controller('EditFamilyCtrl', function ($scope, $state, Family, Utils) {
-
+.controller('EditFamilyCtrl', function ($scope, $state, $stateParams, Family, Utils) {
+    $scope.family = Family.get($stateParams.familyId);
+    $scope.save = function () {
+        if (!$scope.family.fml_name)
+            Utils.alert("请输入家庭名称");
+        else if ($scope.family.fml_name.length < 3)
+            Utils.alert("家庭名称不能少于3个字符");
+        else if ($scope.family.fml_name.length > 20)
+            Utils.alert("家庭名称不能超过20个字符");
+        else {
+            Utils.loading("保存中...");
+            Family.create($scope.family, function (data, status) {
+                if (status == 0)
+                    $state.go("tab.family");
+                else {
+                    var msg = data ? data.Code + " " + data.Msg : status;
+                    Utils.alert("修改家庭失败，错误码：" + msg);
+                }
+            });
+        }
+    };
 });
