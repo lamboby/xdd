@@ -137,6 +137,15 @@
             var url = Utils.buildUrl("families/update", params);
 
             $http.jsonp(url).success(function (data) {
+                if (data.Code == 0) {
+                    for (var i = 0; i < familys.length; i++) {
+                        if (familys[i].fml_id == family.fml_id) {
+                            familys[i].fml_name = family.fml_name;
+                            break;
+                        }
+                    }
+                }
+
                 if (callback)
                     callback(data, data.Code);
             }).error(function (data, statusText) {

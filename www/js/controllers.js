@@ -166,7 +166,7 @@
 })
 
 .controller('EditFamilyCtrl', function ($scope, $state, $stateParams, Family, Utils) {
-    $scope.family = Family.get($stateParams.familyId);
+    $scope.family = angular.copy(Family.get($stateParams.familyId));
     $scope.save = function () {
         if (!$scope.family.fml_name)
             Utils.alert("请输入家庭名称");
