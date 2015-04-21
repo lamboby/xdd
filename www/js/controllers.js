@@ -131,7 +131,6 @@
             Utils.alert("获取家庭列表失败，错误码：" + msg);
         }
     });
-
 })
 
 .controller('CreateFamilyCtrl', function ($scope, $state, Family, Utils) {
@@ -195,4 +194,39 @@
             });
         }
     };
+})
+
+.controller('ParentCtrl', function ($scope, Parent, Utils) {
+    Utils.loading();
+    Parent.all(function (data, status) {
+        if (status == 0)
+            $scope.parents = data.Data;
+        else {
+            var msg = data ? data.Code + " " + data.Msg : status;
+            Utils.alert("获取家长列表失败，错误码：" + msg);
+        }
+    });
+})
+
+.controller('CreateParentCtrl', function ($scope, $state, Parent, Utils) {
+    //$scope.family = { fml_name: "" };
+    //$scope.save = function () {
+    //    if (!$scope.family.fml_name)
+    //        Utils.alert("请输入家庭名称");
+    //    else if ($scope.family.fml_name.length < 3)
+    //        Utils.alert("家庭名称不能少于3个字符");
+    //    else if ($scope.family.fml_name.length > 20)
+    //        Utils.alert("家庭名称不能超过20个字符");
+    //    else {
+    //        Utils.loading();
+    //        Family.create($scope.family, function (data, status) {
+    //            if (status == 0)
+    //                $state.go("tab.family");
+    //            else {
+    //                var msg = data ? data.Code + " " + data.Msg : status;
+    //                Utils.alert("添加家庭失败，错误码：" + msg);
+    //            }
+    //        });
+    //    }
+    //};
 });

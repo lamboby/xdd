@@ -119,6 +119,24 @@
             }
         }
     })
+    .state('tab.parent', {
+        url: '/setting/parent',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/parent-list.html',
+                controller: 'ParentCtrl'
+            }
+        }
+    })
+    .state('tab.create-parent', {
+        url: '/setting/create-parent',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/create-parent.html',
+                controller: 'CreateParentCtrl'
+            }
+        }
+    })
     .state('signin', {
         url: '/signin',
         templateUrl: 'templates/signin.html',

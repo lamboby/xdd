@@ -1,0 +1,32 @@
+﻿<ion-view view-title="家长">
+    <ion-nav-buttons side="right">
+        <a class="button button-clear icon ion-android-add" href="#/tab/setting/create-parent"></a>
+    </ion-nav-buttons>
+    <ion-content>
+        <ion-list>
+            <div ng-repeat="parent in parents | orderBy:parent.is_primary">
+                <div class="list card">
+                    <div class="item item-avatar">
+                        <img ng-src="{{parent.picture | avatar}}">
+                        <h2>{{parent.username}}</h2>
+                        <p>{{parent.is_primary?"主家长":"副家长"}}</p>
+                    </div>
+
+                    <div class="item item-body">
+                        <p>关系：{{parent.relation}}</p>
+                        <p>生日：{{parent.birthday}}</p>
+                        <p>手机：{{parent.phone}}</p>
+                        <p>身份证：{{parent.id_card}}</p>
+                    </div>
+
+                    <div class="item tabs tabs-secondary tabs-icon-left">
+                        <a class="tab-item" ng-click="remove(parent)">
+                            <i class="icon ion-trash-a"></i>
+                            删除
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </ion-list>
+    </ion-content>
+</ion-view>

@@ -166,6 +166,60 @@
     }
 })
 
+.factory("Parent", function ($http, Auth, Utils) {
+    var parents = [];
+
+    return {
+        all: function (callback) {
+            Auth.refreshAccessToken();
+            var params = { token: itru_accessToken, fml_id: itru_familyId() };
+            var url = Utils.buildUrl("families/getAllUsers", params);
+            $http.jsonp(url).success(function (data) {
+                if (data.Code == 0)
+                    familys = data.Data;
+                callback(data, data.Code);
+            }).error(function (data, statusText) {
+                callback(data, statusText);
+            }).finally(function () {
+                Utils.hideLoading();
+            });
+        },
+        create: function (parent, callback) {
+            Auth.refreshAccessToken();
+            var params = angular.copy(parent);
+            params.token = itru_accessToken;
+            var url = Utils.buildUrl("users/createViceParents", params);
+
+            $http.jsonp(url).success(function (data) {
+                if (data.Code == 0) {
+                    parent.user_id = data.Data[0].user_id;
+                    parents.push(parent);
+                }
+                callback(data, data.Code);
+            }).error(function (data, statusText) {
+                callback(data, statusText);
+            }).finally(function () {
+                Utils.hideLoading();
+            });
+        },
+        del: function (parent, callback) {
+            Auth.refreshAccessToken();
+            var params = { token: itru_accessToken, fml_id: itru_familyId(), user_id: parent.user_id };
+            var url = Utils.buildUrl("users/deleteViceParents", params);
+
+            $http.jsonp(url).success(function (data) {
+                if (data.Code == 0)
+                    parents.splice(parents.indexOf(parent), 1);
+                callback(data, data.Code);
+            }).error(function (data, statusText) {
+                callback(data, statusText);
+            }).finally(function () {
+                Utils.hideLoading();
+            });
+        }
+    }
+})
+
 .factory("Auth", function ($http, $q, $state, Utils) {
     var accessToken = function () {
         if (itru_lastGetTokenTime) {
