@@ -220,7 +220,7 @@
     };
 })
 
-.controller('CreateParentCtrl', function ($scope, $state, Parent, Utils) {
+.controller('CreateParentCtrl', function ($scope, $state, $filter, Parent, Utils) {
     $scope.parent = {
         username: "",
         gender: 0,
@@ -236,6 +236,8 @@
             Utils.alert("请输入手机号");
         else {
             Utils.loading();
+            if ($scope.parent.birthday)
+                $scope.parent.birthday = $filter('date')($scope.parent.birthday, 'yyyy-MM-dd');
             Parent.create($scope.parent, function (data, status) {
                 if (status == 0)
                     $state.go("tab.parent");
