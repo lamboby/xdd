@@ -4,14 +4,8 @@
     if (!itru_isLogin) {
         if (!itru_loginToken())
             $window.location.hash = "#/signin";
-        else {
-            Auth.getAccessToken(function (data, status) {
-                if (status != 0) {
-                    Utils.alert("验证身份信息失败，请重新登录");
-                    $window.location.hash = "#/signin";
-                }
-            });
-        }
+        else
+            Auth.refreshAccessToken();
     }
 })
 
@@ -30,11 +24,9 @@
             Utils.loading('登录中...');
             Auth.login($scope.user, function (data, status) {
                 if (status == 0) {
-                    //$window.history.back();
                     $window.location.hash = "#/select-family";
                     return;
                 }
-
                 var msg = data ? data.Code + " " + data.Msg : status;
                 Utils.alert("登录失败，错误码：" + msg);
             });
@@ -42,7 +34,7 @@
     }
 })
 
-.controller('SelectFamilyCtrl', function ($scope, $window, Family, Utils) {
+.controller('SelectFamilyCtrl', function ($scope, $state, Family, Utils) {
     Utils.loading('获取家庭列表中...');
     Family.all(function (data, status) {
         if (status == 0) {
@@ -58,7 +50,7 @@
 
     $scope.selected = function () {
         itru_familyId($scope.familyId);
-        $window.history.go(-2);
+        $state.go("tab.dash");
     };
 })
 
@@ -168,7 +160,6 @@
 .controller('EditFamilyCtrl', function ($scope, $state, $stateParams, Family, Utils) {
     Utils.loading("获取家庭信息中...");
     $scope.family = angular.copy(Family.get($stateParams.familyId));
-
     Family.isPrimary($stateParams.familyId, function (data, status) {
         if (status == 0) {
             $scope.isPrimary = data.Data[0].primary;

@@ -87,14 +87,14 @@
     };
 })
 
-.factory("Family", function ($http, Utils) {
+.factory("Family", function ($http, Auth, Utils) {
     var familys = [];
 
     return {
         all: function (callback) {
+            Auth.refreshAccessToken();
             var params = { token: itru_accessToken, id: itru_userId() };
             var url = Utils.buildUrl("families/loginList", params);
-
             $http.jsonp(url).success(function (data) {
                 if (data.Code == 0)
                     familys = data.Data;
@@ -115,6 +115,7 @@
             }
         },
         create: function (family, callback) {
+            Auth.refreshAccessToken();
             var params = { token: itru_accessToken, id: itru_userId(), name: family.fml_name };
             var url = Utils.buildUrl("families/create", params);
 
@@ -133,6 +134,7 @@
             });
         },
         update: function (family, callback) {
+            Auth.refreshAccessToken();
             var params = { token: itru_accessToken, id: family.fml_id, name: family.fml_name };
             var url = Utils.buildUrl("families/update", params);
 
@@ -156,6 +158,7 @@
             });
         },
         isPrimary: function (familyId, callback) {
+            Auth.refreshAccessToken();
             var params = { token: itru_accessToken, fml_id: familyId, user_id: itru_userId() };
             var url = Utils.buildUrl("users/isPrimary", params);
             $http.jsonp(url).success(function (data) {
@@ -171,33 +174,38 @@
     }
 })
 
-.factory("Auth", function ($http, Utils) {
-    var accessToken = function (callback) {
+.factory("Auth", function ($http, $q, $state, Utils) {
+    var accessToken = function () {
         if (itru_lastGetTokenTime) {
             var nowTicks = Date.parse(new Date());
             var lastGetTicks = Date.parse(itru_lastGetTokenTime);
-            if ((nowTicks - lastGetTicks) / 1000 < 7080) {
-                if (callback)
-                    callback(null, 0);
+            if ((nowTicks - lastGetTicks) / 1000 < 7080)
                 return;
-            }
         }
 
+        var deferred = $q.defer();
         var url = Utils.buildUrl("users/accessToken", { token: itru_loginToken() });
         var now = new Date();
         $http.jsonp(url).success(function (data) {
-            if (data.Code == 0) {
-                itru_isLogin = true;
-                itru_accessToken = data.Data[0].access_token;
-                itru_lastGetTokenTime = now;
+            deferred.resolve(data);
+        }).error(function (statusText) {
+            deferred.reject(statusText);
+        });
+
+        deferred.promise.then(function (data) {
+            if (data.Code != 'undefined') {
+                if (data.Code == 0) {
+                    itru_accessToken = data.Data[0].access_token;
+                    itru_lastGetTokenTime = now;
+                }
+                else {
+                    Utils.alert("令牌已失效，请重新登录");
+                    itru_isLogin = false;
+                    $state.go("signin");
+                }
             }
-            if (callback)
-                callback(data, data.Code);
-        }).error(function (data, statusText) {
-            if (callback)
-                callback(data, statusText);
-        }).finally(function () {
-            Utils.hideLoading();
+            else
+                Utils.alert("获取令牌失败，错误码：" + data)
         });
     };
 
@@ -214,14 +222,16 @@
                     itru_userId(data.Data[0].user_id);
                     itru_loginToken(data.Data[0].token);
                 }
-                accessToken(callback);
+                accessToken();
+                if (callback)
+                    callback(data, data.Code);
             }).error(function (data, statusText) {
                 Utils.hideLoading();
                 if (callback)
                     callback(data, statusText);
             });
         },
-        getAccessToken: accessToken
+        refreshAccessToken: accessToken
     }
 })
 
