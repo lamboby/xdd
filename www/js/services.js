@@ -187,6 +187,7 @@
         deferred.promise.then(function (data) {
             if (data.Code != 'undefined') {
                 if (data.Code == 0) {
+                    itru_isLogin = true;
                     itru_accessToken = data.Data[0].access_token;
                     itru_lastGetTokenTime = now;
                 }
