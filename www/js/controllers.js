@@ -166,7 +166,24 @@
 })
 
 .controller('EditFamilyCtrl', function ($scope, $state, $stateParams, Family, Utils) {
+    Utils.loading("获取家庭信息中...");
     $scope.family = angular.copy(Family.get($stateParams.familyId));
+
+    Family.isPrimary($stateParams.familyId, function (data, status) {
+        if (status == 0) {
+            $scope.isPrimary = data.Data[0].primary;
+            if (!$scope.isPrimary) {
+                Utils.alert("非主家长不能修改此家庭");
+                $state.go("tab.family");
+            }
+        }
+        else {
+            var msg = data ? data.Code + " " + data.Msg : status;
+            Utils.alert("获取家庭信息失败，错误码：" + msg);
+            $state.go("tab.family");
+        }
+    });
+
     $scope.save = function () {
         if (!$scope.family.fml_name)
             Utils.alert("请输入家庭名称");

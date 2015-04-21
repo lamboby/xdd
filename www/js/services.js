@@ -107,6 +107,13 @@
                 Utils.hideLoading();
             });
         },
+        get: function (familyId) {
+            for (var i = 0; i < familys.length; i++) {
+                if (familys[i].fml_id == parseInt(familyId)) {
+                    return familys[i];
+                }
+            }
+        },
         create: function (family, callback) {
             var params = { token: itru_accessToken, id: itru_userId(), name: family.fml_name };
             var url = Utils.buildUrl("families/create", params);
@@ -125,13 +132,6 @@
                 Utils.hideLoading();
             });
         },
-        get: function (familyId) {
-            for (var i = 0; i < familys.length; i++) {
-                if (familys[i].fml_id == parseInt(familyId)) {
-                    return familys[i];
-                }
-            }
-        },
         update: function (family, callback) {
             var params = { token: itru_accessToken, id: family.fml_id, name: family.fml_name };
             var url = Utils.buildUrl("families/update", params);
@@ -146,6 +146,19 @@
                     }
                 }
 
+                if (callback)
+                    callback(data, data.Code);
+            }).error(function (data, statusText) {
+                if (callback)
+                    callback(data, statusText);
+            }).finally(function () {
+                Utils.hideLoading();
+            });
+        },
+        isPrimary: function (familyId, callback) {
+            var params = { token: itru_accessToken, fml_id: familyId, user_id: itru_userId() };
+            var url = Utils.buildUrl("users/isPrimary", params);
+            $http.jsonp(url).success(function (data) {
                 if (callback)
                     callback(data, data.Code);
             }).error(function (data, statusText) {
