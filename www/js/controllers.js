@@ -21,7 +21,7 @@
         else if (!$scope.user.password)
             Utils.alert("请输入密码");
         else {
-            Utils.loading('登录中...');
+            Utils.loading();
             Auth.login($scope.user, function (data, status) {
                 if (status == 0) {
                     $window.location.hash = "#/select-family";
@@ -35,7 +35,7 @@
 })
 
 .controller('SelectFamilyCtrl', function ($scope, $state, Family, Utils) {
-    Utils.loading('获取家庭列表中...');
+    Utils.loading();
     Family.all(function (data, status) {
         if (status == 0) {
             $scope.familys = data.Data;
@@ -122,7 +122,7 @@
 })
 
 .controller('FamilyCtrl', function ($scope, Family, Utils) {
-    Utils.loading('获取家庭列表中...');
+    Utils.loading();
     Family.all(function (data, status) {
         if (status == 0)
             $scope.familys = data.Data;
@@ -144,7 +144,7 @@
         else if ($scope.family.fml_name.length > 20)
             Utils.alert("家庭名称不能超过20个字符");
         else {
-            Utils.loading("保存中...");
+            Utils.loading();
             Family.create($scope.family, function (data, status) {
                 if (status == 0)
                     $state.go("tab.family");
@@ -158,12 +158,13 @@
 })
 
 .controller('EditFamilyCtrl', function ($scope, $state, $stateParams, Family, Utils) {
-    Utils.loading("获取家庭信息中...");
-    $scope.family = angular.copy(Family.get($stateParams.familyId));
+    Utils.loading();
     Family.isPrimary($stateParams.familyId, function (data, status) {
         if (status == 0) {
             $scope.isPrimary = data.Data[0].primary;
-            if (!$scope.isPrimary) {
+            if ($scope.isPrimary)
+                $scope.family = angular.copy(Family.get($stateParams.familyId));
+            else {
                 Utils.alert("非主家长不能修改此家庭");
                 $state.go("tab.family");
             }
@@ -183,7 +184,7 @@
         else if ($scope.family.fml_name.length > 20)
             Utils.alert("家庭名称不能超过20个字符");
         else {
-            Utils.loading("保存中...");
+            Utils.loading();
             Family.update($scope.family, function (data, status) {
                 if (status == 0)
                     $state.go("tab.family");

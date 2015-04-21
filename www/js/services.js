@@ -247,8 +247,8 @@
                     callback(res);
             });
         },
-        loading: function (msg) {
-            $ionicLoading.show({ template: msg });
+        loading: function () {
+            $ionicLoading.show({ templateUrl: 'loading.html' });
         },
         hideLoading: function () {
             $ionicLoading.hide();
