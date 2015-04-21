@@ -79,18 +79,13 @@
 
 })
 
-.controller('StudentCtrl', function ($scope, $ionicPopup, Student) {
+.controller('StudentCtrl', function ($scope, Student, Utils) {
     $scope.students = Student.all();
 
     $scope.remove = function (student) {
-        var confirmPopup = $ionicPopup.confirm({
-            title: '提示',
-            template: '确定要删除学生吗?'
-        });
-        confirmPopup.then(function (res) {
-            if (res) {
+        Utils.confirm("确定要删除学生吗?", function (res) {
+            if (res)
                 Student.remove(student);
-            }
         });
     };
 })
@@ -206,27 +201,49 @@
             Utils.alert("获取家长列表失败，错误码：" + msg);
         }
     });
+
+    $scope.del = function (parent) {
+        Utils.confirm("确定要删除家长吗?", function (res) {
+            if (res) {
+                if (parent.is_primary) {
+                    Utils.alert("不允许删除主家长");
+                    return;
+                }
+                Parent.del(parent, function (data, status) {
+                    if (status != 0) {
+                        var msg = data ? data.Code + " " + data.Msg : status;
+                        Utils.alert("删除家长失败，错误码：" + msg);
+                    }
+                });
+            }
+        });
+    };
 })
 
 .controller('CreateParentCtrl', function ($scope, $state, Parent, Utils) {
-    //$scope.family = { fml_name: "" };
-    //$scope.save = function () {
-    //    if (!$scope.family.fml_name)
-    //        Utils.alert("请输入家庭名称");
-    //    else if ($scope.family.fml_name.length < 3)
-    //        Utils.alert("家庭名称不能少于3个字符");
-    //    else if ($scope.family.fml_name.length > 20)
-    //        Utils.alert("家庭名称不能超过20个字符");
-    //    else {
-    //        Utils.loading();
-    //        Family.create($scope.family, function (data, status) {
-    //            if (status == 0)
-    //                $state.go("tab.family");
-    //            else {
-    //                var msg = data ? data.Code + " " + data.Msg : status;
-    //                Utils.alert("添加家庭失败，错误码：" + msg);
-    //            }
-    //        });
-    //    }
-    //};
+    $scope.parent = {
+        username: "",
+        gender: 0,
+        birthday: "",
+        phone: "",
+        id_card: "",
+        fml_id: itru_familyId()
+    };
+    $scope.save = function () {
+        if (!$scope.parent.username)
+            Utils.alert("请输入家长名称");
+        else if (!$scope.parent.phone)
+            Utils.alert("请输入手机号");
+        else {
+            Utils.loading();
+            Parent.create($scope.parent, function (data, status) {
+                if (status == 0)
+                    $state.go("tab.parent");
+                else {
+                    var msg = data ? data.Code + " " + data.Msg : status;
+                    Utils.alert("添加副家长失败，错误码：" + msg);
+                }
+            });
+        }
+    };
 });

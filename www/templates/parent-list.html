@@ -14,13 +14,13 @@
 
                     <div class="item item-body">
                         <p>关系：{{parent.relation}}</p>
-                        <p>生日：{{parent.birthday}}</p>
+                        <p>生日：{{parent.birthday | date:'yyyy-MM-dd'}}</p>
                         <p>手机：{{parent.phone}}</p>
                         <p>身份证：{{parent.id_card}}</p>
                     </div>
 
                     <div class="item tabs tabs-secondary tabs-icon-left">
-                        <a class="tab-item" ng-click="remove(parent)">
+                        <a class="tab-item" ng-click="del(parent)">
                             <i class="icon ion-trash-a"></i>
                             删除
                         </a>

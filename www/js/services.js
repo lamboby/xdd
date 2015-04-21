@@ -176,7 +176,7 @@
             var url = Utils.buildUrl("families/getAllUsers", params);
             $http.jsonp(url).success(function (data) {
                 if (data.Code == 0)
-                    familys = data.Data;
+                    parents = data.Data;
                 callback(data, data.Code);
             }).error(function (data, statusText) {
                 callback(data, statusText);
@@ -204,7 +204,7 @@
         },
         del: function (parent, callback) {
             Auth.refreshAccessToken();
-            var params = { token: itru_accessToken, fml_id: itru_familyId(), user_id: parent.user_id };
+            var params = { token: itru_accessToken, fml_id: itru_familyId(), pri_id: itru_userId(), user_id: parent.user_id };
             var url = Utils.buildUrl("users/deleteViceParents", params);
 
             $http.jsonp(url).success(function (data) {
