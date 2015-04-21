@@ -176,7 +176,7 @@
             Utils.alert("家庭名称不能超过20个字符");
         else {
             Utils.loading("保存中...");
-            Family.create($scope.family, function (data, status) {
+            Family.update($scope.family, function (data, status) {
                 if (status == 0)
                     $state.go("tab.family");
                 else {

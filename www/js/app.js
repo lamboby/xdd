@@ -12,7 +12,9 @@
         //处理android返回键
         $ionicPlatform.registerBackButtonAction(function (e) {
             e.preventDefault();
-            if (!itru_isLogin || $location.path() == '/tab/dash' || $location.path() == "/select-family") {
+            var path = $location.path();
+            if (!itru_isLogin || path == '/tab/dash'
+                || path == "/tab/news" || path == "/tab/setting" || path == "/select-family") {
                 Utils.confirm("确定退出应用吗?", function (res) {
                     if (res)
                         ionic.Platform.exitApp();
