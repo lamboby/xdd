@@ -98,11 +98,9 @@
             $http.jsonp(url).success(function (data) {
                 if (data.Code == 0)
                     familys = data.Data;
-                if (callback)
-                    callback(data, data.Code);
+                callback(data, data.Code);
             }).error(function (data, statusText) {
-                if (callback)
-                    callback(data, statusText);
+                callback(data, statusText);
             }).finally(function () {
                 Utils.hideLoading();
             });
@@ -124,11 +122,9 @@
                     family.fml_id = data.Data[0].id;
                     familys.push(family);
                 }
-                if (callback)
-                    callback(data, data.Code);
+                callback(data, data.Code);
             }).error(function (data, statusText) {
-                if (callback)
-                    callback(data, statusText);
+                callback(data, statusText);
             }).finally(function () {
                 Utils.hideLoading();
             });
@@ -148,11 +144,9 @@
                     }
                 }
 
-                if (callback)
-                    callback(data, data.Code);
+                callback(data, data.Code);
             }).error(function (data, statusText) {
-                if (callback)
-                    callback(data, statusText);
+                callback(data, statusText);
             }).finally(function () {
                 Utils.hideLoading();
             });
@@ -162,11 +156,9 @@
             var params = { token: itru_accessToken, fml_id: familyId, user_id: itru_userId() };
             var url = Utils.buildUrl("users/isPrimary", params);
             $http.jsonp(url).success(function (data) {
-                if (callback)
-                    callback(data, data.Code);
+                callback(data, data.Code);
             }).error(function (data, statusText) {
-                if (callback)
-                    callback(data, statusText);
+                callback(data, statusText);
             }).finally(function () {
                 Utils.hideLoading();
             });
@@ -223,12 +215,10 @@
                     itru_loginToken(data.Data[0].token);
                 }
                 accessToken();
-                if (callback)
-                    callback(data, data.Code);
+                callback(data, data.Code);
             }).error(function (data, statusText) {
                 Utils.hideLoading();
-                if (callback)
-                    callback(data, statusText);
+                callback(data, statusText);
             });
         },
         refreshAccessToken: accessToken
