@@ -246,16 +246,16 @@
                     itru_lastGetTokenTime = now;
                 }
                 else {
-					Utils.hideLoading();
+                    Utils.hideLoading();
                     Utils.alert("令牌已失效，请重新登录");
                     itru_isLogin = false;
                     $state.go("signin");
                 }
             }
-            else{
-				Utils.hideLoading();
-				Utils.alert("获取令牌失败，错误码：" + data)
-			}
+            else {
+                Utils.hideLoading();
+                Utils.alert("获取令牌失败，错误码：" + data)
+            }
         });
     };
 
@@ -271,8 +271,8 @@
                     itru_isLogin = true;
                     itru_userId(data.Data[0].user_id);
                     itru_loginToken(data.Data[0].token);
+                    accessToken();
                 }
-                accessToken();
                 callback(data, data.Code);
             }).error(function (data, statusText) {
                 Utils.hideLoading();
