@@ -1,13 +1,11 @@
 ﻿angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.services', 'itrustoor.filters'])
 
-.run(function ($ionicPlatform, $location, $ionicHistory, Utils) {
+.run(function ($ionicPlatform, $location, $ionicHistory, $rootScope, $urlRouter, $state, Utils, Auth) {
     $ionicPlatform.ready(function () {
-        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard)
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-        }
-        if (window.StatusBar) {
-            StatusBar.styleLightContent();
-        }
+        if (window.StatusBar)
+            StatusBar.styleDefault();
 
         //处理android返回键
         $ionicPlatform.registerBackButtonAction(function (e) {
@@ -24,6 +22,43 @@
                 $ionicHistory.goBack();
             return false;
         }, 101);
+
+        //AccessToken
+        $rootScope.$on('$locationChangeSuccess', function (evt) {
+            evt.preventDefault();
+            var path = $location.path();
+            if (path == "/signin")
+                $urlRouter.sync();
+            else {
+                var res = Auth.refreshAccessToken();
+                if (res === -1) 
+                    $state.go("signin");
+                else if (res === 0)
+                    $urlRouter.sync();
+                else {
+                    res.then(function (data) {
+                        if (data.Code != 'undefined') {
+                            if (data.Code == 0) {
+                                itru_isLogin = true;
+                                itru_accessToken = data.Data[0].access_token;
+                                itru_lastGetTokenTime = new Date();
+                                $urlRouter.sync();
+                            }
+                            else {
+                                Utils.hideLoading();
+                                Utils.alert("令牌已失效，请重新登录");
+                                itru_isLogin = false;
+                                $state.go("signin");
+                            }
+                        }
+                        else {
+                            Utils.hideLoading();
+                            Utils.alert("获取令牌失败，错误码：" + data)
+                        }
+                    });
+                }
+            }
+        });
     });
 })
 

@@ -92,7 +92,6 @@
 
     return {
         all: function (callback) {
-            Auth.refreshAccessToken();
             var params = { token: itru_accessToken, id: itru_userId() };
             var url = Utils.buildUrl("families/loginList", params);
             $http.jsonp(url).success(function (data) {
@@ -113,7 +112,6 @@
             }
         },
         create: function (family, callback) {
-            Auth.refreshAccessToken();
             var params = { token: itru_accessToken, id: itru_userId(), name: family.fml_name };
             var url = Utils.buildUrl("families/create", params);
 
@@ -130,7 +128,6 @@
             });
         },
         update: function (family, callback) {
-            Auth.refreshAccessToken();
             var params = { token: itru_accessToken, id: family.fml_id, name: family.fml_name };
             var url = Utils.buildUrl("families/update", params);
 
@@ -152,7 +149,6 @@
             });
         },
         isPrimary: function (familyId, callback) {
-            Auth.refreshAccessToken();
             var params = { token: itru_accessToken, fml_id: familyId, user_id: itru_userId() };
             var url = Utils.buildUrl("users/isPrimary", params);
             $http.jsonp(url).success(function (data) {
@@ -171,7 +167,6 @@
 
     return {
         all: function (callback) {
-            Auth.refreshAccessToken();
             var params = { token: itru_accessToken, fml_id: itru_familyId() };
             var url = Utils.buildUrl("families/getAllUsers", params);
             $http.jsonp(url).success(function (data) {
@@ -185,7 +180,6 @@
             });
         },
         create: function (parent, callback) {
-            Auth.refreshAccessToken();
             var params = angular.copy(parent);
             params.token = itru_accessToken;
             var url = Utils.buildUrl("users/createViceParents", params);
@@ -203,7 +197,6 @@
             });
         },
         del: function (parent, callback) {
-            Auth.refreshAccessToken();
             var params = { token: itru_accessToken, fml_id: itru_familyId(), pri_id: itru_userId(), user_id: parent.user_id };
             var url = Utils.buildUrl("users/deleteViceParents", params);
 
@@ -241,41 +234,27 @@
             });
         },
         refreshAccessToken: function () {
-            if (itru_lastGetTokenTime) {
-                var nowTicks = Date.parse(new Date());
-                var lastGetTicks = Date.parse(itru_lastGetTokenTime);
-                if ((nowTicks - lastGetTicks) / 1000 < 7080)
-                    return;
+            if (!itru_isLogin || !itru_loginToken()) {
+                $state.go("signin");
+                return -1;
             }
-
-            var deferred = $q.defer();
-            var url = Utils.buildUrl("users/accessToken", { token: itru_loginToken() });
-            var now = new Date();
-            $http.jsonp(url).success(function (data) {
-                deferred.resolve(data);
-            }).error(function (statusText) {
-                deferred.reject(statusText);
-            });
-
-            deferred.promise.then(function (data) {
-                if (data.Code != 'undefined') {
-                    if (data.Code == 0) {
-                        itru_isLogin = true;
-                        itru_accessToken = data.Data[0].access_token;
-                        itru_lastGetTokenTime = now;
-                    }
-                    else {
-                        Utils.hideLoading();
-                        Utils.alert("令牌已失效，请重新登录");
-                        itru_isLogin = false;
-                        $state.go("signin");
-                    }
+            else {
+                if (itru_lastGetTokenTime) {
+                    var nowTicks = Date.parse(new Date());
+                    var lastGetTicks = Date.parse(itru_lastGetTokenTime);
+                    if ((nowTicks - lastGetTicks) / 1000 < 7080)
+                        return 0;
                 }
-                else {
-                    Utils.hideLoading();
-                    Utils.alert("获取令牌失败，错误码：" + data)
-                }
-            });
+
+                var deferred = $q.defer();
+                var url = Utils.buildUrl("users/accessToken", { token: itru_loginToken() });
+                $http.jsonp(url).success(function (data) {
+                    deferred.resolve(data);
+                }).error(function (statusText) {
+                    deferred.reject(statusText);
+                });
+                return deferred.promise;
+            }
         }
     }
 })
