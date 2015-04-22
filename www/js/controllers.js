@@ -126,7 +126,7 @@
     };
 })
 
-.controller('FamilyCtrl', function ($scope, Family, Utils) {
+.controller('FamilyCtrl', function ($scope, $state, Family, Utils) {
     Utils.loading();
     Family.all(function (data, status) {
         if (status == 0)
@@ -136,9 +136,24 @@
             Utils.alert("获取家庭列表失败，错误码：" + msg);
         }
     });
-    $scope.switch = function () {
 
-
+    $scope.switch = function (family) {
+        Utils.confirm("确定要切换家庭吗?", function (res) {
+            if (res) {
+                Utils.loading();
+                Family.isPrimary(family.fml_id, function (data, status) {
+                    if (status == 0) {
+                        itru_familyId(family.fml_id);
+                        itru_isPrimary = data.Data[0].primary;
+                        $state.go("tab.setting");
+                    }
+                    else {
+                        var msg = data ? data.Code + " " + data.Msg : status;
+                        Utils.alert("切换家庭失败，错误码：" + msg);
+                    }
+                });
+            }
+        });
     };
 })
 
