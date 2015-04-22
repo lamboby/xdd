@@ -5,6 +5,7 @@
     var itru_lastGetTokenTime = null;
     var itru_tokenExpires = 7200;
     var itru_encryptKey = "itrustor";
+    var itru_isPrimary = false;
 
     var itru_loginToken = function (token) {
         if (token)

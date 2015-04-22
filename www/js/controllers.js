@@ -50,8 +50,17 @@
     });
 
     $scope.selected = function () {
-        itru_familyId($scope.familyId);
-        $state.go("tab.dash");
+        Family.isPrimary($scope.familyId, function (data, status) {
+            if (status == 0) {
+                itru_familyId($scope.familyId);
+                itru_isPrimary = data.Data[0].primary;
+                $state.go("tab.dash");
+            }
+            else {
+                var msg = data ? data.Code + " " + data.Msg : status;
+                Utils.alert("选择家庭失败，错误码：" + msg);
+            }
+        });
     };
 })
 
@@ -127,6 +136,10 @@
             Utils.alert("获取家庭列表失败，错误码：" + msg);
         }
     });
+    $scope.switch = function () {
+
+
+    };
 })
 
 .controller('CreateFamilyCtrl', function ($scope, $state, Family, Utils) {
