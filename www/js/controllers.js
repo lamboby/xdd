@@ -27,6 +27,7 @@
                     $window.location.hash = "#/select-family";
                     return;
                 }
+                Utils.hideLoading();
                 var msg = data ? data.Code + " " + data.Msg : status;
                 Utils.alert("登录失败，错误码：" + msg);
             });
