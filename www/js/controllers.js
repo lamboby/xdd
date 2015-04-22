@@ -243,6 +243,7 @@
 
 .controller('ParentCtrl', function ($scope, Parent, Utils) {
     Utils.loading();
+    $scope.isPrimary = itru_isPrimary;
     Parent.all(function (data, status) {
         if (status == 0)
             $scope.parents = data.Data;
