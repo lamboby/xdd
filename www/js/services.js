@@ -246,13 +246,16 @@
                     itru_lastGetTokenTime = now;
                 }
                 else {
+					Utils.hideLoading();
                     Utils.alert("令牌已失效，请重新登录");
                     itru_isLogin = false;
                     $state.go("signin");
                 }
             }
-            else
-                Utils.alert("获取令牌失败，错误码：" + data)
+            else{
+				Utils.hideLoading();
+				Utils.alert("获取令牌失败，错误码：" + data)
+			}
         });
     };
 
