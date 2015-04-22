@@ -221,44 +221,6 @@
 })
 
 .factory("Auth", function ($http, $q, $state, Utils) {
-    var accessToken = function () {
-        if (itru_lastGetTokenTime) {
-            var nowTicks = Date.parse(new Date());
-            var lastGetTicks = Date.parse(itru_lastGetTokenTime);
-            if ((nowTicks - lastGetTicks) / 1000 < 7080)
-                return;
-        }
-
-        var deferred = $q.defer();
-        var url = Utils.buildUrl("users/accessToken", { token: itru_loginToken() });
-        var now = new Date();
-        $http.jsonp(url).success(function (data) {
-            deferred.resolve(data);
-        }).error(function (statusText) {
-            deferred.reject(statusText);
-        });
-
-        deferred.promise.then(function (data) {
-            if (data.Code != 'undefined') {
-                if (data.Code == 0) {
-                    itru_isLogin = true;
-                    itru_accessToken = data.Data[0].access_token;
-                    itru_lastGetTokenTime = now;
-                }
-                else {
-                    Utils.hideLoading();
-                    Utils.alert("令牌已失效，请重新登录");
-                    itru_isLogin = false;
-                    $state.go("signin");
-                }
-            }
-            else {
-                Utils.hideLoading();
-                Utils.alert("获取令牌失败，错误码：" + data)
-            }
-        });
-    };
-
     return {
         login: function (user, callback) {
             var phone = Utils.encrypt(user.phone);
@@ -271,7 +233,6 @@
                     itru_isLogin = true;
                     itru_userId(data.Data[0].user_id);
                     itru_loginToken(data.Data[0].token);
-                    accessToken();
                 }
                 callback(data, data.Code);
             }).error(function (data, statusText) {
@@ -279,7 +240,43 @@
                 callback(data, statusText);
             });
         },
-        refreshAccessToken: accessToken
+        refreshAccessToken: function () {
+            if (itru_lastGetTokenTime) {
+                var nowTicks = Date.parse(new Date());
+                var lastGetTicks = Date.parse(itru_lastGetTokenTime);
+                if ((nowTicks - lastGetTicks) / 1000 < 7080)
+                    return;
+            }
+
+            var deferred = $q.defer();
+            var url = Utils.buildUrl("users/accessToken", { token: itru_loginToken() });
+            var now = new Date();
+            $http.jsonp(url).success(function (data) {
+                deferred.resolve(data);
+            }).error(function (statusText) {
+                deferred.reject(statusText);
+            });
+
+            deferred.promise.then(function (data) {
+                if (data.Code != 'undefined') {
+                    if (data.Code == 0) {
+                        itru_isLogin = true;
+                        itru_accessToken = data.Data[0].access_token;
+                        itru_lastGetTokenTime = now;
+                    }
+                    else {
+                        Utils.hideLoading();
+                        Utils.alert("令牌已失效，请重新登录");
+                        itru_isLogin = false;
+                        $state.go("signin");
+                    }
+                }
+                else {
+                    Utils.hideLoading();
+                    Utils.alert("获取令牌失败，错误码：" + data)
+                }
+            });
+        }
     }
 })
 
