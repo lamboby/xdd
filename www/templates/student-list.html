@@ -7,7 +7,7 @@
             <div ng-repeat="student in students">
                 <div class="list card">
                     <div class="item item-avatar">
-                        <img ng-src="{{student.picture}}">
+                        <img ng-src="{{student.picture | avatar}}">
                         <h2>{{student.stu_name}}</h2>
                         <p>{{student.gender | gender}}</p>
                     </div>
@@ -18,7 +18,7 @@
                     </div>
 
                     <div class="item tabs tabs-secondary tabs-icon-left">
-                        <a class="tab-item" ng-click="remove(student)">
+                        <a class="tab-item" ng-click="del(student)">
                             <i class="icon ion-trash-a"></i>
                             删除
                         </a>

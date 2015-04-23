@@ -111,9 +111,17 @@
 })
 
 .controller('StudentCtrl', function ($scope, Student, Utils) {
-    $scope.students = Student.all();
+    Utils.loading();
+    Student.all(function (data, status) {
+        if (status == 0)
+            $scope.students = data.Data;
+        else {
+            var msg = data ? data.Code + " " + data.Msg : status;
+            Utils.alert("获取学生列表失败，错误码：" + msg);
+        }
+    });
 
-    $scope.remove = function (student) {
+    $scope.del = function (student) {
         Utils.confirm("确定要删除学生吗?", function (res) {
             if (res)
                 Student.remove(student);

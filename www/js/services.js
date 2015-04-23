@@ -39,39 +39,35 @@
     };
 })
 
-.factory("Student", function () {
-    var students = [{
-        stu_id: 1,
-        stu_name: 'Ben Sparrow',
-        gender: 0,
-        birthday: '2014-8-9',
-        sch_id: 1,
-        sch_name: '中心一小',
-        picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-    }, {
-        stu_id: 1,
-        stu_name: 'Mike',
-        gender: 1,
-        birthday: '2014-8-10',
-        sch_id: 1,
-        sch_name: '中心小学',
-        picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-    }, {
-        stu_id: 1,
-        stu_name: 'Eva',
-        gender: 0,
-        birthday: '2014-8-9',
-        sch_id: 1,
-        sch_name: '广州市第三小学',
-        picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-    }];
+.factory("Student", function ($http, Utils) {
+    var students = [];
 
     return {
-        all: function () {
-            return students;
+        all: function (callback) {
+            var params = { token: itru_accessToken, fml_id: itru_familyId() };
+            var url = Utils.buildUrl("families/getAllStudents", params);
+            $http.jsonp(url).success(function (data) {
+                if (data.Code == 0)
+                    students = data.Data;
+                callback(data, data.Code);
+            }).error(function (data, statusText) {
+                callback(data, statusText);
+            }).finally(function () {
+                Utils.hideLoading();
+            });
         },
-        remove: function (student) {
-            students.splice(students.indexOf(student), 1);
+        del: function (student, callback) {
+            var params = { token: itru_accessToken, stu_id: student.stu_id };
+            var url = Utils.buildUrl("families/deleteStudent", params);
+            $http.jsonp(url).success(function (data) {
+                if (data.Code == 0)
+                    students.splice(students.indexOf(student), 1);
+                callback(data, data.Code);
+            }).error(function (data, statusText) {
+                callback(data, statusText);
+            }).finally(function () {
+                Utils.hideLoading();
+            });
         },
         get: function (studentId) {
             for (var i = 0; i < students.length; i++) {
