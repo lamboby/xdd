@@ -45,15 +45,13 @@
     return {
         all: function (callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId() };
-            var url = Utils.buildUrl("families/getAllStudents", params);
-            Utils.exec(url, params, callback, function (data) {
+            Utils.exec("families/getAllStudents", params, callback, function (data) {
                 students = data.Data;
             });
         },
         del: function (student, callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId(), stu_id: student.stu_id, sch_id: student.sch_id };
-            var url = Utils.buildUrl("students/delete", params);
-            Utils.exec(url, params, callback, function (data) {
+            Utils.exec("students/delete", params, callback, function (data) {
                 students.splice(students.indexOf(student), 1);
             });
         },
@@ -77,8 +75,7 @@
     return {
         all: function (name, callback) {
             var params = { token: itru_accessToken, key: name };
-            var url = Utils.buildUrl("families/loginList", params);
-            Utils.exec(url, params, callback, function (data) {
+            Utils.exec("schools/searchSchools", params, callback, function (data) {
                 familys = data.Data;
             });
         }
@@ -91,8 +88,7 @@
     return {
         all: function (callback) {
             var params = { token: itru_accessToken, id: itru_userId() };
-            var url = Utils.buildUrl("families/loginList", params);
-            Utils.exec(url, params, callback, function (data) {
+            Utils.exec("families/loginList", params, callback, function (data) {
                 familys = data.Data;
             });
         },
@@ -105,16 +101,14 @@
         },
         create: function (family, callback) {
             var params = { token: itru_accessToken, id: itru_userId(), name: family.fml_name };
-            var url = Utils.buildUrl("families/create", params);
-            Utils.exec(url, params, callback, function (data) {
+            Utils.exec("families/create", params, callback, function (data) {
                 family.fml_id = data.Data[0].id;
                 familys.push(family);
             });
         },
         update: function (family, callback) {
             var params = { token: itru_accessToken, id: family.fml_id, name: family.fml_name };
-            var url = Utils.buildUrl("families/update", params);
-            Utils.exec(url, params, callback, function (data) {
+            Utils.exec("families/update", params, callback, function (data) {
                 for (var i = 0; i < familys.length; i++) {
                     if (familys[i].fml_id == family.fml_id) {
                         familys[i].fml_name = family.fml_name;
@@ -125,8 +119,7 @@
         },
         isPrimary: function (familyId, callback) {
             var params = { token: itru_accessToken, fml_id: familyId, user_id: itru_userId() };
-            var url = Utils.buildUrl("users/isPrimary", params);
-            Utils.exec(url, params, callback);
+            Utils.exec("users/isPrimary", params, callback);
         }
     }
 })
@@ -137,24 +130,21 @@
     return {
         all: function (callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId() };
-            var url = Utils.buildUrl("families/getAllUsers", params);
-            Utils.exec(url, params, callback, function (data) {
+            Utils.exec("families/getAllUsers", params, callback, function (data) {
                 parents = data.Data;
             });
         },
         create: function (parent, callback) {
             var params = angular.copy(parent);
             params.token = itru_accessToken;
-            var url = Utils.buildUrl("users/createViceParents", params);
-            Utils.exec(url, params, callback, function (data) {
+            Utils.exec("users/createViceParents", params, callback, function (data) {
                 parent.user_id = data.Data[0].user_id;
                 parents.push(parent);
             });
         },
         del: function (parent, callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId(), pri_id: itru_userId(), user_id: parent.user_id };
-            var url = Utils.buildUrl("users/deleteViceParents", params);
-            Utils.exec(url, params, callback, function (data) {
+            Utils.exec("users/deleteViceParents", params, callback, function (data) {
                 parents.splice(parents.indexOf(parent), 1);
             });
         }
@@ -167,9 +157,7 @@
             var phone = Utils.encrypt(user.phone);
             var pwd = Utils.encrypt(user.password);
             var params = { username: phone, password: pwd };
-            var url = Utils.buildUrl("users/tickets", params);
-
-            Utils.exec(url, params, callback, function (data) {
+            Utils.exec("users/tickets", params, callback, function (data) {
                 itru_isLogin = true;
                 itru_userId(data.Data[0].user_id);
                 itru_loginToken(data.Data[0].token);
@@ -202,6 +190,13 @@
 })
 
 .factory("Utils", function ($http, $ionicPopup, $ionicLoading) {
+    var _buildUrl = function (path, params) {
+        var url = itru_serviceUrl + path + "?callback=JSON_CALLBACK";
+        for (var item in params)
+            url += "&" + item + "=" + encodeURIComponent(params[item]);
+        return url;
+    };
+
     return {
         alert: function (msg) {
             $ionicPopup.alert({
@@ -236,14 +231,9 @@
             });
             return encrypted.toString();
         },
-        buildUrl: function (path, params) {
-            var url = itru_serviceUrl + path + "?callback=JSON_CALLBACK";
-            for (var item in params)
-                url += "&" + item + "=" + encodeURIComponent(params[item]);
-            return url;
-        },
+        buildUrl: _buildUrl,
         exec: function (url, params, callback, code0_callback) {
-            $http.jsonp(url).success(function (data) {
+            $http.jsonp(_buildUrl(url, params)).success(function (data) {
                 if (data.Code == 0 && code0_callback)
                     code0_callback(data);
                 if (callback)
