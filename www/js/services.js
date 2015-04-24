@@ -63,8 +63,14 @@
             }
             return null;
         },
-        put: function (student) {
-            students.push(student);
+        create: function (student, callback) {
+            var params = angular.copy(student);
+            params.name = student.stu_name;
+            params.token = itru_accessToken;
+            Utils.exec("students/create", params, callback, function (data) {
+                student.stu_id = data.Data[0].id;
+                students.push(student);
+            });
         }
     };
 })
@@ -78,6 +84,10 @@
             Utils.exec("schools/searchSchools", params, callback, function (data) {
                 schools = data.Data;
             });
+        },
+        allGrades: function (schoolId, callback) {
+            var params = { token: itru_accessToken, id: schoolId };
+            Utils.exec("schools/getGradeAndClass", params, callback);
         }
     };
 })

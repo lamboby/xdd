@@ -136,14 +136,13 @@
     };
 })
 
-.controller('CreateStudentCtrl', function ($scope, $state, $ionicModal, Student, School, Utils) {
+.controller('CreateStudentCtrl', function ($scope, $state, $ionicModal, $filter, Student, School, Utils) {
     $scope.schools = [];
     $scope.grades = [];
-    $scope.grade = null;
+    $scope.classes = [];
 
     $scope.current = {
         query: "",
-        schoolId: "",
         schoolName: "",
     };
     $scope.student = {
@@ -168,10 +167,14 @@
         $scope.modal.show();
     };
 
+    $scope.hideModal = function () {
+        $scope.modal.hide();
+    };
+
     $scope.querySchool = function () {
         if (!$scope.current.query) {
             Utils.alert("请输入学校名称");
-            return
+            return;
         }
 
         Utils.loading();
@@ -179,50 +182,82 @@
             if (status == 0) {
                 $scope.schools = data.Data;
                 if ($scope.schools.length > 0)
-                    $scope.current.schoolId = $scope.schools[0].id;
+                    $scope.student.sch_id = $scope.schools[0].id;
             }
             else {
                 var msg = data ? data.Code + " " + data.Msg : status;
                 Utils.alert("查找学校失败，错误码：" + msg);
             }
         });
-
-        //if ($scope.schools.length > 0)
-        //$scope.current.schoolId = $scope.schools[0].sch_id;
     };
 
     $scope.selectSchool = function () {
         $scope.current.schoolName = "";
-        if ($scope.current.schoolId) {
+        if ($scope.student.sch_id) {
             for (var i = 0; i < $scope.schools.length; i++) {
-                if ($scope.schools[i].id == $scope.current.schoolId) {
+                if ($scope.schools[i].id == $scope.student.sch_id) {
                     $scope.current.schoolName = $scope.schools[i].name;
                     break;
                 }
             }
         }
-        $scope.current.query = "";
-        $scope.schools = [];
-        $scope.modal.hide();
+
+        Utils.loading();
+        School.allGrades($scope.student.sch_id, function (data, status) {
+            if (status == 0) {
+                $scope.grades = data.Data[0].grade;
+                if ($scope.grades && $scope.grades.length > 0) {
+                    $scope.student.grade_id = $scope.grades[0].grade_id;
+                    if ($scope.grades[0].class && $scope.grades[0].class.length > 0)
+                        $scope.classes = $scope.grades[0].class;
+                }
+
+                $scope.current.query = "";
+                $scope.schools = [];
+                $scope.hideModal();
+            }
+            else {
+                var msg = data ? data.Code + " " + data.Msg : status;
+                Utils.alert("获取年级列表失败，错误码：" + msg);
+            }
+        });
     };
 
-    //$scope.save = function () {
-    //    if (!$scope.student.stu_name)
-    //        Utils.alert("请输入姓名");
-    //    else {
-    //        var student = {
-    //            stu_id: 5,
-    //            stu_name: $scope.student.stu_name,
-    //            gender: $scope.student.gender,
-    //            birthday: $scope.student.birthday,
-    //            sch_id: 1,
-    //            sch_name: '北京第一小学',
-    //            picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-    //        };
-    //        Student.put(student);
-    //        $state.go("tab.student");
-    //    }
-    //};
+    $scope.selectGrade = function () {
+        for (var i = 0; i <= $scope.grades.length; i++) {
+            if ($scope.grades[i].grade_id == $scope.student.grade_id) {
+                $scope.classes = $scope.grades[i].class;
+                break;
+            }
+        }
+    };
+
+    $scope.save = function () {
+        if (!$scope.student.stu_name)
+            Utils.alert("请输入姓名");
+        else if ($scope.student.stu_name.length > 20)
+            Utils.alert("姓名不能超过20个字符");
+        else if (!$scope.student.sch_id)
+            Utils.alert("请选择学校");
+        else if (!$scope.student.grade_id)
+            Utils.alert("请选择年级");
+        else if (!$scope.student.class_id)
+            Utils.alert("请选择班级");
+        else if (!$scope.student.birthday)
+            Utils.alert("请输入生日");
+        else {
+            $scope.student.birthday = $filter("date")($scope.student.birthday, "yyyy-MM-dd");
+            Utils.loading();
+            Student.create($scope.student, function (data, status) {
+                if (status == 0)
+                    $state.go("tab.student");
+                else {
+                    var msg = data ? data.Code + " " + data.Msg : status;
+                    Utils.alert("添加学生失败，错误码：" + msg);
+                }
+            });
+        }
+    };
 })
 
 .controller('FamilyCtrl', function ($scope, $state, Family, Utils) {
@@ -360,7 +395,9 @@
     };
     $scope.save = function () {
         if (!$scope.parent.username)
-            Utils.alert("请输入家长名称");
+            Utils.alert("请输入家长姓名");
+        else if ($scope.parent.length > 20)
+            Utils.alert("家长姓名不能超过20个字符");
         else if (!$scope.parent.phone)
             Utils.alert("请输入手机号");
         else {
