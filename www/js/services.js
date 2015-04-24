@@ -68,6 +68,7 @@
             params.name = student.stu_name;
             params.birthday = $filter("date")(params.birthday, 'yyyy-MM-dd');
             params.token = itru_accessToken;
+            params.fml_id = itru_familyId();
             Utils.exec("students/create", params, callback, function (data) {
                 student.stu_id = data.Data[0].id;
                 if (students)
