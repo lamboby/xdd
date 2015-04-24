@@ -201,6 +201,10 @@
                 }
             }
         }
+        else {
+            Utils.alert("请选择学校");
+            return;
+        }
 
         Utils.loading();
         School.allGrades($scope.student.sch_id, function (data, status) {
