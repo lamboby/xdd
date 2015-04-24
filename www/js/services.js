@@ -316,7 +316,7 @@
                 url += "&" + item + "=" + encodeURIComponent(params[item]);
             return url;
         },
-        next: function (url, params, callback, code0_callback) {
+        exec: function (url, params, callback, code0_callback) {
             $http.jsonp(url).success(function (data) {
                 if (data.Code == 0)
                     code0_callback(data);
