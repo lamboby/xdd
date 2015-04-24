@@ -63,7 +63,7 @@
                 <button class="button button-balanced" style="margin-right:5px" ng-click="querySchool()">查 找</button>
             </div>
             <ion-list>
-                <ion-radio ng-model="current.schoolId" name="school-group" ng-value="{{school.sch_id}}" ng-repeat="school in schools">{{school.name}}</ion-radio>
+                <ion-radio ng-model="current.schoolId" name="school-group" ng-value="{{school.id}}" ng-repeat="school in schools">{{school.name}}</ion-radio>
             </ion-list>
         </ion-content>
         <ion-footer-bar align-title="right" class="bar-positive">

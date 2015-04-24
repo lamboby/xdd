@@ -76,7 +76,7 @@
         all: function (name, callback) {
             var params = { token: itru_accessToken, key: name };
             Utils.exec("schools/searchSchools", params, callback, function (data) {
-                familys = data.Data;
+                schools = data.Data;
             });
         }
     };

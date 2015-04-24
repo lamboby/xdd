@@ -136,7 +136,7 @@
     };
 })
 
-.controller('CreateStudentCtrl', function ($scope, $state, $ionicModal, Student, Utils) {
+.controller('CreateStudentCtrl', function ($scope, $state, $ionicModal, Student, School, Utils) {
     $scope.schools = [];
     $scope.grades = [];
     $scope.grade = null;
@@ -174,16 +174,28 @@
             return
         }
 
-        $scope.schools = [{ sch_id: 1, name: "kakaxi" }, { sch_id: 29, name: "中心小学" }];
-        if ($scope.schools.length > 0)
-            $scope.current.schoolId = $scope.schools[0].sch_id;
+        Utils.loading();
+        School.all($scope.current.query, function (data, status) {
+            if (status == 0) {
+                $scope.schools = data.Data;
+                if ($scope.schools.length > 0)
+                    $scope.current.schoolId = $scope.schools[0].id;
+            }
+            else {
+                var msg = data ? data.Code + " " + data.Msg : status;
+                Utils.alert("查找学校失败，错误码：" + msg);
+            }
+        });
+
+        //if ($scope.schools.length > 0)
+        //$scope.current.schoolId = $scope.schools[0].sch_id;
     };
 
     $scope.selectSchool = function () {
         $scope.current.schoolName = "";
         if ($scope.current.schoolId) {
             for (var i = 0; i < $scope.schools.length; i++) {
-                if ($scope.schools[i].sch_id == $scope.current.schoolId) {
+                if ($scope.schools[i].id == $scope.current.schoolId) {
                     $scope.current.schoolName = $scope.schools[i].name;
                     break;
                 }
