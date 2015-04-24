@@ -58,11 +58,12 @@
 
 .controller('SelectFamilyCtrl', function ($scope, $state, Family, Utils) {
     Utils.loading();
+    $scope.current = { familyId: "" };
     Family.all(function (data, status) {
         if (status == 0) {
             $scope.familys = data.Data;
             if ($scope.familys && $scope.familys.length > 0)
-                $scope.familyId = $scope.familys[0].fml_id;
+                $scope.current.familyId = $scope.familys[0].fml_id;
         }
         else {
             var msg = data ? data.Code + " " + data.Msg : status;
@@ -71,9 +72,9 @@
     });
 
     $scope.selected = function () {
-        Family.isPrimary($scope.familyId, function (data, status) {
+        Family.isPrimary($scope.current.familyId, function (data, status) {
             if (status == 0) {
-                itru_familyId($scope.familyId);
+                itru_familyId($scope.current.familyId);
                 itru_isPrimary = data.Data[0].primary;
                 $state.go("tab.dash");
             }
