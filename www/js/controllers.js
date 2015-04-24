@@ -142,8 +142,7 @@
     $scope.classes = [];
 
     $scope.current = {
-        query: "",
-        schoolName: "",
+        query: ""
     };
     $scope.student = {
         stu_name: "",
@@ -152,6 +151,7 @@
         picture: "",
         sid: "",
         sch_id: "",
+        sch_name: "",
         grade_id: "",
         class_id: ""
     };
@@ -192,11 +192,10 @@
     };
 
     $scope.selectSchool = function () {
-        $scope.current.schoolName = "";
         if ($scope.student.sch_id) {
             for (var i = 0; i < $scope.schools.length; i++) {
                 if ($scope.schools[i].id == $scope.student.sch_id) {
-                    $scope.current.schoolName = $scope.schools[i].name;
+                    $scope.student.sch_name = $scope.schools[i].name;
                     break;
                 }
             }
@@ -255,7 +254,6 @@
         else if (!$scope.student.birthday)
             Utils.alert("请输入生日");
         else {
-            //$scope.student.birthday = $filter("date")($scope.student.birthday, "yyyy-MM-dd");
             Utils.loading();
             Student.create($scope.student, function (data, status) {
                 if (status == 0)
