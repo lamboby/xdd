@@ -123,8 +123,14 @@
 
     $scope.del = function (student) {
         Utils.confirm("确定要删除学生吗?", function (res) {
-            if (res)
-                Student.remove(student);
+            if (res) {
+                Student.del(student, function (data, status) {
+                    if (status != 0) {
+                        var msg = data ? data.Code + " " + data.Msg : status;
+                        Utils.alert("删除学生失败，错误码：" + msg);
+                    }
+                });
+            }
         });
     };
 })

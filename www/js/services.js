@@ -57,8 +57,8 @@
             });
         },
         del: function (student, callback) {
-            var params = { token: itru_accessToken, stu_id: student.stu_id };
-            var url = Utils.buildUrl("families/deleteStudent", params);
+            var params = { token: itru_accessToken, fml_id: itru_familyId(), stu_id: student.stu_id, sch_id: student.sch_id };
+            var url = Utils.buildUrl("students/delete", params);
             $http.jsonp(url).success(function (data) {
                 if (data.Code == 0)
                     students.splice(students.indexOf(student), 1);
