@@ -39,34 +39,22 @@
     };
 })
 
-.factory("Student", function ($http, Utils) {
+.factory("Student", function (Utils) {
     var students = [];
 
     return {
         all: function (callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId() };
             var url = Utils.buildUrl("families/getAllStudents", params);
-            $http.jsonp(url).success(function (data) {
-                if (data.Code == 0)
-                    students = data.Data;
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                callback(data, statusText);
-            }).finally(function () {
-                Utils.hideLoading();
+            Utils.exec(url, params, callback, function (data) {
+                students = data.Data;
             });
         },
         del: function (student, callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId(), stu_id: student.stu_id, sch_id: student.sch_id };
             var url = Utils.buildUrl("students/delete", params);
-            $http.jsonp(url).success(function (data) {
-                if (data.Code == 0)
-                    students.splice(students.indexOf(student), 1);
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                callback(data, statusText);
-            }).finally(function () {
-                Utils.hideLoading();
+            Utils.exec(url, params, callback, function (data) {
+                students.splice(students.indexOf(student), 1);
             });
         },
         get: function (studentId) {
@@ -83,41 +71,29 @@
     };
 })
 
-.factory("School", function ($http, Utils) {
+.factory("School", function (Utils) {
     var schools = [];
 
     return {
         all: function (name, callback) {
             var params = { token: itru_accessToken, key: name };
             var url = Utils.buildUrl("families/loginList", params);
-            $http.jsonp(url).success(function (data) {
-                if (data.Code == 0)
-                    familys = data.Data;
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                callback(data, statusText);
-            }).finally(function () {
-                Utils.hideLoading();
+            Utils.exec(url, params, callback, function (data) {
+                familys = data.Data;
             });
         }
     };
 })
 
-.factory("Family", function ($http, Utils) {
+.factory("Family", function (Utils) {
     var familys = [];
 
     return {
         all: function (callback) {
             var params = { token: itru_accessToken, id: itru_userId() };
             var url = Utils.buildUrl("families/loginList", params);
-            $http.jsonp(url).success(function (data) {
-                if (data.Code == 0)
-                    familys = data.Data;
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                callback(data, statusText);
-            }).finally(function () {
-                Utils.hideLoading();
+            Utils.exec(url, params, callback, function (data) {
+                familys = data.Data;
             });
         },
         get: function (familyId) {
@@ -130,100 +106,56 @@
         create: function (family, callback) {
             var params = { token: itru_accessToken, id: itru_userId(), name: family.fml_name };
             var url = Utils.buildUrl("families/create", params);
-
-            $http.jsonp(url).success(function (data) {
-                if (data.Code == 0) {
-                    family.fml_id = data.Data[0].id;
-                    familys.push(family);
-                }
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                callback(data, statusText);
-            }).finally(function () {
-                Utils.hideLoading();
+            Utils.exec(url, params, callback, function (data) {
+                family.fml_id = data.Data[0].id;
+                familys.push(family);
             });
         },
         update: function (family, callback) {
             var params = { token: itru_accessToken, id: family.fml_id, name: family.fml_name };
             var url = Utils.buildUrl("families/update", params);
-
-            $http.jsonp(url).success(function (data) {
-                if (data.Code == 0) {
-                    for (var i = 0; i < familys.length; i++) {
-                        if (familys[i].fml_id == family.fml_id) {
-                            familys[i].fml_name = family.fml_name;
-                            break;
-                        }
+            Utils.exec(url, params, callback, function (data) {
+                for (var i = 0; i < familys.length; i++) {
+                    if (familys[i].fml_id == family.fml_id) {
+                        familys[i].fml_name = family.fml_name;
+                        break;
                     }
                 }
-
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                callback(data, statusText);
-            }).finally(function () {
-                Utils.hideLoading();
             });
         },
         isPrimary: function (familyId, callback) {
             var params = { token: itru_accessToken, fml_id: familyId, user_id: itru_userId() };
             var url = Utils.buildUrl("users/isPrimary", params);
-            $http.jsonp(url).success(function (data) {
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                callback(data, statusText);
-            }).finally(function () {
-                Utils.hideLoading();
-            });
+            Utils.exec(url, params, callback);
         }
     }
 })
 
-.factory("Parent", function ($http, Utils) {
+.factory("Parent", function (Utils) {
     var parents = [];
 
     return {
         all: function (callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId() };
             var url = Utils.buildUrl("families/getAllUsers", params);
-            $http.jsonp(url).success(function (data) {
-                if (data.Code == 0)
-                    parents = data.Data;
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                callback(data, statusText);
-            }).finally(function () {
-                Utils.hideLoading();
+            Utils.exec(url, params, callback, function (data) {
+                parents = data.Data;
             });
         },
         create: function (parent, callback) {
             var params = angular.copy(parent);
             params.token = itru_accessToken;
             var url = Utils.buildUrl("users/createViceParents", params);
-
-            $http.jsonp(url).success(function (data) {
-                if (data.Code == 0) {
-                    parent.user_id = data.Data[0].user_id;
-                    parents.push(parent);
-                }
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                callback(data, statusText);
-            }).finally(function () {
-                Utils.hideLoading();
+            Utils.exec(url, params, callback, function (data) {
+                parent.user_id = data.Data[0].user_id;
+                parents.push(parent);
             });
         },
         del: function (parent, callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId(), pri_id: itru_userId(), user_id: parent.user_id };
             var url = Utils.buildUrl("users/deleteViceParents", params);
-
-            $http.jsonp(url).success(function (data) {
-                if (data.Code == 0)
-                    parents.splice(parents.indexOf(parent), 1);
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                callback(data, statusText);
-            }).finally(function () {
-                Utils.hideLoading();
+            Utils.exec(url, params, callback, function (data) {
+                parents.splice(parents.indexOf(parent), 1);
             });
         }
     }
@@ -237,16 +169,10 @@
             var params = { username: phone, password: pwd };
             var url = Utils.buildUrl("users/tickets", params);
 
-            $http.jsonp(url).success(function (data) {
-                if (data.Code == 0) {
-                    itru_isLogin = true;
-                    itru_userId(data.Data[0].user_id);
-                    itru_loginToken(data.Data[0].token);
-                }
-                callback(data, data.Code);
-            }).error(function (data, statusText) {
-                Utils.hideLoading();
-                callback(data, statusText);
+            Utils.exec(url, params, callback, function (data) {
+                itru_isLogin = true;
+                itru_userId(data.Data[0].user_id);
+                itru_loginToken(data.Data[0].token);
             });
         },
         refreshAccessToken: function () {
@@ -318,13 +244,15 @@
         },
         exec: function (url, params, callback, code0_callback) {
             $http.jsonp(url).success(function (data) {
-                if (data.Code == 0)
+                if (data.Code == 0 && code0_callback)
                     code0_callback(data);
-                callback(data, data.Code);
+                if (callback)
+                    callback(data, data.Code);
             }).error(function (data, statusText) {
-                callback(data, statusText);
+                if (callback)
+                    callback(data, statusText);
             }).finally(function () {
-                Utils.hideLoading();
+                $ionicLoading.hide();
             });
         }
     }
