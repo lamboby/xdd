@@ -69,7 +69,10 @@
             params.token = itru_accessToken;
             Utils.exec("students/create", params, callback, function (data) {
                 student.stu_id = data.Data[0].id;
-                students.push(student);
+                if (students)
+                    students.push(student);
+                else
+                    students = [student];
             });
         }
     };
@@ -113,7 +116,11 @@
             var params = { token: itru_accessToken, id: itru_userId(), name: family.fml_name };
             Utils.exec("families/create", params, callback, function (data) {
                 family.fml_id = data.Data[0].id;
-                familys.push(family);
+
+                if (familys)
+                    familys.push(family);
+                else
+                    familys = [family];
             });
         },
         update: function (family, callback) {
@@ -149,7 +156,11 @@
             params.token = itru_accessToken;
             Utils.exec("users/createViceParents", params, callback, function (data) {
                 parent.user_id = data.Data[0].user_id;
-                parents.push(parent);
+
+                if (parents)
+                    parents.push(parent);
+                else
+                    parents = [parent];
             });
         },
         del: function (parent, callback) {

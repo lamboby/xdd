@@ -208,8 +208,11 @@
                 $scope.grades = data.Data[0].grade;
                 if ($scope.grades && $scope.grades.length > 0) {
                     $scope.student.grade_id = $scope.grades[0].grade_id;
-                    if ($scope.grades[0].class && $scope.grades[0].class.length > 0)
+                    if ($scope.grades[0].class && $scope.grades[0].class.length > 0) {
                         $scope.classes = $scope.grades[0].class;
+                        if ($scope.classes && $scope.classes.length > 0)
+                            $scope.student.class_id = $scope.classes[0].class_id;
+                    }
                 }
 
                 $scope.current.query = "";
@@ -227,6 +230,8 @@
         for (var i = 0; i <= $scope.grades.length; i++) {
             if ($scope.grades[i].grade_id == $scope.student.grade_id) {
                 $scope.classes = $scope.grades[i].class;
+                if ($scope.classes && $scope.classes.length > 0)
+                    $scope.student.class_id = $scope.classes[0].class_id;
                 break;
             }
         }
@@ -246,7 +251,7 @@
         else if (!$scope.student.birthday)
             Utils.alert("请输入生日");
         else {
-            $scope.student.birthday = $filter("date")($scope.student.birthday, "yyyy-MM-dd");
+            //$scope.student.birthday = $filter("date")($scope.student.birthday, "yyyy-MM-dd");
             Utils.loading();
             Student.create($scope.student, function (data, status) {
                 if (status == 0)
