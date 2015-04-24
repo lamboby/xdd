@@ -39,7 +39,7 @@
     };
 })
 
-.factory("Student", function (Utils) {
+.factory("Student", function ($filter, Utils) {
     var students = [];
 
     return {
@@ -66,6 +66,7 @@
         create: function (student, callback) {
             var params = angular.copy(student);
             params.name = student.stu_name;
+            params.birthday = $filter("date")(params.birthday, 'yyyy-MM-dd');
             params.token = itru_accessToken;
             Utils.exec("students/create", params, callback, function (data) {
                 student.stu_id = data.Data[0].id;
