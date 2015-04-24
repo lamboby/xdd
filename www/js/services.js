@@ -230,7 +230,7 @@
             });
         },
         refreshAccessToken: function () {
-            if (!itru_isLogin || !itru_loginToken()) {
+            if (!itru_isLogin && !itru_loginToken()) {
                 $state.go("signin");
                 return -1;
             }
