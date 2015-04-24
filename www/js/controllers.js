@@ -135,30 +135,81 @@
     };
 })
 
-.controller('CreateStudentCtrl', function ($scope, $state, Student, Utils) {
+.controller('CreateStudentCtrl', function ($scope, $state, $ionicModal, Student, Utils) {
+    $scope.schools = [];
+    $scope.grades = [];
+    $scope.grade = null;
+
+    $scope.current = {
+        query: "",
+        schoolId: "",
+        schoolName: "",
+    };
     $scope.student = {
         stu_name: "",
         gender: 0,
-        birthday: ""
+        birthday: "",
+        picture: "",
+        sid: "",
+        sch_id: "",
+        grade_id: "",
+        class_id: ""
     };
 
-    $scope.save = function () {
-        if (!$scope.student.stu_name)
-            Utils.alert("请输入姓名");
-        else {
-            var student = {
-                stu_id: 5,
-                stu_name: $scope.student.stu_name,
-                gender: $scope.student.gender,
-                birthday: $scope.student.birthday,
-                sch_id: 1,
-                sch_name: '北京第一小学',
-                picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
-            };
-            Student.put(student);
-            $state.go("tab.student");
-        }
+    $ionicModal.fromTemplateUrl('school-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.modal = modal;
+    });
+
+    $scope.showModal = function () {
+        $scope.modal.show();
     };
+
+    $scope.querySchool = function () {
+        if (!$scope.current.query) {
+            Utils.alert("请输入学校名称");
+            return
+        }
+
+        $scope.schools = [{ sch_id: 1, name: "kakaxi" }, { sch_id: 29, name: "中心小学" }];
+        if ($scope.schools.length > 0)
+            $scope.current.schoolId = $scope.schools[0].sch_id;
+    };
+
+    $scope.selectSchool = function () {
+        $scope.current.schoolName = "";
+        if ($scope.current.schoolId) {
+            for (var i = 0; i < $scope.schools.length; i++) {
+                if ($scope.schools[i].sch_id == $scope.current.schoolId) {
+                    $scope.current.schoolName = $scope.schools[i].name;
+                    break;
+                }
+            }
+        }
+        $scope.current.query = "";
+        $scope.schools = [];
+        $scope.modal.hide();
+    };
+
+    //$scope.save = function () {
+    //    if (!$scope.student.stu_name)
+    //        Utils.alert("请输入姓名");
+    //    else {
+    //        var student = {
+    //            stu_id: 5,
+    //            stu_name: $scope.student.stu_name,
+    //            gender: $scope.student.gender,
+    //            birthday: $scope.student.birthday,
+    //            sch_id: 1,
+    //            sch_name: '北京第一小学',
+    //            picture: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+    //        };
+    //        Student.put(student);
+    //        $state.go("tab.student");
+    //    }
+    //};
 })
 
 .controller('FamilyCtrl', function ($scope, $state, Family, Utils) {

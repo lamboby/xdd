@@ -31,7 +31,7 @@
                 $urlRouter.sync();
             else {
                 var res = Auth.refreshAccessToken();
-                if (res === -1) 
+                if (res === -1)
                     $state.go("signin");
                 else if (res === 0)
                     $urlRouter.sync();
@@ -123,6 +123,15 @@
         views: {
             'tab-setting': {
                 templateUrl: 'templates/create-student.html',
+                controller: 'CreateStudentCtrl'
+            }
+        }
+    })
+    .state('tab.create-student-2', {
+        url: '/setting/create-student-2',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/create-student-2.html',
                 controller: 'CreateStudentCtrl'
             }
         }

@@ -83,7 +83,27 @@
     };
 })
 
-.factory("Family", function ($http, Auth, Utils) {
+.factory("School", function ($http, Utils) {
+    var schools = [];
+
+    return {
+        all: function (name, callback) {
+            var params = { token: itru_accessToken, key: name };
+            var url = Utils.buildUrl("families/loginList", params);
+            $http.jsonp(url).success(function (data) {
+                if (data.Code == 0)
+                    familys = data.Data;
+                callback(data, data.Code);
+            }).error(function (data, statusText) {
+                callback(data, statusText);
+            }).finally(function () {
+                Utils.hideLoading();
+            });
+        }
+    };
+})
+
+.factory("Family", function ($http, Utils) {
     var familys = [];
 
     return {
@@ -158,7 +178,7 @@
     }
 })
 
-.factory("Parent", function ($http, Auth, Utils) {
+.factory("Parent", function ($http, Utils) {
     var parents = [];
 
     return {
@@ -255,7 +275,7 @@
     }
 })
 
-.factory("Utils", function ($ionicPopup, $ionicLoading) {
+.factory("Utils", function ($http, $ionicPopup, $ionicLoading) {
     return {
         alert: function (msg) {
             $ionicPopup.alert({
@@ -295,6 +315,17 @@
             for (var item in params)
                 url += "&" + item + "=" + encodeURIComponent(params[item]);
             return url;
+        },
+        next: function (url, params, callback, code0_callback) {
+            $http.jsonp(url).success(function (data) {
+                if (data.Code == 0)
+                    code0_callback(data);
+                callback(data, data.Code);
+            }).error(function (data, statusText) {
+                callback(data, statusText);
+            }).finally(function () {
+                Utils.hideLoading();
+            });
         }
     }
 });

@@ -1,0 +1,29 @@
+﻿<ion-view view-title="添加学生">
+    <ion-content>
+        <form ng-submit="save()" novalidate>
+            <br />
+            <label class="item item-input">
+                <span class="input-label">姓名</span>
+                <input type="text" placeholder="姓名" ng-model="student.stu_name" required>
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    性别
+                </div>
+                <select ng-model="student.gender">
+                    <option value="0" selected>男</option>
+                    <option value="1">女</option>
+                </select>
+            </label>
+
+            <label class="item item-input">
+                <span class="input-label">生日</span>
+                <input type="date" placeholder="生日" ng-model="student.birthday">
+            </label>
+            <div class="padding">
+                <button class="button button-block button-balanced" type="submit">保 存</button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

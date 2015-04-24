@@ -7,6 +7,29 @@
                 <input type="text" placeholder="姓名" ng-model="student.stu_name" required>
             </label>
 
+            <label class="item item-input">
+                <span class="input-label">学校</span>
+                <input type="text" placeholder="学校" ng-model="current.schoolName" ng-click="showModal()" required>
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    年级
+                </div>
+                <select ng-model="student.grade_id">
+                    <option value="{{grade.grade_id}}" ng-repeat="grade in grades">{{grade.name}}</option>
+                </select>
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    年级
+                </div>
+                <select ng-model="student.class_id">
+                    <option value="{{cla.class_id}}" ng-repeat="cla in grade.class">{{cla.name}}</option>
+                </select>
+            </label>
+
             <label class="item item-input item-select">
                 <div class="input-label">
                     性别
@@ -27,3 +50,24 @@
         </form>
     </ion-content>
 </ion-view>
+
+<script id="school-modal.html" type="text/ng-template">
+    <ion-modal-view>
+        <ion-header-bar>
+            <h1 class="title">选择学校</h1>
+        </ion-header-bar>
+        <ion-content>
+            <div class="item item-input">
+                <span class="input-label">学校名</span>
+                <input type="text" placeholder="学校名" ng-model="current.query" required>
+                <button class="button button-balanced" style="margin-right:5px" ng-click="querySchool()">查 找</button>
+            </div>
+            <ion-list>
+                <ion-radio ng-model="current.schoolId" name="school-group" ng-value="{{school.sch_id}}" ng-repeat="school in schools">{{school.name}}</ion-radio>
+            </ion-list>
+        </ion-content>
+        <ion-footer-bar align-title="right" class="bar-positive">
+            <button class="button pull-right button-positive" ng-click="selectSchool()">确 定</button>
+        </ion-footer-bar>
+    </ion-modal-view>
+</script>
