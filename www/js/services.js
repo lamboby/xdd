@@ -72,11 +72,7 @@
             params.birthday = $filter("date")(params.birthday, 'yyyy-MM-dd');
             params.token = itru_accessToken;
             params.fml_id = itru_familyId();
-            Utils.exec("students/create", params, callback, function (data) {
-                student.stu_id = data.Data[0].id;
-                student.ssid = data.Data[0].ssid;
-                students.push(student);
-            });
+            Utils.exec("students/create", params, callback);
         },
         update: function (student, callback) {
             var params = angular.copy(student);
@@ -128,21 +124,11 @@
         },
         create: function (family, callback) {
             var params = { token: itru_accessToken, id: itru_userId(), name: family.fml_name };
-            Utils.exec("families/create", params, callback, function (data) {
-                family.fml_id = data.Data[0].id;
-                familys.push(family);
-            });
+            Utils.exec("families/create", params, callback);
         },
         update: function (family, callback) {
             var params = { token: itru_accessToken, id: family.fml_id, name: family.fml_name };
-            Utils.exec("families/update", params, callback, function (data) {
-                for (var i = 0; i < familys.length; i++) {
-                    if (familys[i].fml_id == family.fml_id) {
-                        familys[i].fml_name = family.fml_name;
-                        break;
-                    }
-                }
-            });
+            Utils.exec("families/update", params, callback);
         },
         isPrimary: function (familyId, callback) {
             var params = { token: itru_accessToken, fml_id: familyId, user_id: itru_userId() };
@@ -168,10 +154,7 @@
             var params = angular.copy(parent);
             params.token = itru_accessToken;
             params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
-            Utils.exec("users/createViceParents", params, callback, function (data) {
-                parent.user_id = data.Data[0].user_id;
-                parents.push(parent);
-            });
+            Utils.exec("users/createViceParents", params, callback);
         },
         del: function (parent, callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId(), pri_id: itru_userId(), user_id: parent.user_id };

@@ -1,6 +1,6 @@
 ﻿<ion-view view-title="学生">
     <ion-nav-buttons side="right">
-        <a class="button button-clear icon ion-android-add" href="#/tab/setting/create-student"></a>
+        <a class="button button-clear icon ion-android-add" style="display:{{isPrimary?'inline-block':'none'}}" href="#/tab/setting/create-student"></a>
     </ion-nav-buttons>
     <ion-content>
         <ion-list>
@@ -17,7 +17,7 @@
                         <p>学校：{{student.sch_name}}</p>
                     </div>
 
-                    <div class="item tabs tabs-secondary tabs-icon-left">
+                    <div class="item tabs tabs-secondary tabs-icon-left" style='display:{{isPrimary ? "flex":"none"}}'>
                         <a class="tab-item" ng-click="del(student)">
                             <i class="icon ion-trash-a"></i>
                             删除

@@ -111,8 +111,9 @@
 
 })
 
-.controller('StudentCtrl', function ($scope, Student, Utils) {
+.controller('StudentCtrl', function ($scope, $state, Student, Utils) {
     Utils.loading();
+    $scope.isPrimary = itru_isPrimary;
     Student.all(function (data, status) {
         if (status == 0)
             $scope.students = data.Data;
@@ -535,7 +536,7 @@
         if (status == 0) {
             $scope.isPrimary = data.Data[0].primary;
             if ($scope.isPrimary)
-                $scope.family = angular.copy(Family.get($stateParams.familyId));
+                $scope.family = Family.get($stateParams.familyId);
             else {
                 Utils.alert("非主家长不能修改此家庭");
                 $state.go("tab.family");

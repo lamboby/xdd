@@ -75,6 +75,7 @@
       })
     .state('tab.dash', {
         url: '/dash',
+        cache: false,
         views: {
             'tab-dash': {
                 templateUrl: 'templates/tab-dash.html',
@@ -84,6 +85,7 @@
     })
     .state('tab.news', {
         url: '/news',
+        cache: false,
         views: {
             'tab-news': {
                 templateUrl: 'templates/tab-news.html',
@@ -139,6 +141,7 @@
     })
     .state('tab.family', {
         url: '/setting/family',
+        cache: false,
         views: {
             'tab-setting': {
                 templateUrl: 'templates/family-list.html',
@@ -166,6 +169,7 @@
     })
     .state('tab.parent', {
         url: '/setting/parent',
+        cache: false,
         views: {
             'tab-setting': {
                 templateUrl: 'templates/parent-list.html',
