@@ -400,7 +400,6 @@
                 }
 
                 if (!cSelected) {
-                    $scope.classes.length = 0;
                     $scope.student.class_id = "";
                     $scope.student.class_name = "";
                 }
@@ -432,7 +431,6 @@
         }
 
         if (!cSelected) {
-            $scope.classes.length = 0;
             $scope.student.class_id = "";
             $scope.student.class_name = "";
         }
