@@ -313,11 +313,12 @@
     };
 })
 
-.controller('EditStudentCtrl', function ($scope, $state, $ionicModal, $stateParams, Student, School, Utils) {
+.controller('EditStudentCtrl', function ($scope, $state, $ionicModal, $stateParams, $filter, Student, School, Utils) {
     $scope.schools = [];
     $scope.grades = [];
     $scope.classes = [];
     $scope.student = Student.get($stateParams.studentId);
+    $scope.student.birthday = new Date($scope.student.birthday);
     $scope.grades.push({ grade_id: $scope.student.grade_id, name: $scope.student.grade_name });
     $scope.classes.push({ class_id: $scope.student.class_id, name: $scope.student.class_name });
     $scope.current = {
