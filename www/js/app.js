@@ -127,12 +127,12 @@
             }
         }
     })
-    .state('tab.create-student-2', {
-        url: '/setting/create-student-2',
+    .state('tab.edit-student', {
+        url: '/setting/student/:studentId',
         views: {
             'tab-setting': {
-                templateUrl: 'templates/create-student-2.html',
-                controller: 'CreateStudentCtrl'
+                templateUrl: 'templates/edit-student.html',
+                controller: 'EditStudentCtrl'
             }
         }
     })

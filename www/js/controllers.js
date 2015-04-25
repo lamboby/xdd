@@ -136,7 +136,7 @@
     };
 })
 
-.controller('CreateStudentCtrl', function ($scope, $state, $ionicModal, $filter, Student, School, Utils) {
+.controller('CreateStudentCtrl', function ($scope, $state, $ionicModal, Student, School, Utils) {
     $scope.schools = [];
     $scope.grades = [];
     $scope.classes = [];
@@ -153,7 +153,172 @@
         sch_id: "",
         sch_name: "",
         grade_id: "",
-        class_id: ""
+        grade_name: "",
+        class_id: "",
+        class_name: ""
+    };
+
+    $ionicModal.fromTemplateUrl('school-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.modal = modal;
+    });
+
+    $scope.showModal = function () {
+        $scope.modal.show();
+    };
+
+    $scope.hideModal = function () {
+        $scope.modal.hide();
+    };
+
+    $scope.querySchool = function () {
+        if (!$scope.current.query) {
+            Utils.alert("请输入学校名称");
+            return;
+        }
+
+        Utils.loading();
+        School.all($scope.current.query, function (data, status) {
+            if (status == 0) {
+                $scope.schools = data.Data;
+                if ($scope.schools.length > 0)
+                    $scope.student.sch_id = $scope.schools[0].id;
+            }
+            else {
+                var msg = data ? data.Code + " " + data.Msg : status;
+                Utils.alert("查找学校失败，错误码：" + msg);
+            }
+        });
+    };
+
+    $scope.selectSchool = function () {
+        if ($scope.student.sch_id) {
+            for (var i = 0; i < $scope.schools.length; i++) {
+                if ($scope.schools[i].id == $scope.student.sch_id) {
+                    $scope.student.sch_name = $scope.schools[i].name;
+                    break;
+                }
+            }
+        }
+        else {
+            Utils.alert("请选择学校");
+            return;
+        }
+
+        Utils.loading();
+        School.allGrades($scope.student.sch_id, function (data, status) {
+            if (status == 0) {
+                var gSelected = false;
+                var cSelected = false;
+                $scope.grades = data.Data[0].grade;
+                if ($scope.grades && $scope.grades.length > 0) {
+                    $scope.student.grade_id = $scope.grades[0].grade_id;
+                    $scope.student.grade_name = $scope.grades[0].name;
+                    gSelected = true;
+                    if ($scope.grades[0].class && $scope.grades[0].class.length > 0) {
+                        $scope.classes = $scope.grades[0].class;
+                        if ($scope.classes && $scope.classes.length > 0) {
+                            $scope.student.class_id = $scope.classes[0].class_id;
+                            $scope.student.class_name = $scope.classes[0].name;
+                            cSelected = true;
+                        }
+                    }
+                }
+
+                if (!gSelected) {
+                    $scope.student.grade_id = "";
+                    $scope.student.grade_name = "";
+                }
+
+                if (!cSelected) {
+                    $scope.student.class_id = "";
+                    $scope.student.class_name = "";
+                }
+
+                $scope.current.query = "";
+                $scope.schools = [];
+                $scope.hideModal();
+            }
+            else {
+                var msg = data ? data.Code + " " + data.Msg : status;
+                Utils.alert("获取年级列表失败，错误码：" + msg);
+            }
+        });
+    };
+
+    $scope.selectGrade = function () {
+        var cSelected = false;
+        for (var i = 0; i <= $scope.grades.length; i++) {
+            if ($scope.grades[i].grade_id == $scope.student.grade_id) {
+                $scope.classes = $scope.grades[i].class;
+                $scope.student.grade_name = $scope.grades[i].name;
+                if ($scope.classes && $scope.classes.length > 0) {
+                    $scope.student.class_id = $scope.classes[0].class_id;
+                    $scope.student.class_name = $scope.classes[0].name;
+                    cSelected = true;
+                }
+                break;
+            }
+        }
+
+        if (!cSelected) {
+            $scope.student.class_id = "";
+            $scope.student.class_name = "";
+        }
+    };
+
+    $scope.selectClass = function () {
+        var selected = false;
+        for (var i = 0; i <= $scope.classes.length; i++) {
+            if ($scope.classes[i].class_id == $scope.student.class_id) {
+                $scope.student.class_name = $scope.classes[i].name;
+                selected = true;
+                break;
+            }
+        }
+
+        if (!selected) {
+            $scope.student.class_id = "";
+            $scope.student.class_name = "";
+        }
+    };
+
+    $scope.save = function () {
+        if (!$scope.student.stu_name)
+            Utils.alert("请输入姓名");
+        else if ($scope.student.stu_name.length > 20)
+            Utils.alert("姓名不能超过20个字符");
+        else if (!$scope.student.sch_id)
+            Utils.alert("请选择学校");
+        else if (!$scope.student.grade_id)
+            Utils.alert("请选择年级");
+        else if (!$scope.student.class_id)
+            Utils.alert("请选择班级");
+        else if (!$scope.student.birthday)
+            Utils.alert("请输入生日");
+        else {
+            Utils.loading();
+            Student.create($scope.student, function (data, status) {
+                if (status == 0)
+                    $state.go("tab.student");
+                else {
+                    var msg = data ? data.Code + " " + data.Msg : status;
+                    Utils.alert("添加学生失败，错误码：" + msg);
+                }
+            });
+        }
+    };
+})
+
+.controller('EditStudentCtrl', function ($scope, $state, $ionicModal, $stateParams, Student, School, Utils) {
+    $scope.schools = [];
+    $scope.grades = [];
+    $scope.classes = [];
+    $scope.student = Student.get($stateParams.studentId);
+    $scope.current = {
+        query: ""
     };
 
     $ionicModal.fromTemplateUrl('school-modal.html', {
