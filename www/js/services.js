@@ -75,11 +75,19 @@
             Utils.exec("students/create", params, callback);
         },
         update: function (student, callback) {
-            var params = angular.copy(student);
-            params.name = student.stu_name;
-            params.birthday = $filter("date")(params.birthday, 'yyyy-MM-dd');
-            params.token = itru_accessToken;
-            params.fml_id = itru_familyId();
+            var params = {
+                token: itru_accessToken,
+                id: student.stu_id,
+                name: student.stu_name,
+                gender: student.gender,
+                picture: student.picture,
+                birthday: $filter("date")(student.birthday, 'yyyy-MM-dd'),
+                sch_id: student.sch_id,
+                grade_id: student.grade_id,
+                class_id: student.class_id,
+                ssid: student.ssid,
+                sid: student.stu_sid
+            };
             Utils.exec("students/update", params, callback);
         }
     };

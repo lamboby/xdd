@@ -318,6 +318,8 @@
     $scope.grades = [];
     $scope.classes = [];
     $scope.student = Student.get($stateParams.studentId);
+    $scope.grades.push({ grade_id: $scope.student.grade_id, name: $scope.student.grade_name });
+    $scope.classes.push({ class_id: $scope.student.class_id, name: $scope.student.class_name });
     $scope.current = {
         query: ""
     };
@@ -397,6 +399,7 @@
                 }
 
                 if (!cSelected) {
+                    $scope.classes.length = 0;
                     $scope.student.class_id = "";
                     $scope.student.class_name = "";
                 }
@@ -428,6 +431,7 @@
         }
 
         if (!cSelected) {
+            $scope.classes.length = 0;
             $scope.student.class_id = "";
             $scope.student.class_name = "";
         }

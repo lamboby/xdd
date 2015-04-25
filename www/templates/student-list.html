@@ -13,8 +13,11 @@
                     </div>
 
                     <div class="item item-body">
-                        <p>生日：{{student.birthday | date:'yyyy-MM-dd'}}</p>
                         <p>学校：{{student.sch_name}}</p>
+                        <p>年级：{{student.grade_name}}</p>
+                        <p>班级：{{student.class_name}}</p>
+                        <p>学号：{{student.stu_sid}}</p>
+                        <p>生日：{{student.birthday | date:'yyyy-MM-dd'}}</p>
                     </div>
 
                     <div class="item tabs tabs-secondary tabs-icon-left" style='display:{{isPrimary ? "flex":"none"}}'>
