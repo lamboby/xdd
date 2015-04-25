@@ -373,14 +373,31 @@
         Utils.loading();
         School.allGrades($scope.student.sch_id, function (data, status) {
             if (status == 0) {
+                var gSelected = false;
+                var cSelected = false;
                 $scope.grades = data.Data[0].grade;
                 if ($scope.grades && $scope.grades.length > 0) {
                     $scope.student.grade_id = $scope.grades[0].grade_id;
+                    $scope.student.grade_name = $scope.grades[0].name;
+                    gSelected = true;
                     if ($scope.grades[0].class && $scope.grades[0].class.length > 0) {
                         $scope.classes = $scope.grades[0].class;
-                        if ($scope.classes && $scope.classes.length > 0)
+                        if ($scope.classes && $scope.classes.length > 0) {
                             $scope.student.class_id = $scope.classes[0].class_id;
+                            $scope.student.class_name = $scope.classes[0].name;
+                            cSelected = true;
+                        }
                     }
+                }
+
+                if (!gSelected) {
+                    $scope.student.grade_id = "";
+                    $scope.student.grade_name = "";
+                }
+
+                if (!cSelected) {
+                    $scope.student.class_id = "";
+                    $scope.student.class_name = "";
                 }
 
                 $scope.current.query = "";
@@ -395,13 +412,39 @@
     };
 
     $scope.selectGrade = function () {
+        var cSelected = false;
         for (var i = 0; i <= $scope.grades.length; i++) {
             if ($scope.grades[i].grade_id == $scope.student.grade_id) {
                 $scope.classes = $scope.grades[i].class;
-                if ($scope.classes && $scope.classes.length > 0)
+                $scope.student.grade_name = $scope.grades[i].name;
+                if ($scope.classes && $scope.classes.length > 0) {
                     $scope.student.class_id = $scope.classes[0].class_id;
+                    $scope.student.class_name = $scope.classes[0].name;
+                    cSelected = true;
+                }
                 break;
             }
+        }
+
+        if (!cSelected) {
+            $scope.student.class_id = "";
+            $scope.student.class_name = "";
+        }
+    };
+
+    $scope.selectClass = function () {
+        var selected = false;
+        for (var i = 0; i <= $scope.classes.length; i++) {
+            if ($scope.classes[i].class_id == $scope.student.class_id) {
+                $scope.student.class_name = $scope.classes[i].name;
+                selected = true;
+                break;
+            }
+        }
+
+        if (!selected) {
+            $scope.student.class_id = "";
+            $scope.student.class_name = "";
         }
     };
 
@@ -420,12 +463,12 @@
             Utils.alert("请输入生日");
         else {
             Utils.loading();
-            Student.create($scope.student, function (data, status) {
+            Student.update($scope.student, function (data, status) {
                 if (status == 0)
                     $state.go("tab.student");
                 else {
                     var msg = data ? data.Code + " " + data.Msg : status;
-                    Utils.alert("添加学生失败，错误码：" + msg);
+                    Utils.alert("修改学生失败，错误码：" + msg);
                 }
             });
         }
@@ -556,7 +599,7 @@
     };
 })
 
-.controller('CreateParentCtrl', function ($scope, $state, $filter, Parent, Utils) {
+.controller('CreateParentCtrl', function ($scope, $state, Parent, Utils) {
     $scope.parent = {
         username: "",
         gender: 0,
@@ -572,10 +615,10 @@
             Utils.alert("家长姓名不能超过20个字符");
         else if (!$scope.parent.phone)
             Utils.alert("请输入手机号");
+        else if (!$scope.parent.birthday)
+            Utils.alert("请输入生日");
         else {
             Utils.loading();
-            if ($scope.parent.birthday)
-                $scope.parent.birthday = $filter('date')($scope.parent.birthday, 'yyyy-MM-dd');
             Parent.create($scope.parent, function (data, status) {
                 if (status == 0)
                     $state.go("tab.parent");

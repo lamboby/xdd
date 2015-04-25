@@ -46,7 +46,10 @@
         all: function (callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId() };
             Utils.exec("families/getAllStudents", params, callback, function (data) {
-                students = data.Data;
+                if (data.Data)
+                    students = data.Data;
+                else
+                    students.length = 0;
             });
         },
         del: function (student, callback) {
@@ -71,11 +74,20 @@
             params.fml_id = itru_familyId();
             Utils.exec("students/create", params, callback, function (data) {
                 student.stu_id = data.Data[0].id;
+                student.ssid = data.Data[0].ssid;
                 if (students)
                     students.push(student);
                 else
                     students = [student];
             });
+        },
+        update: function (student, callback) {
+            var params = angular.copy(student);
+            params.name = student.stu_name;
+            params.birthday = $filter("date")(params.birthday, 'yyyy-MM-dd');
+            params.token = itru_accessToken;
+            params.fml_id = itru_familyId();
+            Utils.exec("students/update", params, callback);
         }
     };
 })
@@ -104,7 +116,10 @@
         all: function (callback) {
             var params = { token: itru_accessToken, id: itru_userId() };
             Utils.exec("families/loginList", params, callback, function (data) {
-                familys = data.Data;
+                if (data.Data)
+                    familys = data.Data;
+                else
+                    familys.length = 0;
             });
         },
         get: function (familyId) {
@@ -118,11 +133,7 @@
             var params = { token: itru_accessToken, id: itru_userId(), name: family.fml_name };
             Utils.exec("families/create", params, callback, function (data) {
                 family.fml_id = data.Data[0].id;
-
-                if (familys)
-                    familys.push(family);
-                else
-                    familys = [family];
+                familys.push(family);
             });
         },
         update: function (family, callback) {
@@ -143,26 +154,26 @@
     }
 })
 
-.factory("Parent", function (Utils) {
+.factory("Parent", function ($filter, Utils) {
     var parents = [];
 
     return {
         all: function (callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId() };
             Utils.exec("families/getAllUsers", params, callback, function (data) {
-                parents = data.Data;
+                if (data.Data)
+                    parents = data.Data;
+                else
+                    parents.length = 0;
             });
         },
         create: function (parent, callback) {
             var params = angular.copy(parent);
             params.token = itru_accessToken;
+            params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
             Utils.exec("users/createViceParents", params, callback, function (data) {
                 parent.user_id = data.Data[0].user_id;
-
-                if (parents)
-                    parents.push(parent);
-                else
-                    parents = [parent];
+                parents.push(parent);
             });
         },
         del: function (parent, callback) {
