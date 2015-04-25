@@ -111,6 +111,7 @@
     })
     .state('tab.student', {
         url: '/setting/student',
+        cache: false,
         views: {
             'tab-setting': {
                 templateUrl: 'templates/student-list.html',

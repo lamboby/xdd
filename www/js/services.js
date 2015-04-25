@@ -75,10 +75,7 @@
             Utils.exec("students/create", params, callback, function (data) {
                 student.stu_id = data.Data[0].id;
                 student.ssid = data.Data[0].ssid;
-                if (students)
-                    students.push(student);
-                else
-                    students = [student];
+                students.push(student);
             });
         },
         update: function (student, callback) {
