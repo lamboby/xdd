@@ -8,23 +8,28 @@
         $state.go("signin");
     }
     else if (res != 0) {
-        res.then(function (data) {
+        try {
+            res.then(function (data) {
+                Utils.hideLoading();
+                if (data.Code != 'undefined') {
+                    if (data.Code == 0) {
+                        itru_isLogin = true;
+                        itru_accessToken = data.Data[0].access_token;
+                        itru_lastGetTokenTime = new Date();
+                    }
+                    else {
+                        Utils.alert("令牌已失效，请重新登录");
+                        itru_isLogin = false;
+                        $state.go("signin");
+                    }
+                }
+                else
+                    Utils.alert("获取令牌失败，错误码：" + data)
+            });
+        }
+        finally {
             Utils.hideLoading();
-            if (data.Code != 'undefined') {
-                if (data.Code == 0) {
-                    itru_isLogin = true;
-                    itru_accessToken = data.Data[0].access_token;
-                    itru_lastGetTokenTime = new Date();
-                }
-                else {
-                    Utils.alert("令牌已失效，请重新登录");
-                    itru_isLogin = false;
-                    $state.go("signin");
-                }
-            }
-            else
-                Utils.alert("获取令牌失败，错误码：" + data)
-        });
+        }
     }
     else
         Utils.hideLoading();
