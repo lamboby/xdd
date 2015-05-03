@@ -186,6 +186,43 @@
             }
         }
     })
+    .state('tab.card', {
+        url: '/setting/card',
+        cache: false,
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/card-list.html',
+                controller: 'CardCtrl'
+            }
+        }
+    })
+    .state('tab.create-card', {
+        url: '/setting/create-card',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/create-card.html',
+                controller: 'CreateCardCtrl'
+            }
+        }
+    })
+    .state('tab.edit-card', {
+        url: '/setting/edit-card/:card',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/edit-card.html',
+                controller: 'EditCardCtrl'
+            }
+        }
+    })
+    .state('tab.card-push', {
+        url: '/setting/card-push/:card',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/card-push.html',
+                controller: 'CardPushCtrl'
+            }
+        }
+    })
     .state('signin', {
         url: '/signin',
         templateUrl: 'templates/signin.html',

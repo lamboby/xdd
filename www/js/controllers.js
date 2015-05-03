@@ -638,4 +638,99 @@
             });
         }
     };
+})
+
+.controller('CardCtrl', function ($scope, $state, Card, Utils) {
+    Utils.loading();
+    $scope.isPrimary = itru_isPrimary;
+    Card.all(function (data, status) {
+        if (status == 0)
+            $scope.cards = data.Data;
+        else {
+            var msg = data ? data.Code + " " + data.Msg : status;
+            Utils.alert("获取卡列表失败，错误码：" + msg);
+        }
+    });
+
+    $scope.changeStatus = function (card) {
+        var statusStr = card.enabled == 0 ? "启用" : "禁用";
+        Utils.confirm("确定要" + statusStr + "卡吗?", function (res) {
+            if (res) {
+                Utils.loading();
+                Card.updateStatus(card, function (data, status) {
+                    if (status != 0) {
+                        var msg = data ? data.Code + " " + data.Msg : status;
+                        Utils.alert(statusStr + "卡失败，错误码：" + msg);
+                    }
+                });
+            }
+        });
+    };
+})
+
+.controller('CreateCardCtrl', function ($scope, $state, Utils) {
+    //$scope.family = { fml_name: "" };
+    //$scope.save = function () {
+    //    if (!$scope.family.fml_name)
+    //        Utils.alert("请输入家庭名称");
+    //    else if ($scope.family.fml_name.length < 3)
+    //        Utils.alert("家庭名称不能少于3个字符");
+    //    else if ($scope.family.fml_name.length > 20)
+    //        Utils.alert("家庭名称不能超过20个字符");
+    //    else {
+    //        Utils.loading();
+    //        Family.create($scope.family, function (data, status) {
+    //            if (status == 0)
+    //                $state.go("tab.family");
+    //            else {
+    //                var msg = data ? data.Code + " " + data.Msg : status;
+    //                Utils.alert("添加家庭失败，错误码：" + msg);
+    //            }
+    //        });
+    //    }
+    //};
+})
+
+.controller('EditCardCtrl', function ($scope, $state, $stateParams, Utils) {
+    //Utils.loading();
+    //Family.isPrimary($stateParams.familyId, function (data, status) {
+    //    if (status == 0) {
+    //        $scope.isPrimary = data.Data[0].primary;
+    //        if ($scope.isPrimary)
+    //            $scope.family = Family.get($stateParams.familyId);
+    //        else {
+    //            Utils.alert("非主家长不能修改此家庭");
+    //            $state.go("tab.family");
+    //        }
+    //    }
+    //    else {
+    //        var msg = data ? data.Code + " " + data.Msg : status;
+    //        Utils.alert("获取家庭信息失败，错误码：" + msg);
+    //        $state.go("tab.family");
+    //    }
+    //});
+
+    //$scope.save = function () {
+    //    if (!$scope.family.fml_name)
+    //        Utils.alert("请输入家庭名称");
+    //    else if ($scope.family.fml_name.length < 3)
+    //        Utils.alert("家庭名称不能少于3个字符");
+    //    else if ($scope.family.fml_name.length > 20)
+    //        Utils.alert("家庭名称不能超过20个字符");
+    //    else {
+    //        Utils.loading();
+    //        Family.update($scope.family, function (data, status) {
+    //            if (status == 0)
+    //                $state.go("tab.family");
+    //            else {
+    //                var msg = data ? data.Code + " " + data.Msg : status;
+    //                Utils.alert("修改家庭失败，错误码：" + msg);
+    //            }
+    //        });
+    //    }
+    //};
+})
+
+.controller('CardPushCtrl', function ($scope, $state, $stateParams, Utils) {
+
 });

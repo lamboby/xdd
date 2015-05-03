@@ -173,6 +173,52 @@
     }
 })
 
+.factory("Card", function (Utils) {
+    var cards = [];
+
+    return {
+        all: function (callback) {
+            var params = { token: itru_accessToken, fml_id: itru_familyId() };
+            Utils.exec("cards/getCardsByFml", params, callback, function (data) {
+                if (data.Data)
+                    cards = data.Data;
+                else
+                    cards.length = 0;
+            });
+        },
+        get: function (cardNo) {
+            for (var i = 0; i < cards.length; i++) {
+                if (cards[i].card == cardNo) {
+                    return cards[i];
+                }
+            }
+        },
+        updateStatus: function (card, callback) {
+            var newStatus = card.enabled == 0 ? 1 : 0;
+            var params = { token: itru_accessToken, card: card.card, status: newStatus, fml_id: itru_familyId(), sch_id: card.sch_id };
+            Utils.exec("cards/changeCardStatus", params, callback, function (data) {
+                card.enabled = newStatus;
+            });
+        },
+        create: function (card, callback) {
+            var params = angular.copy(card);
+            params.token = itru_accessToken;
+            params.fml_id = itru_familyId();
+            Utils.exec("cards/createCard", params, callback);
+        },
+        update: function (card, callback) {
+            var params = { token: itru_accessToken, id: family.fml_id, name: family.fml_name };
+            Utils.exec("cards/getUserAndStuByCard", params, callback);
+        },
+        getPush: function (cardNo, callback) {
+
+        },
+        updatePush: function (cardNo, callback) {
+
+        }
+    }
+})
+
 .factory("Auth", function ($http, $q, $state, Utils) {
     return {
         login: function (user, callback) {
