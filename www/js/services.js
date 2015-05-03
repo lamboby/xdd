@@ -1,5 +1,19 @@
 ﻿angular.module('itrustoor.services', [])
 
+.factory('Dash', function (Utils) {
+    var items = [];
+    return {
+        all: function (callback) {
+            var params = { token: itru_accessToken, user_id: itru_userId(), time: "2015-03-12 00:00:00" };
+            Utils.exec("attends/list", params, callback, function (data) {
+                for (i = 0; i < data.Data.length; i++) {
+                    console.debug(data.Data[i].type);
+                }
+            });
+        }
+    }
+})
+
 .factory('News', function () {
     var news = [{
         id: 0,

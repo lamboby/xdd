@@ -1,6 +1,6 @@
 ﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope, $state, Auth, Utils) {
+.controller('DashCtrl', function ($scope, $state, Dash, Auth, Utils) {
     Utils.loading();
     var res = Auth.refreshAccessToken();
     if (res === -1) {
@@ -16,6 +16,7 @@
                         itru_isLogin = true;
                         itru_accessToken = data.Data[0].access_token;
                         itru_lastGetTokenTime = new Date();
+                        $scope.refresh();
                     }
                     else {
                         Utils.alert("令牌已失效，请重新登录");
@@ -31,8 +32,16 @@
             Utils.hideLoading();
         }
     }
-    else
+    else {
+        $scope.refresh();
         Utils.hideLoading();
+    }
+
+    $scope.refresh = function () {
+        Dash.all(function (data, status) {
+
+        });
+    };
 })
 
 .controller('SigninCtrl', function ($scope, $window, Auth, Utils) {
