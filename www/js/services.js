@@ -203,7 +203,6 @@
         create: function (card, callback) {
             var params = angular.copy(card);
             params.token = itru_accessToken;
-            params.fml_id = itru_familyId();
             Utils.exec("cards/createCard", params, callback);
         },
         update: function (card, callback) {

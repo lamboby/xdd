@@ -668,27 +668,94 @@
     };
 })
 
-.controller('CreateCardCtrl', function ($scope, $state, Utils) {
-    //$scope.family = { fml_name: "" };
-    //$scope.save = function () {
-    //    if (!$scope.family.fml_name)
-    //        Utils.alert("请输入家庭名称");
-    //    else if ($scope.family.fml_name.length < 3)
-    //        Utils.alert("家庭名称不能少于3个字符");
-    //    else if ($scope.family.fml_name.length > 20)
-    //        Utils.alert("家庭名称不能超过20个字符");
-    //    else {
-    //        Utils.loading();
-    //        Family.create($scope.family, function (data, status) {
-    //            if (status == 0)
-    //                $state.go("tab.family");
-    //            else {
-    //                var msg = data ? data.Code + " " + data.Msg : status;
-    //                Utils.alert("添加家庭失败，错误码：" + msg);
-    //            }
-    //        });
-    //    }
-    //};
+.controller('CreateCardCtrl', function ($scope, $state, $ionicModal, Card, School, Utils) {
+    $scope.schools = [];
+    $scope.kinds = [{ id: 0, name: "铜卡" }, { id: 1, name: "蜗牛卡" }, { id: 2, name: "银卡" }];
+    $scope.current = {
+        query: "",
+        sch_name: ""
+    };
+
+    $scope.card = {
+        card: "",
+        kind: 0,
+        enabled: 1,
+        sch_id: "",
+        fml_id: itru_familyId()
+    };
+
+    $ionicModal.fromTemplateUrl('school-modal.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+        $scope.modal = modal;
+    });
+
+    $scope.showModal = function () {
+        $scope.modal.show();
+    };
+
+    $scope.hideModal = function () {
+        $scope.modal.hide();
+    };
+
+    $scope.querySchool = function () {
+        if (!$scope.current.query) {
+            Utils.alert("请输入学校名称");
+            return;
+        }
+
+        Utils.loading();
+        School.all($scope.current.query, function (data, status) {
+            if (status == 0) {
+                $scope.schools = data.Data;
+                if ($scope.schools.length > 0)
+                    $scope.card.sch_id = $scope.schools[0].id;
+            }
+            else {
+                var msg = data ? data.Code + " " + data.Msg : status;
+                Utils.alert("查找学校失败，错误码：" + msg);
+            }
+        });
+    };
+
+    $scope.selectSchool = function () {
+        if ($scope.card.sch_id) {
+            for (var i = 0; i < $scope.schools.length; i++) {
+                if ($scope.schools[i].id == $scope.card.sch_id) {
+                    $scope.current.sch_name = $scope.schools[i].name;
+                    $scope.current.query = "";
+                    $scope.schools = [];
+                    $scope.hideModal();
+                    break;
+                }
+            }
+        }
+        else {
+            Utils.alert("请选择学校");
+            return;
+        }
+    };
+
+    $scope.save = function () {
+        if (!$scope.card.card)
+            Utils.alert("请输入卡号");
+        else if ($scope.card.card.length > 32)
+            Utils.alert("卡号不能超过32个字符");
+        else if (!$scope.card.sch_id)
+            Utils.alert("请选择学校");
+        else {
+            Utils.loading();
+            Card.create($scope.card, function (data, status) {
+                if (status == 0)
+                    $state.go("tab.card");
+                else {
+                    var msg = data ? data.Code + " " + data.Msg : status;
+                    Utils.alert("添加卡失败，错误码：" + msg);
+                }
+            });
+        }
+    };
 })
 
 .controller('EditCardCtrl', function ($scope, $state, $stateParams, Utils) {
