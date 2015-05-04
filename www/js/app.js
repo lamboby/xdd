@@ -1,6 +1,6 @@
 ﻿angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.services', 'itrustoor.filters'])
 
-.run(function ($ionicPlatform, $location, $ionicHistory, $rootScope, $urlRouter, $state, Utils, Auth) {
+.run(function ($ionicPlatform, $location, $ionicHistory, $rootScope, $urlRouter, $state, Utils, Auth, DB) {
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard)
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -22,6 +22,9 @@
                 $ionicHistory.goBack();
             return false;
         }, 101);
+
+        //初始化DB
+        DB.init();
 
         //AccessToken
         $rootScope.$on('$locationChangeSuccess', function (evt) {

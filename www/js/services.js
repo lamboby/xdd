@@ -1,15 +1,46 @@
 ﻿angular.module('itrustoor.services', [])
 
-.factory('Dash', function (Utils) {
+.factory('Dash', function (Utils, DB) {
     var items = [];
     return {
         all: function (callback) {
+            var result = DB.query("select max(add_time) maxtime from attends", []);
             var params = { token: itru_accessToken, user_id: itru_userId(), time: "2015-03-12 00:00:00" };
             Utils.exec("attends/list", params, callback, function (data) {
-                for (i = 0; i < data.Data.length; i++) {
-                    console.debug(data.Data[i].type);
-                }
+
             });
+        }
+    }
+})
+
+.factory('DB', function (Utils) {
+    var db = null;
+    var errorFunc = function (err) {
+        console.debug(err.code);
+        Utils.alert("初始化本地数据失败，错误码：" + err.code);
+    };
+    var getDb = function () {
+        if (db == null)
+            db = window.openDatabase(itru_dbName, itru_dbVersion, itru_dbName, itru_dbSize);
+        return db;
+    };
+
+    return {
+        getDb: getDb,
+        init: function () {
+            var db = getDb();
+            db.transaction(function (tx) {
+                tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (stu_id,stu_name,att_time,sch_id,sch_name,type,kind,error,entex_anme,extex_type)');
+            }, errorFunc);
+        },
+        query: function (sql, params, callback) {
+            var db = getDb();
+            db.transaction(function (tx) {
+                tx.executeSql(sql, params, function (tx, results) {
+                    //callback(results);
+                    return results;
+                });
+            }, errorFunc);
         }
     }
 })

@@ -6,6 +6,9 @@
     var itru_tokenExpires = 7200;
     var itru_encryptKey = "itrustor";
     var itru_isPrimary = false;
+    var itru_dbName = "itrustor";
+    var itru_dbVersion = "1.0";
+    var itru_dbSize = 1000000;
 
     var itru_loginToken = function (token) {
         if (token)

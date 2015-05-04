@@ -2,6 +2,99 @@
 
 .controller('DashCtrl', function ($scope, $state, Dash, Auth, Utils) {
     Utils.loading();
+
+    $scope.refresh = function () {
+        Dash.all(function (data, status) {
+
+        });
+        $scope.items = [
+            {
+                stu_id: 1,
+                stu_name: "小叮当",
+                att_time: "07:00",
+                sch_id: 1,
+                sch_name: "高塘幼儿园",
+                add_time: new Date(),
+                type: 1,
+                kind: 0,
+                error: 0,
+                entex_name: "A出口",
+                extex_type: 0,
+                display_type: 0
+            },
+            {
+                stu_id: 1,
+                stu_name: "小叮当",
+                att_time: "07:23",
+                sch_id: 1,
+                sch_name: "高塘幼儿园",
+                add_time: new Date(),
+                type: "进校",
+                kind: 0,
+                error: 0,
+                entex_name: "A出口",
+                extex_type: 0,
+                display_type: 1
+            },
+            {
+                stu_id: 1,
+                stu_name: "小叮当",
+                att_time: "07:36",
+                sch_id: 1,
+                sch_name: "高塘幼儿园",
+                add_time: new Date(),
+                type: "出校",
+                kind: 0,
+                error: 0,
+                entex_name: "A出口",
+                extex_type: 0,
+                display_type: 1
+            },
+             {
+                 stu_id: 1,
+                 stu_name: "小叮当",
+                 att_time: "08:00",
+                 sch_id: 1,
+                 sch_name: "高塘幼儿园",
+                 add_time: new Date(),
+                 type: 1,
+                 kind: 0,
+                 error: 0,
+                 entex_name: "A出口",
+                 extex_type: 0,
+                 display_type: 0
+             },
+            {
+                stu_id: 1,
+                stu_name: "小叮当",
+                att_time: "08:05",
+                sch_id: 1,
+                sch_name: "高塘幼儿园",
+                add_time: new Date(),
+                type: "进校",
+                kind: 0,
+                error: 0,
+                entex_name: "A出口",
+                extex_type: 0,
+                display_type: 1
+            },
+            {
+                stu_id: 1,
+                stu_name: "小叮当",
+                att_time: "08:49",
+                sch_id: 1,
+                sch_name: "高塘幼儿园",
+                add_time: new Date(),
+                type: "出校",
+                kind: 0,
+                error: 0,
+                entex_name: "A出口",
+                extex_type: 0,
+                display_type: 1
+            }
+        ];
+    };
+
     var res = Auth.refreshAccessToken();
     if (res === -1) {
         Utils.hideLoading();
@@ -36,12 +129,6 @@
         $scope.refresh();
         Utils.hideLoading();
     }
-
-    $scope.refresh = function () {
-        Dash.all(function (data, status) {
-
-        });
-    };
 })
 
 .controller('SigninCtrl', function ($scope, $window, Auth, Utils) {
