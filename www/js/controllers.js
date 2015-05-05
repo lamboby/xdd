@@ -1,8 +1,6 @@
 ﻿angular.module('itrustoor.controllers', [])
 
 .controller('DashCtrl', function ($scope, $state, $filter, Dash, Auth, Utils) {
-    Utils.loading();
-
     $scope.items = [];
     $scope.refresh = function (date) {
         Dash.all(date, function (data, status) {
@@ -36,6 +34,7 @@
                 var msg = data ? data.Code + " " + data.Msg : status;
                 Utils.alert("获取信息失败，错误码：" + msg);
             }
+
             $scope.$broadcast('scroll.refreshComplete');
         });
     };
