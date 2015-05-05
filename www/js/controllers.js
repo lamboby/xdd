@@ -1,98 +1,29 @@
 ﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope, $state, Dash, Auth, Utils) {
+.controller('DashCtrl', function ($scope, $state, $filter, Dash, Auth, Utils) {
     Utils.loading();
 
+    $scope.items = [];
     $scope.refresh = function () {
-        Dash.all(function (data, status) {
+        Dash.all(null, function (data, status) {
+            if (status == 0) {
+                $scope.items.length = 0;
+                if (data.length > 0) {
+                    for (i = 0; i < data.length; i++) {
+                        var item = data.item(i);
+                        item.display_time = $filter('date')(item.att_time, 'HH:mm:ss');
+                        $scope.items.push(data.item(i));
+                    }
 
-        });
-        $scope.items = [
-            {
-                stu_id: 1,
-                stu_name: "小叮当",
-                att_time: "07:00",
-                sch_id: 1,
-                sch_name: "高塘幼儿园",
-                add_time: new Date(),
-                type: 1,
-                kind: 0,
-                error: 0,
-                entex_name: "A出口",
-                extex_type: 0,
-                display_type: 0
-            },
-            {
-                stu_id: 1,
-                stu_name: "小叮当",
-                att_time: "07:23",
-                sch_id: 1,
-                sch_name: "高塘幼儿园",
-                add_time: new Date(),
-                type: "进校",
-                kind: 0,
-                error: 0,
-                entex_name: "A出口",
-                extex_type: 0,
-                display_type: 1
-            },
-            {
-                stu_id: 1,
-                stu_name: "小叮当",
-                att_time: "07:36",
-                sch_id: 1,
-                sch_name: "高塘幼儿园",
-                add_time: new Date(),
-                type: "出校",
-                kind: 0,
-                error: 0,
-                entex_name: "A出口",
-                extex_type: 0,
-                display_type: 1
-            },
-             {
-                 stu_id: 1,
-                 stu_name: "小叮当",
-                 att_time: "08:00",
-                 sch_id: 1,
-                 sch_name: "高塘幼儿园",
-                 add_time: new Date(),
-                 type: 1,
-                 kind: 0,
-                 error: 0,
-                 entex_name: "A出口",
-                 extex_type: 0,
-                 display_type: 0
-             },
-            {
-                stu_id: 1,
-                stu_name: "小叮当",
-                att_time: "08:05",
-                sch_id: 1,
-                sch_name: "高塘幼儿园",
-                add_time: new Date(),
-                type: "进校",
-                kind: 0,
-                error: 0,
-                entex_name: "A出口",
-                extex_type: 0,
-                display_type: 1
-            },
-            {
-                stu_id: 1,
-                stu_name: "小叮当",
-                att_time: "08:49",
-                sch_id: 1,
-                sch_name: "高塘幼儿园",
-                add_time: new Date(),
-                type: "出校",
-                kind: 0,
-                error: 0,
-                entex_name: "A出口",
-                extex_type: 0,
-                display_type: 1
+
+                }
             }
-        ];
+            else {
+                var msg = data ? data.Code + " " + data.Msg : status;
+                Utils.alert("获取信息失败，错误码：" + msg);
+            }
+            $scope.$broadcast('scroll.refreshComplete');
+        });
     };
 
     var res = Auth.refreshAccessToken();

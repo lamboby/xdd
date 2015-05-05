@@ -1,28 +1,49 @@
 ﻿angular.module('itrustoor.services', [])
 
-.factory('Dash', function (Utils, DB) {
-    var items = [];
+.factory('Dash', function ($filter, Utils, DB) {
     return {
-        all: function (callback) {
-            var result = DB.query("select max(add_time) maxtime from attends", []);
-            var params = { token: itru_accessToken, user_id: itru_userId(), time: "2015-03-12 00:00:00" };
-            Utils.exec("attends/list", params, callback, function (data) {
+        all: function (date, callback) {
+            if (date == null)
+                date = new Date();
+            date = $filter("date")(date, "yyyy-MM-dd");
 
+            DB.query("select max(add_time) maxtime from attends", [], function (results) {
+                var maxtime = new Date();
+                for (i = 0; i <= results.rows.length; i++) {
+                    var row = results.rows.item(i);
+                    if (row.maxtime != null)
+                        maxtime = row.maxtime
+                    break;
+                }
+                maxtime = $filter("date")(maxtime, "yyyy-MM-dd HH:mm:ss");
+                var params = { token: itru_accessToken, user_id: itru_userId(), time: '2015-05-04 00:00:00' };
+                Utils.exec("attends/list", params, function (data, status) {
+                    if (status == 0) {
+                        if (data.Data && data.Data.length > 0) {
+                            DB.insert("attends", ["stu_id", "stu_name", "att_time", "sch_id", "sch_name",
+                                "add_time", "type", "kind", "error", "entex_name", "entex_type"], data.Data, function () {
+                                    DB.query("select 1 display_type,* from attends where att_time >= ?", [date], function (results) {
+                                        callback(results.rows, status);
+                                    });
+                                });
+                        }
+                    }
+                    else if (callback)
+                        callback(data, status);
+                });
             });
         }
     }
 })
 
 .factory('DB', function (Utils) {
-    var db = null;
     var errorFunc = function (err) {
-        console.debug(err.code);
-        Utils.alert("初始化本地数据失败，错误码：" + err.code);
+        Utils.alert("操作数据失败，错误码：" + err.code + " " + err.message);
     };
     var getDb = function () {
-        if (db == null)
-            db = window.openDatabase(itru_dbName, itru_dbVersion, itru_dbName, itru_dbSize);
-        return db;
+        if (itru_db == null)
+            itru_db = window.openDatabase(itru_dbName, itru_dbVersion, itru_dbName, itru_dbSize);
+        return itru_db;
     };
 
     return {
@@ -30,16 +51,41 @@
         init: function () {
             var db = getDb();
             db.transaction(function (tx) {
-                tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (stu_id,stu_name,att_time,sch_id,sch_name,type,kind,error,entex_anme,extex_type)');
+                tx.executeSql('drop table if exists attends');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (stu_id,stu_name,att_time,sch_id,sch_name,add_time,type,kind,error,entex_name,entex_type)');
             }, errorFunc);
         },
         query: function (sql, params, callback) {
             var db = getDb();
             db.transaction(function (tx) {
                 tx.executeSql(sql, params, function (tx, results) {
-                    //callback(results);
-                    return results;
+                    if (callback)
+                        callback(results);
                 });
+            }, errorFunc);
+        },
+        insert: function (tab, fields, array, callback) {
+            var sql = "insert into " + tab + " (";
+            var fieldStr = "";
+            var valueStr = "";
+            for (i = 0; i < fields.length; i++) {
+                fieldStr += fields[i] + ",";
+                valueStr += "?,";
+            }
+            fieldStr = fieldStr.substr(0, fieldStr.length - 1);
+            valueStr = valueStr.substr(0, valueStr.length - 1);
+            sql += fieldStr + ") values (" + valueStr + ")";
+
+            var db = getDb();
+            db.transaction(function (tx) {
+                for (i = 0 ; i < array.length; i++) {
+                    var params = [];
+                    for (j = 0; j < fields.length; j++)
+                        params.push(array[i][fields[j]]);
+                    tx.executeSql(sql, params);
+                }
+                if (callback)
+                    callback();
             }, errorFunc);
         }
     }
@@ -356,6 +402,12 @@
             }).finally(function () {
                 $ionicLoading.hide();
             });
+        },
+        objToArray: function (obj) {
+            var array = [];
+            for (var p in obj)
+                array.push(obj[p]);
+            return array;
         }
     }
 });
