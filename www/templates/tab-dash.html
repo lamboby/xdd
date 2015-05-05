@@ -5,7 +5,9 @@
         </ion-refresher>
         <ion-list>
             <ion-item ng-repeat="item in items | orderBy:'display_time'">
-                <div ng-class="item.display_type == 0 ? 'test1':'test2'">{{item.display_type == 0 ? item.display_time:item.display_time+" "+item.stu_name+"从"+item.sch_name+item.entex_name+item.type}}</div>
+                <div ng-class="item.display_type == 0 ? 'test1':'test2'">
+                    <span>{{item.display_type == 0 ? item.display_time:item.display_time+" "+item.stu_name+"从"+item.sch_name+item.entex_name+item.type}}</span>
+                </div>
             </ion-item>
         </ion-list>
     </ion-content>
@@ -13,7 +15,7 @@
 
 <style type="text/css">
     .test1 {
-        font-weight: 600;
+        border-right: solid 2px green;
     }
 
     .test2 {
