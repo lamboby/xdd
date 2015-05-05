@@ -11,11 +11,25 @@
                 if (data.length > 0) {
                     for (i = 0; i < data.length; i++) {
                         var item = data.item(i);
-                        item.display_time = $filter('date')(item.att_time, 'HH:mm:ss');
-                        $scope.items.push(data.item(i));
+                        item.display_time = $filter('date')(new Date(item.att_time), 'HH:mm');
+                        $scope.items.push(item);
                     }
 
+                    $scope.items.sort(function (a, b) {
+                        var aTime = parseInt(a.display_time.replace(':', ''));
+                        var bTime = parseInt(b.display_time.replace(':', ''));
+                        return aTime > bTime ? 1 : -1;
+                    });
 
+                    for (i = 0; i <= 23; i++) {
+                        var time = (i >= 10 ? "" + i : "0" + i) + ":00";
+                        for (j = 0; j < $scope.items.length; j++) {
+                            if ($scope.items[j].display_time.substr(0, 2) + ":00" == time) {
+                                $scope.items.splice(j, 0, { display_time: time, display_type: 0 });
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             else {
