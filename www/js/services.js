@@ -8,15 +8,16 @@
             date = $filter("date")(date, "yyyy-MM-dd");
 
             DB.query("select max(add_time) maxtime from attends", [], function (results) {
-                var maxtime = new Date();
-                for (i = 0; i <= results.rows.length; i++) {
+                var maxtime = null;
+                for (i = 0; i < results.rows.length; i++) {
                     var row = results.rows.item(i);
-                    if (row.maxtime != null)
+                    if (row.maxtime != null) {
                         maxtime = row.maxtime
-                    break;
+                        break;
+                    }
                 }
-                maxtime = $filter("date")(maxtime, "yyyy-MM-dd HH:mm:ss");
-                var params = { token: itru_accessToken, user_id: itru_userId(), time: '2015-05-04 00:00:00' };
+
+                var params = { token: itru_accessToken, user_id: itru_userId(), time: '2015-05-01 00:00:00' };
                 Utils.exec("attends/list", params, function (data, status) {
                     if (status == 0) {
                         if (data.Data && data.Data.length > 0) {

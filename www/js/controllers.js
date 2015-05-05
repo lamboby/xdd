@@ -4,8 +4,8 @@
     Utils.loading();
 
     $scope.items = [];
-    $scope.refresh = function () {
-        Dash.all(null, function (data, status) {
+    $scope.refresh = function (date) {
+        Dash.all(date, function (data, status) {
             if (status == 0) {
                 $scope.items.length = 0;
                 if (data.length > 0) {
@@ -54,7 +54,7 @@
                         itru_isLogin = true;
                         itru_accessToken = data.Data[0].access_token;
                         itru_lastGetTokenTime = new Date();
-                        $scope.refresh();
+                        $scope.refresh(null);
                     }
                     else {
                         Utils.alert("令牌已失效，请重新登录");
@@ -71,7 +71,7 @@
         }
     }
     else {
-        $scope.refresh();
+        $scope.refresh(null);
         Utils.hideLoading();
     }
 })

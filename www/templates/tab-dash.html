@@ -1,23 +1,80 @@
 ﻿<ion-view view-title="按平安">
     <ion-content class="padding">
         <ion-refresher pulling-text="松开刷新..."
-                       on-refresh="refresh()">
+                       on-refresh="refresh(null)">
         </ion-refresher>
         <ion-list>
-            <ion-item ng-repeat="item in items | orderBy:'display_time'">
-                <div ng-class="item.display_type == 0 ? 'test1':'test2'">
-                    <span>{{item.display_type == 0 ? item.display_time:item.display_time+" "+item.stu_name+"从"+item.sch_name+item.entex_name+item.type}}</span>
+            <div ng-repeat="item in items | orderBy:'display_time'">
+                <div class="dash-item dash-item-left">
+                    <div style="display:{{item.display_type == 0 ? 'block':'none'}}">
+                        <label class="title-label">{{item.display_time}}</label>
+                        <span class="line">&nbsp;</span>
+                    </div>
+                    <div style="display:{{item.display_type == 1 ? 'block':'none'}}">&nbsp;</div>
                 </div>
-            </ion-item>
+                <div class="dash-item dash-item-center">&nbsp;</div>
+                <div class="dash-item dash-item-right">
+                    <div style="display:{{item.display_type == 1 ? 'block':'none'}}">
+                        <span class="line">&nbsp;</span>
+                        <label class="title-label">{{item.display_time}}</label>
+                        <span ng-class="item.type == 0 ? 'blue-span':'green-span'">{{item.stu_name + (item.type == 0 ? "进入":"离开") + item.sch_name }}</span>
+                    </div>
+                    <div style="display:{{item.display_type == 0 ? 'block':'none'}}">&nbsp;</div>
+                </div>
+            </div>
         </ion-list>
     </ion-content>
 </ion-view>
 
 <style type="text/css">
-    .test1 {
-        border-right: solid 2px green;
+    .dash-item {
+        float: left;
+        height: 40px;
     }
 
-    .test2 {
+    .dash-item-left {
+        width: 29%;
+        text-align: right;
+    }
+
+    .title-label {
+        color: #0080FF;
+        font-weight: 600;
+    }
+
+    .line {
+        width: 10px;
+        height: 11px;
+        display: inline-block;
+        border-bottom: solid 2px #0080FF;
+    }
+
+    .dash-item-center {
+        width: 3px;
+        background-color: #0080FF;
+    }
+
+    .dash-item-right {
+        width: 69%;
+    }
+
+    .blue-span {
+        color: white;
+        font-weight: 600;
+        background-color: #0080FF;
+        border-radius: 3px 3px 3px 3px;
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-left: 5px;
+    }
+
+    .green-span {
+        color: white;
+        font-weight: 600;
+        background-color: #00BB00;
+        border-radius: 3px 3px 3px 3px;
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-left: 5px;
     }
 </style>
