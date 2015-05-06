@@ -798,44 +798,62 @@
     };
 })
 
-.controller('EditCardCtrl', function ($scope, $state, $stateParams, Utils) {
-    //Utils.loading();
-    //Family.isPrimary($stateParams.familyId, function (data, status) {
-    //    if (status == 0) {
-    //        $scope.isPrimary = data.Data[0].primary;
-    //        if ($scope.isPrimary)
-    //            $scope.family = Family.get($stateParams.familyId);
-    //        else {
-    //            Utils.alert("非主家长不能修改此家庭");
-    //            $state.go("tab.family");
-    //        }
-    //    }
-    //    else {
-    //        var msg = data ? data.Code + " " + data.Msg : status;
-    //        Utils.alert("获取家庭信息失败，错误码：" + msg);
-    //        $state.go("tab.family");
-    //    }
-    //});
+.controller('CardUserCtrl', function ($scope, $state, $stateParams, Card, Parent, Student, Utils) {
+    Utils.loading();
+    Parent.all(function (data, status) {
+        if (status == 0) {
+            $scope.parents = data.Data;
+            Student.all(function (data, status) {
+                if (status == 0) {
+                    $scope.students = data.Data;
+                    $scope.card = Card.get($stateParams.card);
 
-    //$scope.save = function () {
-    //    if (!$scope.family.fml_name)
-    //        Utils.alert("请输入家庭名称");
-    //    else if ($scope.family.fml_name.length < 3)
-    //        Utils.alert("家庭名称不能少于3个字符");
-    //    else if ($scope.family.fml_name.length > 20)
-    //        Utils.alert("家庭名称不能超过20个字符");
-    //    else {
-    //        Utils.loading();
-    //        Family.update($scope.family, function (data, status) {
-    //            if (status == 0)
-    //                $state.go("tab.family");
-    //            else {
-    //                var msg = data ? data.Code + " " + data.Msg : status;
-    //                Utils.alert("修改家庭失败，错误码：" + msg);
-    //            }
-    //        });
-    //    }
-    //};
+                    if ($scope.card.bind && $scope.card.bind.length > 0)
+                        $scope.card.studentId = $scope.card.bind[0].id;
+                    if ($scope.card.carry && $scope.card.carry.length > 0)
+                        $scope.card.parentId = $scope.card.carry[0].id;
+                }
+                else {
+                    var msg = data ? data.Code + " " + data.Msg : status;
+                    Utils.alert("获取学生信息失败，错误码：" + msg);
+                }
+            });
+        }
+        else {
+            var msg = data ? data.Code + " " + data.Msg : status;
+            Utils.alert("获取家长信息失败，错误码：" + msg);
+        }
+    });
+
+    $scope.save = function () {
+        if (!$scope.card.studentId)
+            Utils.alert("请选择使用者");
+        else if (!$scope.card.parentId)
+            Utils.alert("请选择携带者");
+        else {
+            Utils.confirm("确定要更改此卡的用户关联吗?", function (res) {
+                if (res) {
+                    var params = { stu_id: $scope.card.studentId, user_id: $scope.card.parentId, card: $stateParams.card, sch_id: "" };
+                    for (i = 0; i < $scope.students.length; i++) {
+                        if ($scope.students[i].stu_id == params.stu_id) {
+                            params.sch_id = $scope.students[i].sch_id;
+                            break;
+                        }
+                    }
+
+                    Utils.loading();
+                    Card.updateCardUser(params, function (data, status) {
+                        if (status == 0)
+                            $state.go("tab.card");
+                        else {
+                            var msg = data ? data.Code + " " + data.Msg : status;
+                            Utils.alert("修改用户关联失败，错误码：" + msg);
+                        }
+                    });
+                }
+            });
+        }
+    };
 })
 
 .controller('CardPushCtrl', function ($scope, $state, $stateParams, Utils) {

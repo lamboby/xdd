@@ -297,9 +297,10 @@
             params.token = itru_accessToken;
             Utils.exec("cards/createCard", params, callback);
         },
-        update: function (card, callback) {
-            var params = { token: itru_accessToken, id: family.fml_id, name: family.fml_name };
-            Utils.exec("cards/getUserAndStuByCard", params, callback);
+        updateCardUser: function (params, callback) {
+            params.token = itru_accessToken;
+            params.fml_id = itru_familyId();
+            Utils.exec("cards/bindCard", params, callback);
         },
         getPush: function (cardNo, callback) {
 

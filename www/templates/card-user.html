@@ -1,0 +1,26 @@
+﻿<ion-view view-title="用户关联">
+    <ion-content>
+        <form ng-submit="save()" novalidate>
+            <br />
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    关联学生
+                </div>
+                <select ng-model="card.studentId">
+                    <option value="{{student.stu_id}}" ng-repeat="student in students">{{student.stu_name}}</option>
+                </select>
+            </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    关联家长
+                </div>
+                <select ng-model="card.parentId">
+                    <option value="{{parent.user_id}}" ng-repeat="parent in parents">{{parent.username}}</option>
+                </select>
+            </label>
+            <div class="padding">
+                <button class="button button-block button-balanced" type="submit">确 定</button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

@@ -208,12 +208,12 @@
             }
         }
     })
-    .state('tab.edit-card', {
-        url: '/setting/edit-card/:card',
+    .state('tab.card-user', {
+        url: '/setting/card-user/:card',
         views: {
             'tab-setting': {
-                templateUrl: 'templates/edit-card.html',
-                controller: 'EditCardCtrl'
+                templateUrl: 'templates/card-user.html',
+                controller: 'CardUserCtrl'
             }
         }
     })

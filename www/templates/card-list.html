@@ -14,6 +14,8 @@
                     <div class="item item-body">
                         <p>状态：{{card.enabled | status}}</p>
                         <p>使用情况：{{card.used | use}}</p>
+                        <p ng-repeat="parent in card.bind">关联学生：{{parent.realname}}</p>
+                        <p ng-repeat="child in card.carry">关联家长：{{child.realname}}</p>
                     </div>
 
                     <div class="item tabs tabs-secondary tabs-icon-left">
@@ -21,9 +23,9 @@
                             <i class="icon {{card.enabled == 0 ? 'ion-ios-checkmark':'ion-ios-close'}}"></i>
                             {{card.enabled == 0 ? "启用":"禁用"}}
                         </a>
-                        <a class="tab-item" href="#/tab/setting/card/{{card.card}}">
+                        <a class="tab-item" href="#/tab/setting/card-user/{{card.card}}" style='display:{{isPrimary ? "inline-block":"none"}}'>
                             <i class="icon ion-person-stalker"></i>
-                            用户信息
+                            用户关联
                         </a>
                         <a class="tab-item" href="#/tab/setting/card-push/{{card.card}}">
                             <i class="icon ion-ios-star"></i>

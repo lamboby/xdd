@@ -1,0 +1,10 @@
+﻿<ion-view view-title="推送关系">
+    <ion-content>
+        <ion-list>
+            <ion-radio ng-model="current.familyId" name="family-group" ng-value="{{family.fml_id}}" ng-repeat="family in familys">{{family.fml_name}}</ion-radio>
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-balanced" ng-click="save()">确 定</button>
+        </div>
+    </ion-content>
+</ion-view>
