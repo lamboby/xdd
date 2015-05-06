@@ -892,5 +892,10 @@
 
     $scope.save = function () {
 
-    }
+    };
+
+    $scope.checkAll = function () {
+        for (i = 0; i < $scope.relations.length; i++)
+            $scope.relations[i].checked = true;
+    };
 });
