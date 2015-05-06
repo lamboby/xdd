@@ -101,6 +101,10 @@
     }
 })
 
+.controller('AboutCtrl', function ($scope) {
+
+})
+
 .controller('SelectFamilyCtrl', function ($scope, $state, Family, Utils) {
     Utils.loading();
     $scope.current = { familyId: "" };

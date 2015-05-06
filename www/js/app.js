@@ -235,6 +235,15 @@
         url: '/select-family',
         templateUrl: 'templates/select-family.html',
         controller: 'SelectFamilyCtrl'
+    })
+    .state('tab.about', {
+        url: '/setting/about',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/about.html',
+                controller: 'AboutCtrl'
+            }
+        }
     });
 
     $urlRouterProvider.otherwise('/tab/dash');
