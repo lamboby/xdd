@@ -152,8 +152,21 @@
     $scope.new = News.get($stateParams.newId);
 })
 
-.controller('SettingCtrl', function ($scope) {
-
+.controller('SettingCtrl', function ($scope, $state, Utils) {
+    $scope.signout = function () {
+        Utils.confirm("确定要注销?", function (res) {
+            if (!res)
+                return;
+            itru_isLogin = false;
+            itru_accessToken = "";
+            itru_lastGetTokenTime = null;
+            itru_isPrimary = false;
+            itru_loginToken(-1);
+            itru_familyId(-1);
+            itru_userId(-1);
+            $state.go("signin");
+        });
+    };
 })
 
 .controller('StudentCtrl', function ($scope, $state, Student, Utils) {

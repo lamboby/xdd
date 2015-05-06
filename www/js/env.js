@@ -1,4 +1,5 @@
 {
+    var itru_version = "1.0.0 Alpha";
     var itru_isLogin = false;
     var itru_serviceUrl = "http://121.41.49.137:8080/api/";
     var itru_accessToken = "";
@@ -12,17 +13,23 @@
     var itru_db = null;
 
     var itru_loginToken = function (token) {
-        if (token)
+        if (token == -1)
+            window.localStorage.removeItem("LOGIN_TOKEN");
+        else if (token)
             window.localStorage.setItem("LOGIN_TOKEN", token);
         return window.localStorage.getItem("LOGIN_TOKEN");
     };
     var itru_familyId = function (familyId) {
-        if (familyId)
+        if (familyId == -1)
+            window.localStorage.removeItem("FAMILYID");
+        else if (familyId)
             window.localStorage.setItem("FAMILYID", familyId);
         return window.localStorage.getItem("FAMILYID");
     };
     var itru_userId = function (userId) {
-        if (userId)
+        if (userId == -1)
+            window.localStorage.removeItem("USERID");
+        else if (userId)
             window.localStorage.setItem("USERID", userId);
         return window.localStorage.getItem("USERID");
     };
