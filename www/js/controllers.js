@@ -856,6 +856,41 @@
     };
 })
 
-.controller('CardPushCtrl', function ($scope, $state, $stateParams, Utils) {
+.controller('CardPushCtrl', function ($scope, $state, $stateParams, Card, Parent, Utils) {
+    Utils.loading();
+    $scope.relations = [];
+    Parent.all(function (data, status) {
+        if (status == 0) {
+            $scope.parents = data.Data;
+            Card.getCardPush($stateParams.card, function (data, status) {
+                if (status == 0) {
+                    for (i = 0; i < $scope.parents.length; i++) {
+                        var parent = $scope.parents[i];
+                        var item = { parentId: parent.user_id, parentName: parent.username, checked: false };
+                        if (data.Data && data.Data.length > 0) {
+                            for (j = 0; j < data.Data.length; j++) {
+                                if (parent.user_id == data.Data[i].id) {
+                                    item.checked = true;
+                                    break;
+                                }
+                            }
+                        }
+                        $scope.relations.push(item);
+                    }
+                }
+                else {
+                    var msg = data ? data.Code + " " + data.Msg : status;
+                    Utils.alert("获取推送关系失败，错误码：" + msg);
+                }
+            });
+        }
+        else {
+            var msg = data ? data.Code + " " + data.Msg : status;
+            Utils.alert("获取家长信息失败，错误码：" + msg);
+        }
+    });
 
+    $scope.save = function () {
+
+    }
 });

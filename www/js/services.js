@@ -302,10 +302,11 @@
             params.fml_id = itru_familyId();
             Utils.exec("cards/bindCard", params, callback);
         },
-        getPush: function (cardNo, callback) {
-
+        getCardPush: function (cardNo, callback) {
+            var params = { token: itru_accessToken, card: cardNo };
+            Utils.exec("cards/getInfoReceiverByCard", params, callback);
         },
-        updatePush: function (cardNo, callback) {
+        updateCardPush: function (cardNo, callback) {
 
         }
     }
