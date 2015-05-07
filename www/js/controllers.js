@@ -880,6 +880,7 @@
 .controller('CardPushCtrl', function ($scope, $state, $stateParams, Card, Parent, Utils) {
     Utils.loading();
     $scope.relations = [];
+    $scope.card = Card.get($stateParams.card);
     Parent.all(function (data, status) {
         if (status == 0) {
             $scope.parents = data.Data;
@@ -890,7 +891,7 @@
                         var item = { parentId: parent.user_id, parentName: parent.username, checked: false };
                         if (data.Data && data.Data.length > 0) {
                             for (j = 0; j < data.Data.length; j++) {
-                                if (parent.user_id == data.Data[i].id) {
+                                if (parent.user_id == data.Data[j].id) {
                                     item.checked = true;
                                     break;
                                 }
@@ -912,7 +913,22 @@
     });
 
     $scope.save = function () {
+        var users = [];
+        for (i = 0; i < $scope.relations.length; i++) {
+            var item = $scope.relations[i];
+            if (item.checked)
+                users.push({ id: item.parentId, type: 1 });
+        }
 
+        Utils.loading();
+        Card.updateCardPush($stateParams.card, $scope.card.sch_id, users, function (data, status) {
+            if (status == 0)
+                $state.go("tab.card");
+            else {
+                var msg = data ? data.Code + " " + data.Msg : status;
+                Utils.alert("修改推送关系失败，错误码：" + msg);
+            }
+        });
     };
 
     $scope.checkAll = function () {

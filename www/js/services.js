@@ -306,8 +306,9 @@
             var params = { token: itru_accessToken, card: cardNo };
             Utils.exec("cards/getInfoReceiverByCard", params, callback);
         },
-        updateCardPush: function (cardNo, callback) {
-
+        updateCardPush: function (cardNo, schoolId, users, callback) {
+            var params = { token: itru_accessToken, fml_id: itru_familyId(), sch_id: schoolId, card: cardNo, users: users };
+            Utils.exec("families/updateReceivers", params, callback);
         }
     }
 })
@@ -353,8 +354,13 @@
 .factory("Utils", function ($http, $ionicPopup, $ionicLoading) {
     var _buildUrl = function (path, params) {
         var url = itru_serviceUrl + path + "?callback=JSON_CALLBACK";
-        for (var item in params)
-            url += "&" + item + "=" + encodeURIComponent(params[item]);
+        for (var item in params) {
+            var val = params[item];
+            if (val instanceof Array)
+                url += "&" + item + "=" + encodeURIComponent(JSON.stringify(val));
+            else
+                url += "&" + item + "=" + encodeURIComponent(val);
+        }
         return url;
     };
 
