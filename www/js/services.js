@@ -12,11 +12,12 @@
                 for (i = 0; i < results.rows.length; i++) {
                     var row = results.rows.item(i);
                     if (row.maxtime != null) {
-                        maxtime = $filter('date')(row.maxtime, 'yyyy-MM-dd HH:mm:ss');
+                        maxtime = row.maxtime
                         break;
                     }
                 }
 
+                maxtime = $filter('date')(maxtime, 'yyyy-MM-dd HH:mm:ss.sss');
                 var params = { token: itru_accessToken, user_id: itru_userId(), time: maxtime };
                 Utils.exec("attends/list", params, function (data, status) {
                     if (status == 0) {
