@@ -58,7 +58,7 @@
         init: function () {
             var db = getDb();
             db.transaction(function (tx) {
-                tx.executeSql('drop table if exists attends');
+                //tx.executeSql('drop table if exists attends');
                 tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (stu_id,stu_name,att_time,sch_id,sch_name,add_time,type,kind,error,entex_name,entex_type)');
             }, errorFunc);
         },
