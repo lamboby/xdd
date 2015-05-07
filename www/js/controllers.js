@@ -101,8 +101,12 @@
     }
 })
 
-.controller('AboutCtrl', function ($scope) {
+.controller('AboutCtrl', function ($scope, Utils) {
+    $scope.version = itru_version;
 
+    $scope.checkVersion = function () {
+        Utils.alert("当前已是最新版本");
+    };
 })
 
 .controller('SelectFamilyCtrl', function ($scope, $state, Family, Utils) {

@@ -1,5 +1,16 @@
 ﻿<ion-view view-title="关于">
     <ion-content>
-        忠邦网络
+        <br />
+        <br />
+        <div style="text-align:center">
+            <img src="img/logo.png" />
+            <h3>小叮当</h3>
+            <p>版本号：{{version}}</p>
+        </div>
+        <br />
+        <div class="item item-icon-left" ng-click="checkVersion()">
+            <i class="icon ion-loop"></i>
+            检查更新
+        </div>
     </ion-content>
 </ion-view>

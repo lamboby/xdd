@@ -1,1 +1,48 @@
-/* Empty. Add your own CSS if you like */
+    .dash-item {
+        float: left;
+        height: 40px;
+    }
+
+    .dash-item-left {
+        width: 20%;
+        text-align: right;
+    }
+
+    .title-label {
+        color: #0080FF;
+        font-weight: 700;
+    }
+
+    .line {
+        width: 10px;
+        height: 11px;
+        display: inline-block;
+        border-bottom: solid 2px #0080FF;
+    }
+
+    .dash-item-center {
+        width: 3px;
+        background-color: #0080FF;
+    }
+
+    .dash-item-right {
+        width: 78%;
+    }
+
+    .blue-span {
+        color: white;
+        font-weight: 700;
+        background-color: #0080FF;
+        border-radius: 4px 4px 4px 4px;
+        padding: 5px 8px 5px 8px;
+        margin-left: 5px;
+    }
+
+    .green-span {
+        color: white;
+        font-weight: 700;
+        background-color: #00BB00;
+        border-radius: 4px 4px 4px 4px;
+        padding: 5px 8px 5px 8px;
+        margin-left: 5px;
+    }
