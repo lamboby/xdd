@@ -309,6 +309,14 @@
         updateCardPush: function (cardNo, schoolId, users, callback) {
             var params = { token: itru_accessToken, fml_id: itru_familyId(), sch_id: schoolId, card: cardNo, users: users };
             Utils.exec("families/updateReceivers", params, callback);
+        },
+        createCardPush: function (params, callback) {
+            params.token = itru_accessToken;
+            Utils.exec("families/createReceivers", params, callback);
+        },
+        deleteCardPush: function (params, callback) {
+            params.token = itru_accessToken;
+            Utils.exec("families/deleteReceivers", params, callback);
         }
     }
 })

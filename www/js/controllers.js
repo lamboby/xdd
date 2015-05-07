@@ -881,6 +881,8 @@
     Utils.loading();
     $scope.relations = [];
     $scope.card = Card.get($stateParams.card);
+    $scope.isPrimary = itru_isPrimary;
+
     Parent.all(function (data, status) {
         if (status == 0) {
             $scope.parents = data.Data;
@@ -888,11 +890,15 @@
                 if (status == 0) {
                     for (i = 0; i < $scope.parents.length; i++) {
                         var parent = $scope.parents[i];
-                        var item = { parentId: parent.user_id, parentName: parent.username, checked: false };
+                        if (!itru_isPrimary && parent.user_id != itru_userId())
+                            continue;
+
+                        var item = { parentId: parent.user_id, parentName: parent.username, checked: false, oldValue: false };
                         if (data.Data && data.Data.length > 0) {
                             for (j = 0; j < data.Data.length; j++) {
                                 if (parent.user_id == data.Data[j].id) {
                                     item.checked = true;
+                                    item.oldValue = true;
                                     break;
                                 }
                             }
@@ -913,22 +919,50 @@
     });
 
     $scope.save = function () {
-        var users = [];
-        for (i = 0; i < $scope.relations.length; i++) {
-            var item = $scope.relations[i];
-            if (item.checked)
-                users.push({ id: item.parentId, type: 1 });
-        }
-
         Utils.loading();
-        Card.updateCardPush($stateParams.card, $scope.card.sch_id, users, function (data, status) {
-            if (status == 0)
-                $state.go("tab.card");
-            else {
-                var msg = data ? data.Code + " " + data.Msg : status;
-                Utils.alert("修改推送关系失败，错误码：" + msg);
+        if (itru_isPrimary) {
+            var users = [];
+            for (i = 0; i < $scope.relations.length; i++) {
+                var item = $scope.relations[i];
+                if (item.checked)
+                    users.push({ id: item.parentId, type: 1 });
             }
-        });
+            Card.updateCardPush($stateParams.card, $scope.card.sch_id, users, function (data, status) {
+                if (status == 0)
+                    $state.go("tab.card");
+                else {
+                    var msg = data ? data.Code + " " + data.Msg : status;
+                    Utils.alert("修改推送关系失败，错误码：" + msg);
+                }
+            });
+        }
+        else {
+            var item = $scope.relations[0];
+            var params = { id: itru_userId(), fml_id: itru_familyId(), sch_id: $scope.card.sch_id, card: $stateParams.card, type: 1 };
+
+            if (!item.oldValue && item.checked) {
+                Card.createCardPush(params, function (data, status) {
+                    if (status == 0)
+                        $state.go("tab.card");
+                    else {
+                        var msg = data ? data.Code + " " + data.Msg : status;
+                        Utils.alert("修改推送关系失败，错误码：" + msg);
+                    }
+                });
+            }
+            else if (item.oldValue && !item.checked) {
+                Card.deleteCardPush(params, function (data, status) {
+                    if (status == 0)
+                        $state.go("tab.card");
+                    else {
+                        var msg = data ? data.Code + " " + data.Msg : status;
+                        Utils.alert("修改推送关系失败，错误码：" + msg);
+                    }
+                });
+            }
+            else
+                $state.go("tab.card");
+        }
     };
 
     $scope.checkAll = function () {
