@@ -3,7 +3,7 @@
 .controller('DashCtrl', function ($scope, $state, $filter, Dash, Auth, Utils) {
     $scope.items = [];
     $scope.refresh = function (date) {
-        Dash.all('2015-05-01', function (data, status) {
+        Dash.all(date, function (data, status) {
             if (status == 0) {
                 $scope.items.length = 0;
                 if (data.length > 0) {

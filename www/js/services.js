@@ -8,16 +8,16 @@
             date = $filter("date")(date, "yyyy-MM-dd");
 
             DB.query("select max(add_time) maxtime from attends", [], function (results) {
-                var maxtime = null;
+                var maxtime = "";
                 for (i = 0; i < results.rows.length; i++) {
                     var row = results.rows.item(i);
                     if (row.maxtime != null) {
-                        maxtime = row.maxtime
+                        maxtime = $filter('date')(row.maxtime, 'yyyy-MM-dd HH:mm:ss');
                         break;
                     }
                 }
 
-                var params = { token: itru_accessToken, user_id: itru_userId(), time: '2015-05-01 00:00:00' };
+                var params = { token: itru_accessToken, user_id: itru_userId(), time: maxtime };
                 Utils.exec("attends/list", params, function (data, status) {
                     if (status == 0) {
                         if (data.Data && data.Data.length > 0) {
@@ -28,8 +28,13 @@
                                     });
                                 });
                         }
+                        else {
+                            DB.query("select 1 display_type,* from attends where att_time >= ?", [date], function (results) {
+                                callback(results.rows, status);
+                            });
+                        }
                     }
-                    else if (callback)
+                    else
                         callback(data, status);
                 });
             });
