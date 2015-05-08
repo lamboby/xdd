@@ -115,13 +115,19 @@
         else {
             Utils.loading();
             Auth.login($scope.user, function (data, status) {
-                if (status == 0) {
+                if (status == 0)
                     $window.location.hash = "#/select-family";
-                    return;
+                else if (status == 1003)
+                    Utils.alert("账号不存在");
+                else if (status == 1004)
+                    Utils.alert("密码错误");
+                else if (status == 1015)
+                    Utils.alert("账号未认证");
+                else {
+                    var msg = data ? data.Code + " " + data.Msg : status;
+                    Utils.alert("登录失败，错误码：" + msg);
                 }
                 Utils.hideLoading();
-                var msg = data ? data.Code + " " + data.Msg : status;
-                Utils.alert("登录失败，错误码：" + msg);
             });
         }
     }
