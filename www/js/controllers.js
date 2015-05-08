@@ -1,10 +1,11 @@
 ﻿angular.module('itrustoor.controllers', [])
 
 .controller('DashCtrl', function ($scope, $state, $filter, $ionicActionSheet, Dash, Auth, Utils) {
+    $scope.current = { date: null };
     $scope.items = [];
-    $scope.refresh = function (date) {
+    $scope.refresh = function () {
         Utils.loading();
-        Dash.all(date, function (data, status) {
+        Dash.all($scope.current.date, function (data, status) {
             if (status == 0) {
                 $scope.items.length = 0;
                 if (data.length > 0) {
@@ -54,12 +55,12 @@
             titleText: '历史',
             cancelText: '取消',
             buttonClicked: function (index) {
-                var date = Utils.getDate(0);
+                $scope.current.date = Utils.getDate(0);
                 if (index == 1)
-                    date = Utils.getDate(1);
+                    $scope.current.date = Utils.getDate(1);
                 else if (index == 2)
-                    date = Utils.getDate(2);
-                $scope.refresh(date);
+                    $scope.current.date = Utils.getDate(2);
+                $scope.refresh($scope.current.date);
                 return true;
             }
         });
