@@ -1,8 +1,9 @@
 ﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope, $state, $filter, Dash, Auth, Utils) {
+.controller('DashCtrl', function ($scope, $state, $filter, $ionicActionSheet, Dash, Auth, Utils) {
     $scope.items = [];
     $scope.refresh = function (date) {
+        Utils.loading();
         Dash.all(date, function (data, status) {
             if (status == 0) {
                 $scope.items.length = 0;
@@ -36,6 +37,31 @@
             }
 
             $scope.$broadcast('scroll.refreshComplete');
+        });
+    };
+
+    $scope.show = function () {
+        var today = $filter('date')(Utils.getDate(0), 'yyyy-MM-dd');
+        var yesterday = $filter('date')(Utils.getDate(1), 'yyyy-MM-dd');
+        var beforeYesterday = $filter('date')(Utils.getDate(2), 'yyyy-MM-dd');
+
+        $ionicActionSheet.show({
+            buttons: [
+              { text: '今天[' + today + ']' },
+              { text: '昨天[' + yesterday + ']' },
+              { text: '前天[' + beforeYesterday + ']' }
+            ],
+            titleText: '历史',
+            cancelText: '取消',
+            buttonClicked: function (index) {
+                var date = Utils.getDate(0);
+                if (index == 1)
+                    date = Utils.getDate(1);
+                else if (index == 2)
+                    date = Utils.getDate(2);
+                $scope.refresh(date);
+                return true;
+            }
         });
     };
 

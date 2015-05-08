@@ -24,13 +24,13 @@
                         if (data.Data && data.Data.length > 0) {
                             DB.insert("attends", ["stu_id", "stu_name", "att_time", "sch_id", "sch_name",
                                 "add_time", "type", "kind", "error", "entex_name", "entex_type"], data.Data, function () {
-                                    DB.query("select 1 display_type,* from attends where att_time >= ?", [date], function (results) {
+                                    DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ?", [date], function (results) {
                                         callback(results.rows, status);
                                     });
                                 });
                         }
                         else {
-                            DB.query("select 1 display_type,* from attends where att_time >= ?", [date], function (results) {
+                            DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ?", [date], function (results) {
                                 callback(results.rows, status);
                             });
                         }
@@ -431,6 +431,9 @@
             for (var p in obj)
                 array.push(obj[p]);
             return array;
+        },
+        getDate: function (days) {
+            return new Date(new Date() - 1000 * 60 * 60 * 24 * days);
         }
     }
 });
