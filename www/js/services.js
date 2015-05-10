@@ -386,6 +386,10 @@
                 okText: '确定'
             });
         },
+        alertError: function (data, status, prefix) {
+            var msg = data ? data.Code + " " + data.Msg : status;
+            Utils.alert(prefix + "，错误码：" + msg);
+        },
         confirm: function (msg, callback) {
             var confirmPopup = $ionicPopup.confirm({
                 title: '<strong>提示</strong>',
