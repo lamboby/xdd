@@ -6,7 +6,6 @@
     var itru_lastGetTokenTime = null;
     var itru_tokenExpires = 7200;
     var itru_encryptKey = "itrustor";
-    var itru_isPrimary = false;
     var itru_dbName = "itrustor";
     var itru_dbVersion = "1.0";
     var itru_dbSize = 1000000;
@@ -32,5 +31,13 @@
         else if (userId)
             window.localStorage.setItem("USERID", userId);
         return window.localStorage.getItem("USERID");
+    };
+    var itru_isPrimary = function (isPrimary) {
+        if (isPrimary == -1)
+            window.localStorage.removeItem("ISPRIMARY");
+        else if (isPrimary != null && isPrimary != 'undefined')
+            window.localStorage.setItem("ISPRIMARY", isPrimary);
+        var val = window.localStorage.getItem("ISPRIMARY");
+        return val != null && val === 'true';
     };
 }

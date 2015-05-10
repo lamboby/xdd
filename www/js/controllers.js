@@ -154,7 +154,7 @@
         Family.isPrimary($scope.current.familyId, function (data, status) {
             if (status == 0) {
                 itru_familyId($scope.current.familyId);
-                itru_isPrimary = data.Data[0].primary;
+                itru_isPrimary(data.Data[0].primary);
                 $state.go("tab.dash");
             }
             else
@@ -192,7 +192,7 @@
             itru_isLogin = false;
             itru_accessToken = "";
             itru_lastGetTokenTime = null;
-            itru_isPrimary = false;
+            itru_isPrimary(false);
             itru_loginToken(-1);
             itru_familyId(-1);
             itru_userId(-1);
@@ -203,7 +203,7 @@
 
 .controller('StudentCtrl', function ($scope, $state, Student, Utils) {
     Utils.loading();
-    $scope.isPrimary = itru_isPrimary;
+    $scope.isPrimary = itru_isPrimary();
     Student.all(function (data, status) {
         if (status == 0)
             $scope.students = data.Data;
@@ -587,7 +587,7 @@
                 Family.isPrimary(family.fml_id, function (data, status) {
                     if (status == 0) {
                         itru_familyId(family.fml_id);
-                        itru_isPrimary = data.Data[0].primary;
+                        itru_isPrimary(data.Data[0].primary);
                         $state.go("tab.setting");
                     }
                     else
@@ -658,7 +658,7 @@
 
 .controller('ParentCtrl', function ($scope, Parent, Utils) {
     Utils.loading();
-    $scope.isPrimary = itru_isPrimary;
+    $scope.isPrimary = itru_isPrimary();
     Parent.all(function (data, status) {
         if (status == 0)
             $scope.parents = data.Data;
@@ -714,7 +714,7 @@
 
 .controller('CardCtrl', function ($scope, $state, Card, Utils) {
     Utils.loading();
-    $scope.isPrimary = itru_isPrimary;
+    $scope.isPrimary = itru_isPrimary();
     Card.all(function (data, status) {
         if (status == 0)
             $scope.cards = data.Data;
@@ -878,7 +878,7 @@
     Utils.loading();
     $scope.relations = [];
     $scope.card = Card.get($stateParams.card);
-    $scope.isPrimary = itru_isPrimary;
+    $scope.isPrimary = itru_isPrimary();
 
     Parent.all(function (data, status) {
         if (status == 0) {
@@ -887,7 +887,7 @@
                 if (status == 0) {
                     for (i = 0; i < $scope.parents.length; i++) {
                         var parent = $scope.parents[i];
-                        if (!itru_isPrimary && parent.user_id != itru_userId())
+                        if (!itru_isPrimary() && parent.user_id != itru_userId())
                             continue;
 
                         var item = { parentId: parent.user_id, parentName: parent.username, checked: false, oldValue: false };
@@ -913,7 +913,7 @@
 
     $scope.save = function () {
         Utils.loading();
-        if (itru_isPrimary) {
+        if (itru_isPrimary()) {
             var users = [];
             for (i = 0; i < $scope.relations.length; i++) {
                 var item = $scope.relations[i];
