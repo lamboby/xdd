@@ -378,17 +378,19 @@
         return url;
     };
 
+    var alertMsg = function (msg) {
+        $ionicPopup.alert({
+            title: '<strong>提示</strong>',
+            template: msg,
+            okText: '确定'
+        });
+    };
+
     return {
-        alert: function (msg) {
-            $ionicPopup.alert({
-                title: '<strong>提示</strong>',
-                template: msg,
-                okText: '确定'
-            });
-        },
+        alert: alertMsg,
         alertError: function (data, status, prefix) {
             var msg = data ? data.Code + " " + data.Msg : status;
-            Utils.alert(prefix + "，错误码：" + msg);
+            alertMsg(msg);
         },
         confirm: function (msg, callback) {
             var confirmPopup = $ionicPopup.confirm({
