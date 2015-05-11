@@ -6,17 +6,13 @@
                 <div class="input-label">
                     关联学生
                 </div>
-                <select ng-model="card.studentId">
-                    <option value="{{student.stu_id}}" ng-repeat="student in students">{{student.stu_name}}</option>
-                </select>
+                <select ng-options="student.stu_id as student.stu_name for student in students" ng-model="card.studentId"></select>
             </label>
             <label class="item item-input item-select">
                 <div class="input-label">
                     关联家长
                 </div>
-                <select ng-model="card.parentId">
-                    <option value="{{parent.user_id}}" ng-repeat="parent in parents">{{parent.username}}</option>
-                </select>
+                <select ng-options="parent.user_id as parent.username for parent in parents" ng-model="card.parentId"></select>
             </label>
             <div class="padding">
                 <button class="button button-block button-balanced" type="submit">确 定</button>
