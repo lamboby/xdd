@@ -440,6 +440,9 @@
         },
         getDate: function (days) {
             return new Date(new Date() - 1000 * 60 * 60 * 24 * days);
+        },
+        checkDate: function check(date) {
+            return (new Date(date).getDate() == date.substring(date.length - 2));
         }
     }
 });

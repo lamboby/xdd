@@ -40,4 +40,10 @@
         var val = window.localStorage.getItem("ISPRIMARY");
         return val != null && val === 'true';
     };
+    var itru_supportDatePicker = function (isSupport) {
+        if (isSupport != null && isSupport != 'undefined')
+            window.localStorage.setItem("SUPPORTDATEPICKER", isSupport);
+        var val = window.localStorage.getItem("SUPPORTDATEPICKER");
+        return val != null && val === 'true';
+    };
 }

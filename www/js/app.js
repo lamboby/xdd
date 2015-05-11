@@ -1,4 +1,4 @@
-﻿angular.module('itrustoor', ['ionic', 'itrustoor.controllers', 'itrustoor.services', 'itrustoor.filters'])
+﻿angular.module('itrustoor', ['ionic', 'ngCordova', 'itrustoor.controllers', 'itrustoor.services', 'itrustoor.filters'])
 
 .run(function ($ionicPlatform, $location, $ionicHistory, $rootScope, $urlRouter, $state, Utils, Auth, DB) {
     $ionicPlatform.ready(function () {
@@ -6,6 +6,11 @@
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         if (window.StatusBar)
             StatusBar.styleDefault();
+
+        if (ionic.Platform.isAndroid() && ionic.Platform.version() < 4.3)
+            itru_supportDatePicker(false);
+        else
+            itru_supportDatePicker(false);
 
         //处理android返回键
         $ionicPlatform.registerBackButtonAction(function (e) {

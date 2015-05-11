@@ -227,9 +227,11 @@
     $scope.schools = [];
     $scope.grades = [];
     $scope.classes = [];
+    $scope.supportDatePicker = itru_supportDatePicker();
 
     $scope.current = {
-        query: ""
+        query: "",
+        birthdayStr: ""
     };
     $scope.student = {
         stu_name: "",
@@ -379,10 +381,14 @@
             Utils.alert("请选择年级");
         else if (!$scope.student.class_id)
             Utils.alert("请选择班级");
-        else if (!$scope.student.birthday)
+        else if (itru_supportDatePicker() && !$scope.student.birthday)
             Utils.alert("请输入生日");
+        else if (!itru_supportDatePicker() && !Utils.checkDate($scope.current.birthdayStr))
+            Utils.alert("生日的格式不正确");
         else {
             Utils.loading();
+            if (!itru_supportDatePicker())
+                $scope.student.birthday = new Date($scope.current.birthdayStr);
             Student.create($scope.student, function (data, status) {
                 if (status == 0)
                     $state.go("tab.student");
@@ -395,14 +401,17 @@
 
 .controller('EditStudentCtrl', function ($scope, $state, $ionicModal, $stateParams, $filter, Student, School, Utils) {
     $scope.current = {
-        query: ""
+        query: "",
+        birthdayStr: ""
     };
 
     $scope.schools = [];
     $scope.grades = [];
     $scope.classes = [];
+    $scope.supportDatePicker = itru_supportDatePicker();
     $scope.student = Student.get($stateParams.studentId);
     $scope.student.birthday = new Date($scope.student.birthday);
+    $scope.current.birthdayStr = $filter('date')($scope.student.birthday, 'yyyy-MM-dd');
 
     Utils.loading();
     School.allGrades($scope.student.sch_id, function (data, status) {
@@ -555,10 +564,14 @@
             Utils.alert("请选择年级");
         else if (!$scope.student.class_id)
             Utils.alert("请选择班级");
-        else if (!$scope.student.birthday)
+        else if (itru_supportDatePicker() && !$scope.student.birthday)
             Utils.alert("请输入生日");
+        else if (!itru_supportDatePicker() && !Utils.checkDate($scope.current.birthdayStr))
+            Utils.alert("生日的格式不正确");
         else {
             Utils.loading();
+            if (!itru_supportDatePicker())
+                $scope.student.birthday = new Date($scope.current.birthdayStr);
             Student.update($scope.student, function (data, status) {
                 if (status == 0)
                     $state.go("tab.student");
@@ -683,6 +696,9 @@
 })
 
 .controller('CreateParentCtrl', function ($scope, $state, Parent, Utils) {
+    $scope.supportDatePicker = itru_supportDatePicker();
+    $scope.current = { birthdayStr: "" };
+
     $scope.parent = {
         username: "",
         gender: 0,
@@ -698,10 +714,14 @@
             Utils.alert("家长姓名不能超过20个字符");
         else if (!$scope.parent.phone)
             Utils.alert("请输入手机号");
-        else if (!$scope.parent.birthday)
+        else if (itru_supportDatePicker() && !$scope.parent.birthday)
             Utils.alert("请输入生日");
+        else if (!itru_supportDatePicker() && !Utils.checkDate($scope.current.birthdayStr))
+            Utils.alert("生日的格式不正确");
         else {
             Utils.loading();
+            if (!itru_supportDatePicker())
+                $scope.parent.birthday = new Date($scope.current.birthdayStr);
             Parent.create($scope.parent, function (data, status) {
                 if (status == 0)
                     $state.go("tab.parent");
