@@ -16,18 +16,14 @@
                 <div class="input-label">
                     年级
                 </div>
-                <select ng-model="student.grade_id" ng-change="selectGrade()">
-                    <option value="{{grade.grade_id}}" ng-repeat="grade in grades">{{grade.name}}</option>
-                </select>
+                <select ng-options="grade.grade_id as grade.name for grade in grades" ng-model="student.grade_id" ng-change="selectGrade()"></select>
             </label>
 
             <label class="item item-input item-select">
                 <div class="input-label">
                     班级
                 </div>
-                <select ng-model="student.class_id" ng-change="selectClass()">
-                    <option value="{{class.class_id}}" ng-repeat="class in classes">{{class.name}}</option>
-                </select>
+                <select ng-options="class.class_id as class.name for class in classes" ng-model="student.class_id" ng-change="selectClass()"></select>
             </label>
 
             <label class="item item-input">
