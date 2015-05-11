@@ -10,7 +10,7 @@
         if (ionic.Platform.isAndroid() && ionic.Platform.version() < 4.3)
             itru_supportDatePicker(false);
         else
-            itru_supportDatePicker(false);
+            itru_supportDatePicker(true);
 
         //处理android返回键
         $ionicPlatform.registerBackButtonAction(function (e) {
