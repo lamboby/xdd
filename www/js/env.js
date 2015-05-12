@@ -1,5 +1,5 @@
 {
-    var itru_version = "1.0.1 Alpha";
+    var itru_version = "1.0.2 Alpha";
     var itru_isLogin = false;
     var itru_serviceUrl = "http://121.41.49.137:8080/api/";
     var itru_accessToken = "";

@@ -101,8 +101,8 @@
 
 .controller('SigninCtrl', function ($scope, $window, Auth, Utils) {
     $scope.user = {
-        phone: '18627228035',
-        password: '1234567890'
+        phone: '',//'18627228035',
+        password: ''//'1234567890'
     };
 
     $scope.signin = function () {
