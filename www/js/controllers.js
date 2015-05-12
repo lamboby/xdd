@@ -973,37 +973,6 @@
     };
 })
 
-.controller('PhotoCtrl', function ($scope, $state, Parent, Student, Utils) {
-    Utils.loading();
-    Parent.all(function (data, status) {
-        if (status == 0) {
-            $scope.parents = data.Data;
-            Student.all(function (data, status) {
-                if (status == 0)
-                    $scope.students = data.Data;
-                else
-                    Utils.alertError(data, status, "获取学生信息失败");
-            });
-        }
-        else
-            Utils.alertError(data, status, "获取家长信息失败");
-    });
-})
-
-.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, Parent, Student, Utils) {
-    $scope.user = { userId: $stateParams.userId, type: $stateParams.userType, userName: "", picture: "" };
-    if ($stateParams.userType == 0) {
-        var student = Student.get($stateParams.userId);
-        $scope.user.userName = student.stu_name;
-        $scope.user.picture = student.picture;
-    }
-    else {
-        var parent = Parent.get($stateParams.userId);
-        $scope.user.userName = parent.username;
-        $scope.user.picture = parent.picture;
-    }
-})
-
 .controller('ProfileCtrl', function ($scope, $state, $filter, Profile, Utils) {
     $scope.supportDatePicker = itru_supportDatePicker();
     $scope.current = { birthdayStr: "" };
@@ -1038,5 +1007,83 @@
                     Utils.alertError(data, status, "修改个人信息失败");
             });
         }
+    };
+})
+
+.controller('PhotoCtrl', function ($scope, $state, Parent, Student, Utils) {
+    Utils.loading();
+    Parent.all(function (data, status) {
+        if (status == 0) {
+            $scope.parents = data.Data;
+            Student.all(function (data, status) {
+                if (status == 0)
+                    $scope.students = data.Data;
+                else
+                    Utils.alertError(data, status, "获取学生信息失败");
+            });
+        }
+        else
+            Utils.alertError(data, status, "获取家长信息失败");
+    });
+})
+
+.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaImagePicker, Parent, Student, Utils) {
+    $scope.user = {
+        userId: $stateParams.userId,
+        type: $stateParams.userType,
+        userName: "",
+        picture: ""
+    };
+
+    if ($stateParams.userType == 0) {
+        var student = Student.get($stateParams.userId);
+        $scope.user.userName = student.stu_name;
+        $scope.user.picture = student.picture;
+    }
+    else {
+        var parent = Parent.get($stateParams.userId);
+        $scope.user.userName = parent.username;
+        $scope.user.picture = parent.picture;
+    }
+
+    $scope.openCamera = function () {
+        var options = {
+            quality: 50,
+            destinationType: Camera.DestinationType.FILE_URI,
+            sourceType: Camera.PictureSourceType.CAMERA,
+            allowEdit: false,
+            encodingType: Camera.EncodingType.JPEG,
+            targetWidth: 600,
+            targetHeight: 600,
+            popoverOptions: CameraPopoverOptions,
+            correctOrientation: true,
+            saveToPhotoAlbum: false
+        };
+
+        $cordovaCamera.getPicture(options).then(function (imageData) {
+            $scope.user.picture = imageData;
+        }, function (err) {
+            Utils.alert(err);
+        });
+    };
+
+    $scope.openLocalStore = function () {
+        var options = {
+            maximumImagesCount: 1,
+            width: 600,
+            height: 600,
+            quality: 50
+        };
+
+        $cordovaImagePicker.getPictures(options)
+        .then(function (results) {
+            $scope.user.picture = results[0];
+        }, function (error) {
+            Utils.alert(error);
+        });
+    };
+
+    $scope.save = function () {
+
     };
 });
