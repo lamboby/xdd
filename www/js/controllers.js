@@ -1004,21 +1004,24 @@
     }
 })
 
-.controller('ProfileCtrl', function ($scope, $state, Utils) {
+.controller('ProfileCtrl', function ($scope, $state, $filter, Profile, Utils) {
     $scope.supportDatePicker = itru_supportDatePicker();
     $scope.current = { birthdayStr: "" };
 
-    $scope.profile = {
-        username: "",
-        gender: 0,
-        birthday: "",
-        id_card: ""
-    };
+    Profile.get(function (data, status) {
+        if (status == 0) {
+            $scope.profile = data.Data[0];
+            $scope.profile.birthday = new Date($scope.profile.birthday);
+            $scope.current.birthdayStr = $filter('date')($scope.profile.birthday, 'yyyy-MM-dd');
+        }
+        else
+            Utils.alertError(data, status, "获取个人信息失败");
+    });
 
     $scope.save = function () {
-        if (!$scope.profile.username)
+        if (!$scope.profile.realname)
             Utils.alert("请输入姓名");
-        else if ($scope.profile.length > 20)
+        else if ($scope.profile.realname.length > 20)
             Utils.alert("姓名不能超过20个字符");
         else if (itru_supportDatePicker() && !$scope.profile.birthday)
             Utils.alert("请输入生日");
@@ -1028,7 +1031,7 @@
             Utils.loading();
             if (!itru_supportDatePicker())
                 $scope.profile.birthday = new Date($scope.current.birthdayStr);
-            Parent.create($scope.profile, function (data, status) {
+            Profile.update($scope.profile, function (data, status) {
                 if (status == 0)
                     $state.go("tab.setting");
                 else

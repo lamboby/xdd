@@ -334,6 +334,20 @@
     }
 })
 
+.factory("Profile", function ($filter, Utils) {
+    return {
+        get: function (callback) {
+            var params = { token: itru_accessToken, user_id: itru_userId() };
+            Utils.exec("users/getUserById", params, callback);
+        },
+        update: function (params, callback) {
+            params.token = itru_accessToken;
+            params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
+            Utils.exec("users/update", params, callback);
+        }
+    }
+})
+
 .factory("Auth", function ($http, $q, $state, Utils) {
     return {
         login: function (user, callback) {
