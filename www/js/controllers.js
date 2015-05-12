@@ -1002,4 +1002,38 @@
         $scope.user.userName = parent.username;
         $scope.user.picture = parent.picture;
     }
+})
+
+.controller('ProfileCtrl', function ($scope, $state, Utils) {
+    $scope.supportDatePicker = itru_supportDatePicker();
+    $scope.current = { birthdayStr: "" };
+
+    $scope.profile = {
+        username: "",
+        gender: 0,
+        birthday: "",
+        id_card: ""
+    };
+
+    $scope.save = function () {
+        if (!$scope.profile.username)
+            Utils.alert("请输入姓名");
+        else if ($scope.profile.length > 20)
+            Utils.alert("姓名不能超过20个字符");
+        else if (itru_supportDatePicker() && !$scope.profile.birthday)
+            Utils.alert("请输入生日");
+        else if (!itru_supportDatePicker() && !Utils.checkDate($scope.current.birthdayStr))
+            Utils.alert("生日的格式不正确");
+        else {
+            Utils.loading();
+            if (!itru_supportDatePicker())
+                $scope.profile.birthday = new Date($scope.current.birthdayStr);
+            Parent.create($scope.profile, function (data, status) {
+                if (status == 0)
+                    $state.go("tab.setting");
+                else
+                    Utils.alertError(data, status, "修改个人信息失败");
+            });
+        }
+    };
 });

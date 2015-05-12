@@ -249,6 +249,24 @@
             }
         }
     })
+    .state('tab.about', {
+        url: '/setting/about',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/about.html',
+                controller: 'AboutCtrl'
+            }
+        }
+    })
+    .state('tab.profile', {
+        url: '/setting/profile',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/profile.html',
+                controller: 'ProfileCtrl'
+            }
+        }
+    })
     .state('signin', {
         url: '/signin',
         templateUrl: 'templates/signin.html',
@@ -258,15 +276,6 @@
         url: '/select-family',
         templateUrl: 'templates/select-family.html',
         controller: 'SelectFamilyCtrl'
-    })
-    .state('tab.about', {
-        url: '/setting/about',
-        views: {
-            'tab-setting': {
-                templateUrl: 'templates/about.html',
-                controller: 'AboutCtrl'
-            }
-        }
     });
 
     $urlRouterProvider.otherwise('/tab/dash');
