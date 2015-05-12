@@ -875,14 +875,7 @@
         else {
             Utils.confirm("确定要更改此卡的用户关联吗?", function (res) {
                 if (res) {
-                    var params = { stu_id: $scope.card.studentId, user_id: $scope.card.parentId, card: $stateParams.card, sch_id: "" };
-                    for (i = 0; i < $scope.students.length; i++) {
-                        if ($scope.students[i].stu_id == params.stu_id) {
-                            params.sch_id = $scope.students[i].sch_id;
-                            break;
-                        }
-                    }
-
+                    var params = { stu_id: $scope.card.studentId, user_id: $scope.card.parentId, card: $stateParams.card, sch_id: $scope.card.sch_id };
                     Utils.loading();
                     Card.updateCardUser(params, function (data, status) {
                         if (status == 0)
