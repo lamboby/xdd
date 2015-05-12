@@ -1063,7 +1063,7 @@
         $cordovaCamera.getPicture(options).then(function (imageData) {
             $scope.user.picture = imageData;
         }, function (err) {
-            Utils.alert(err);
+            //Utils.alert(err);
         });
     };
 
@@ -1079,7 +1079,7 @@
         .then(function (results) {
             $scope.user.picture = results[0];
         }, function (error) {
-            Utils.alert(error);
+            //Utils.alert(error);
         });
     };
 
