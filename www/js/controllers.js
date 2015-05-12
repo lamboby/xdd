@@ -826,6 +826,8 @@
     $scope.save = function () {
         if (!$scope.card.card)
             Utils.alert("请输入卡号");
+        else if (/[^0-9a-zA-Z]/g.test($scope.card.card))
+            Utils.alert("卡号只能包含英文或数字");
         else if ($scope.card.card.length > 32)
             Utils.alert("卡号不能超过32个字符");
         else if (!$scope.card.sch_id)
