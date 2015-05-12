@@ -976,4 +976,25 @@
         for (i = 0; i < $scope.relations.length; i++)
             $scope.relations[i].checked = true;
     };
+})
+
+.controller('PhotoCtrl', function ($scope, $state, Parent, Student, Utils) {
+    Utils.loading();
+    Parent.all(function (data, status) {
+        if (status == 0) {
+            $scope.parents = data.Data;
+            Student.all(function (data, status) {
+                if (status == 0)
+                    $scope.students = data.Data;
+                else
+                    Utils.alertError(data, status, "获取学生信息失败");
+            });
+        }
+        else
+            Utils.alertError(data, status, "获取家长信息失败");
+    });
+})
+
+.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, Utils) {
+    $scope.userName = $stateParams.userId;
 });

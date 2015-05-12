@@ -194,6 +194,24 @@
             }
         }
     })
+    .state('tab.photo', {
+        url: '/setting/photo',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/photo.html',
+                controller: 'PhotoCtrl'
+            }
+        }
+    })
+    .state('tab.take-photo', {
+        url: '/setting/photo/:userId/:userType',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/take-photo.html',
+                controller: 'TakePhotoCtrl'
+            }
+        }
+    })
     .state('tab.card', {
         url: '/setting/card',
         cache: false,
