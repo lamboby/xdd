@@ -256,6 +256,13 @@
                     parents.length = 0;
             });
         },
+        get: function (userId) {
+            for (var i = 0; i < parents.length; i++) {
+                if (parents[i].user_id == parseInt(userId)) {
+                    return parents[i];
+                }
+            }
+        },
         create: function (parent, callback) {
             var params = angular.copy(parent);
             params.token = itru_accessToken;

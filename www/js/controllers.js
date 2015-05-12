@@ -995,6 +995,16 @@
     });
 })
 
-.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, Utils) {
-    $scope.userName = $stateParams.userId;
+.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, Parent, Student, Utils) {
+    $scope.user = { userId: $stateParams.userId, type: $stateParams.userType, userName: "", picture: "" };
+    if ($stateParams.userType == 0) {
+        var student = Student.get($stateParams.userId);
+        $scope.user.userName = student.stu_name;
+        $scope.user.picture = student.picture;
+    }
+    else {
+        var parent = Parent.get($stateParams.userId);
+        $scope.user.userName = parent.username;
+        $scope.user.picture = parent.picture;
+    }
 });

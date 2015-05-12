@@ -4,8 +4,7 @@
             <div class="item item-divider">
                 学生
             </div>
-            <a class="item item-icon-left item-icon-right" href="#/tab/setting/photo/{{student.stu_id}}/0" ng-repeat="student in students">
-                <div style="background-image:url('img/avatar.png')">&nbsp;</div>
+            <a class="item item-icon-right" href="#/tab/setting/photo/{{student.stu_id}}/0" ng-repeat="student in students">
                 {{student.stu_name}}
                 <i class="icon ion-ios-arrow-right"></i>
             </a>
@@ -13,8 +12,7 @@
             <div class="item item-divider">
                 家长
             </div>
-            <a class="item item-icon-left item-icon-right" href="#/tab/setting/photo/{{parent.user_id}}/1" ng-repeat="parent in parents">
-                <i class="icon ion-ios-camera"></i>
+            <a class="item item-icon-right" href="#/tab/setting/photo/{{parent.user_id}}/1" ng-repeat="parent in parents">
                 {{parent.username}}
                 <i class="icon ion-ios-arrow-right"></i>
             </a>

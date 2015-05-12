@@ -1,5 +1,8 @@
-﻿<ion-view view-title="拍照">
+﻿<ion-view view-title="{{user.userName}}">
     <ion-content>
-       {{userName}}
+        <div class="item" style="text-align:center;">
+            <img ng-src="{{user.picture}}" style="width:100px; height:100px; border-radius:50%;" />
+        </div>
+
     </ion-content>
 </ion-view>
