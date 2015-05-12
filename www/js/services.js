@@ -340,7 +340,8 @@
             var params = { token: itru_accessToken, user_id: itru_userId() };
             Utils.exec("users/getUserById", params, callback);
         },
-        update: function (params, callback) {
+        update: function (profile, callback) {
+            var params = angular.copy(profile);
             params.token = itru_accessToken;
             params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
             Utils.exec("users/update", params, callback);
