@@ -1046,15 +1046,15 @@
         $scope.user.picture = parent.picture;
     }
 
-    $scope.openCamera = function () {
+    $scope.openCamera = function (type) {
         var options = {
             quality: 50,
             destinationType: Camera.DestinationType.FILE_URI,
-            sourceType: Camera.PictureSourceType.CAMERA,
-            allowEdit: false,
+            sourceType: type == 0 ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY,
+            allowEdit: true,
             encodingType: Camera.EncodingType.JPEG,
-            targetWidth: 600,
-            targetHeight: 600,
+            //targetWidth: 600,
+            //targetHeight: 600,
             popoverOptions: CameraPopoverOptions,
             correctOrientation: true,
             saveToPhotoAlbum: false
@@ -1067,21 +1067,21 @@
         });
     };
 
-    $scope.openLocalStore = function () {
-        var options = {
-            maximumImagesCount: 1,
-            width: 600,
-            height: 600,
-            quality: 50
-        };
+    //$scope.openLocalStore = function () {
+    //    var options = {
+    //        maximumImagesCount: 1,
+    //        width: 600,
+    //        height: 600,
+    //        quality: 50
+    //    };
 
-        $cordovaImagePicker.getPictures(options)
-        .then(function (results) {
-            $scope.user.picture = results[0];
-        }, function (error) {
-            //Utils.alert(error);
-        });
-    };
+    //    $cordovaImagePicker.getPictures(options)
+    //    .then(function (results) {
+    //        $scope.user.picture = results[0];
+    //    }, function (error) {
+    //        //Utils.alert(error);
+    //    });
+    //};
 
     $scope.save = function () {
 

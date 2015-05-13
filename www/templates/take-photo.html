@@ -3,11 +3,11 @@
         <ion-item style="text-align:center;">
             <img ng-src="{{user.picture | avatar}}" style="width:200px; height:200px; border-radius:50%;" />
         </ion-item>
-        <div class="item item-icon-left" ng-click="openCamera()">
+        <div class="item item-icon-left" ng-click="openCamera(0)">
             <i class="icon ion-ios-camera"></i>
             拍照
         </div>
-        <div class="item item-icon-left" ng-click="openLocalStore()">
+        <div class="item item-icon-left" ng-click="openCamera(1)">
             <i class="icon ion-images"></i>
             从图库选择
         </div>
