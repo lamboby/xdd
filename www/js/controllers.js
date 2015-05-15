@@ -4,7 +4,6 @@
     $scope.current = { date: null };
     $scope.items = [];
     $scope.refresh = function () {
-        Utils.loading();
         Dash.all($scope.current.date, function (data, status) {
             if (status == 0) {
                 $scope.items.length = 0;
@@ -77,7 +76,6 @@
         else if (!$scope.user.password)
             Utils.alert("请输入密码");
         else {
-            Utils.loading();
             Utils.login($scope.user, function (data, status) {
                 if (status == 0)
                     $location.url("select-family");
@@ -89,7 +87,6 @@
                     Utils.alert("账号未认证");
                 else
                     Utils.alertError(data, status, "登录失败");
-                Utils.hideLoading();
             });
         }
     }
@@ -104,7 +101,6 @@
 })
 
 .controller('SelectFamilyCtrl', function ($scope, $state, Family, Utils) {
-    Utils.loading();
     $scope.current = { familyId: "" };
     Family.all(function (data, status) {
         if (status == 0) {
@@ -114,7 +110,6 @@
                     $scope.current.familyId = $scope.familys[0].fml_id;
             }
             else {
-                Utils.loading();
                 Family.create({ fml_name: "我的家庭" }, function (data, status) {
                     if (status == 0) {
                         $scope.familys = [{ fml_id: data.Data[0].id, fml_name: "我的家庭" }];
@@ -168,20 +163,12 @@
         Utils.confirm("确定要注销?", function (res) {
             if (!res)
                 return;
-            itru_isLogin = false;
-            itru_accessToken = "";
-            itru_lastGetTokenTime = null;
-            itru_isPrimary(false);
-            itru_loginToken(-1);
-            itru_familyId(-1);
-            itru_userId(-1);
-            $state.go("signin");
+            Utils.signout;
         });
     };
 })
 
 .controller('StudentCtrl', function ($scope, $state, Student, Utils) {
-    Utils.loading();
     $scope.isPrimary = itru_isPrimary();
     Student.all(function (data, status) {
         if (status == 0)
@@ -246,8 +233,6 @@
             Utils.alert("请输入学校名称");
             return;
         }
-
-        Utils.loading();
         School.all($scope.current.query, function (data, status) {
             if (status == 0) {
                 $scope.schools = data.Data;
@@ -272,8 +257,6 @@
             Utils.alert("请选择学校");
             return;
         }
-
-        Utils.loading();
         School.allGrades($scope.student.sch_id, function (data, status) {
             if (status == 0) {
                 var gSelected = false;
@@ -365,7 +348,6 @@
         else if (!itru_supportDatePicker() && !Utils.checkDate($scope.current.birthdayStr))
             Utils.alert("生日的格式不正确");
         else {
-            Utils.loading();
             if (!itru_supportDatePicker())
                 $scope.student.birthday = new Date($scope.current.birthdayStr);
             Student.create($scope.student, function (data, status) {
@@ -392,7 +374,6 @@
     $scope.student.birthday = new Date($scope.student.birthday);
     $scope.current.birthdayStr = $filter('date')($scope.student.birthday, 'yyyy-MM-dd');
 
-    Utils.loading();
     School.allGrades($scope.student.sch_id, function (data, status) {
         if (status == 0) {
             $scope.grades = data.Data[0].grade;
@@ -429,8 +410,6 @@
             Utils.alert("请输入学校名称");
             return;
         }
-
-        Utils.loading();
         School.all($scope.current.query, function (data, status) {
             if (status == 0) {
                 $scope.schools = data.Data;
@@ -455,8 +434,6 @@
             Utils.alert("请选择学校");
             return;
         }
-
-        Utils.loading();
         School.allGrades($scope.student.sch_id, function (data, status) {
             if (status == 0) {
                 var gSelected = false;
@@ -548,7 +525,6 @@
         else if (!itru_supportDatePicker() && !Utils.checkDate($scope.current.birthdayStr))
             Utils.alert("生日的格式不正确");
         else {
-            Utils.loading();
             if (!itru_supportDatePicker())
                 $scope.student.birthday = new Date($scope.current.birthdayStr);
             Student.update($scope.student, function (data, status) {
@@ -562,7 +538,6 @@
 })
 
 .controller('FamilyCtrl', function ($scope, $state, Family, Utils) {
-    Utils.loading();
     Family.all(function (data, status) {
         if (status == 0)
             $scope.familys = data.Data;
@@ -575,7 +550,6 @@
     $scope.switch = function (family) {
         Utils.confirm("确定要切换家庭吗?", function (res) {
             if (res) {
-                Utils.loading();
                 Family.isPrimary(family.fml_id, function (data, status) {
                     if (status == 0) {
                         itru_familyId(family.fml_id);
@@ -600,7 +574,6 @@
         else if ($scope.family.fml_name.length > 20)
             Utils.alert("家庭名称不能超过20个字符");
         else {
-            Utils.loading();
             Family.create($scope.family, function (data, status) {
                 if (status == 0)
                     $state.go("tab.family");
@@ -612,7 +585,6 @@
 })
 
 .controller('EditFamilyCtrl', function ($scope, $state, $stateParams, Family, Utils) {
-    Utils.loading();
     Family.isPrimary($stateParams.familyId, function (data, status) {
         if (status == 0) {
             $scope.isPrimary = data.Data[0].primary;
@@ -637,7 +609,6 @@
         else if ($scope.family.fml_name.length > 20)
             Utils.alert("家庭名称不能超过20个字符");
         else {
-            Utils.loading();
             Family.update($scope.family, function (data, status) {
                 if (status == 0)
                     $state.go("tab.family");
@@ -649,7 +620,6 @@
 })
 
 .controller('ParentCtrl', function ($scope, Parent, Utils) {
-    Utils.loading();
     $scope.isPrimary = itru_isPrimary();
     Parent.all(function (data, status) {
         if (status == 0)
@@ -698,7 +668,6 @@
         else if (!itru_supportDatePicker() && !Utils.checkDate($scope.current.birthdayStr))
             Utils.alert("生日的格式不正确");
         else {
-            Utils.loading();
             if (!itru_supportDatePicker())
                 $scope.parent.birthday = new Date($scope.current.birthdayStr);
             Parent.create($scope.parent, function (data, status) {
@@ -712,7 +681,6 @@
 })
 
 .controller('CardCtrl', function ($scope, $state, Card, Utils) {
-    Utils.loading();
     $scope.isPrimary = itru_isPrimary();
     Card.all(function (data, status) {
         if (status == 0)
@@ -725,7 +693,6 @@
         var statusStr = card.enabled == 0 ? "启用" : "禁用";
         Utils.confirm("确定要" + statusStr + "卡吗?", function (res) {
             if (res) {
-                Utils.loading();
                 Card.updateStatus(card, function (data, status) {
                     if (status != 0)
                         Utils.alertError(data, status, statusStr + "卡失败");
@@ -772,7 +739,6 @@
             return;
         }
 
-        Utils.loading();
         School.all($scope.current.query, function (data, status) {
             if (status == 0) {
                 $scope.schools = data.Data;
@@ -812,7 +778,6 @@
         else if (!$scope.card.sch_id)
             Utils.alert("请选择学校");
         else {
-            Utils.loading();
             Card.create($scope.card, function (data, status) {
                 if (status == 0)
                     $state.go("tab.card");
@@ -824,7 +789,6 @@
 })
 
 .controller('CardUserCtrl', function ($scope, $state, $stateParams, Card, Parent, Student, Utils) {
-    Utils.loading();
     Parent.all(function (data, status) {
         if (status == 0) {
             $scope.parents = data.Data;
@@ -855,7 +819,6 @@
             Utils.confirm("确定要更改此卡的用户关联吗?", function (res) {
                 if (res) {
                     var params = { stu_id: $scope.card.studentId, user_id: $scope.card.parentId, card: $stateParams.card, sch_id: $scope.card.sch_id };
-                    Utils.loading();
                     Card.updateCardUser(params, function (data, status) {
                         if (status == 0)
                             $state.go("tab.card");
@@ -869,7 +832,6 @@
 })
 
 .controller('CardPushCtrl', function ($scope, $state, $stateParams, Card, Parent, Utils) {
-    Utils.loading();
     $scope.relations = [];
     $scope.card = Card.get($stateParams.card);
     $scope.isPrimary = itru_isPrimary();
@@ -906,7 +868,6 @@
     });
 
     $scope.save = function () {
-        Utils.loading();
         if (itru_isPrimary()) {
             var users = [];
             for (i = 0; i < $scope.relations.length; i++) {
@@ -976,7 +937,6 @@
         else if (!itru_supportDatePicker() && !Utils.checkDate($scope.current.birthdayStr))
             Utils.alert("生日的格式不正确");
         else {
-            Utils.loading();
             if (!itru_supportDatePicker())
                 $scope.profile.birthday = new Date($scope.current.birthdayStr);
             Profile.update($scope.profile, function (data, status) {
@@ -990,7 +950,6 @@
 })
 
 .controller('PhotoCtrl', function ($scope, $state, Parent, Student, Utils) {
-    Utils.loading();
     Parent.all(function (data, status) {
         if (status == 0) {
             $scope.parents = data.Data;

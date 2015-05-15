@@ -18,7 +18,7 @@
                 }
 
                 maxtime = $filter('date')(maxtime, 'yyyy-MM-dd HH:mm:ss.sss');
-                var params = { token: itru_accessToken, user_id: itru_userId(), time: maxtime };
+                var params = { user_id: itru_userId(), time: maxtime };
                 Utils.exec("attends/list", params, function (data, status) {
                     if (status == 0) {
                         if (data.Data && data.Data.length > 0) {
@@ -142,7 +142,7 @@
 
     return {
         all: function (callback) {
-            var params = { token: itru_accessToken, fml_id: itru_familyId() };
+            var params = { fml_id: itru_familyId() };
             Utils.exec("families/getAllStudents", params, callback, function (data) {
                 if (data.Data)
                     students = data.Data;
@@ -151,7 +151,7 @@
             });
         },
         del: function (student, callback) {
-            var params = { token: itru_accessToken, fml_id: itru_familyId(), stu_id: student.stu_id, sch_id: student.sch_id };
+            var params = { fml_id: itru_familyId(), stu_id: student.stu_id, sch_id: student.sch_id };
             Utils.exec("students/delete", params, callback, function (data) {
                 students.splice(students.indexOf(student), 1);
             });
@@ -168,13 +168,11 @@
             var params = angular.copy(student);
             params.name = student.stu_name;
             params.birthday = $filter("date")(params.birthday, 'yyyy-MM-dd');
-            params.token = itru_accessToken;
             params.fml_id = itru_familyId();
             Utils.exec("students/create", params, callback);
         },
         update: function (student, callback) {
             var params = {
-                token: itru_accessToken,
                 id: student.stu_id,
                 name: student.stu_name,
                 gender: student.gender,
@@ -196,13 +194,13 @@
 
     return {
         all: function (name, callback) {
-            var params = { token: itru_accessToken, key: name };
+            var params = { key: name };
             Utils.exec("schools/searchSchools", params, callback, function (data) {
                 schools = data.Data;
             });
         },
         allGrades: function (schoolId, callback) {
-            var params = { token: itru_accessToken, id: schoolId };
+            var params = { id: schoolId };
             Utils.exec("schools/getGradeAndClass", params, callback);
         }
     };
@@ -213,7 +211,7 @@
 
     return {
         all: function (callback) {
-            var params = { token: itru_accessToken, id: itru_userId() };
+            var params = { id: itru_userId() };
             Utils.exec("families/loginList", params, callback, function (data) {
                 if (data.Data)
                     familys = data.Data;
@@ -229,15 +227,15 @@
             }
         },
         create: function (family, callback) {
-            var params = { token: itru_accessToken, id: itru_userId(), name: family.fml_name };
+            var params = { id: itru_userId(), name: family.fml_name };
             Utils.exec("families/create", params, callback);
         },
         update: function (family, callback) {
-            var params = { token: itru_accessToken, id: family.fml_id, name: family.fml_name };
+            var params = { id: family.fml_id, name: family.fml_name };
             Utils.exec("families/update", params, callback);
         },
         isPrimary: function (familyId, callback) {
-            var params = { token: itru_accessToken, fml_id: familyId, user_id: itru_userId() };
+            var params = { fml_id: familyId, user_id: itru_userId() };
             Utils.exec("users/isPrimary", params, callback);
         }
     }
@@ -248,7 +246,7 @@
 
     return {
         all: function (callback) {
-            var params = { token: itru_accessToken, fml_id: itru_familyId() };
+            var params = { fml_id: itru_familyId() };
             Utils.exec("families/getAllUsers", params, callback, function (data) {
                 if (data.Data)
                     parents = data.Data;
@@ -265,12 +263,11 @@
         },
         create: function (parent, callback) {
             var params = angular.copy(parent);
-            params.token = itru_accessToken;
             params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
             Utils.exec("users/createViceParents", params, callback);
         },
         del: function (parent, callback) {
-            var params = { token: itru_accessToken, fml_id: itru_familyId(), pri_id: itru_userId(), user_id: parent.user_id };
+            var params = { fml_id: itru_familyId(), pri_id: itru_userId(), user_id: parent.user_id };
             Utils.exec("users/deleteViceParents", params, callback, function (data) {
                 parents.splice(parents.indexOf(parent), 1);
             });
@@ -283,7 +280,7 @@
 
     return {
         all: function (callback) {
-            var params = { token: itru_accessToken, fml_id: itru_familyId() };
+            var params = { fml_id: itru_familyId() };
             Utils.exec("cards/getCardsByFml", params, callback, function (data) {
                 if (data.Data)
                     cards = data.Data;
@@ -300,35 +297,31 @@
         },
         updateStatus: function (card, callback) {
             var newStatus = card.enabled == 0 ? 1 : 0;
-            var params = { token: itru_accessToken, card: card.card, status: newStatus, fml_id: itru_familyId(), sch_id: card.sch_id };
+            var params = { card: card.card, status: newStatus, fml_id: itru_familyId(), sch_id: card.sch_id };
             Utils.exec("cards/changeCardStatus", params, callback, function (data) {
                 card.enabled = newStatus;
             });
         },
         create: function (card, callback) {
             var params = angular.copy(card);
-            params.token = itru_accessToken;
             Utils.exec("cards/createCard", params, callback);
         },
         updateCardUser: function (params, callback) {
-            params.token = itru_accessToken;
             params.fml_id = itru_familyId();
             Utils.exec("cards/bindCard", params, callback);
         },
         getCardPush: function (cardNo, callback) {
-            var params = { token: itru_accessToken, card: cardNo };
+            var params = { card: cardNo };
             Utils.exec("cards/getInfoReceiverByCard", params, callback);
         },
         updateCardPush: function (cardNo, schoolId, users, callback) {
-            var params = { token: itru_accessToken, fml_id: itru_familyId(), sch_id: schoolId, card: cardNo, users: users };
+            var params = { fml_id: itru_familyId(), sch_id: schoolId, card: cardNo, users: users };
             Utils.exec("families/updateReceivers", params, callback);
         },
         createCardPush: function (params, callback) {
-            params.token = itru_accessToken;
             Utils.exec("families/createReceivers", params, callback);
         },
         deleteCardPush: function (params, callback) {
-            params.token = itru_accessToken;
             Utils.exec("families/deleteReceivers", params, callback);
         }
     }
@@ -337,12 +330,11 @@
 .factory("Profile", function ($filter, Utils) {
     return {
         get: function (callback) {
-            var params = { token: itru_accessToken, user_id: itru_userId() };
+            var params = { user_id: itru_userId() };
             Utils.exec("users/getUserById", params, callback);
         },
         update: function (profile, callback) {
             var params = angular.copy(profile);
-            params.token = itru_accessToken;
             params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
             Utils.exec("users/update", params, callback);
         }
@@ -382,10 +374,19 @@
         });
         return encrypted.toString();
     };
+    var _signout = function () {
+        itru_isLogin = false;
+        itru_accessToken = "";
+        itru_lastGetTokenTime = null;
+        itru_isPrimary(false);
+        itru_loginToken(-1);
+        itru_familyId(-1);
+        itru_userId(-1);
+        $state.go("signin");
+    };
     var _accessToken = function (callback) {
-        if ((!itru_isLogin && !itru_loginToken()) || (!itru_familyId() && $location.url() != "/select-family")) {
+        if ((!itru_isLogin && !itru_loginToken()) || (!itru_familyId() && $location.url() != "/select-family"))
             callback(-1);
-        }
         else {
             if (itru_lastGetTokenTime) {
                 var nowTicks = Date.parse(new Date());
@@ -412,7 +413,16 @@
         alert: _alertMsg,
         alertError: function (data, status, prefix) {
             var msg = prefix + ", " + (data ? data.Code + " " + data.Msg : status);
+            var signout = false;
+            if (status == 404)
+                msg = "请求失败，请检查网络连接";
+            else if (data && data.code == 1000) {
+                msg = "令牌已失效，请重新登录"
+                signout = true;
+            }
             _alertMsg(msg);
+            if (signout)
+                _signout();
         },
         confirm: function (msg, callback) {
             var confirmPopup = $ionicPopup.confirm({
@@ -430,17 +440,21 @@
         hideLoading: _hideLoading,
         encrypt: _encrypt,
         buildUrl: _buildUrl,
+        signout: _signout,
         exec: function (url, params, callback, code0_callback) {
             _showLoading();
             _accessToken(function (code) {
                 if (code == 0) {
+                    params.token = itru_accessToken;
                     $http.jsonp(_buildUrl(url, params)).success(function (data) {
                         if (data.Code == 0 && code0_callback)
                             code0_callback(data);
                         if (callback)
                             callback(data, data.Code);
                     }).error(function (data, statusText) {
-                        if (callback)
+                        if (statusText == 404)
+                            _alertMsg("请求失败，请检查网络连接");
+                        else if (callback)
                             callback(data, statusText);
                     }).finally(function () {
                         _hideLoading();
@@ -450,7 +464,7 @@
                     _hideLoading();
                     $state.go("signin");
                 }
-                else if (code == 1005) {
+                else if (code == 1005 || code == 1000) {
                     _hideLoading();
                     _alertMsg("令牌已失效，请重新登录");
                     itru_isLogin = false;
@@ -462,7 +476,7 @@
                 }
                 else {
                     _hideLoading();
-                    _alertMsg("获取令牌失败，请稍后重试");
+                    _alertMsg("获取令牌失败，请稍后重试，错误码：" + code);
                 }
             });
         },
