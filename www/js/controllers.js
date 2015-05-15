@@ -32,7 +32,7 @@
                 }
             }
             else
-                Utils.alertError(data, status, "获取信息失败");
+                Utils.error(data, status, "获取信息失败");
             $scope.$broadcast('scroll.refreshComplete');
         });
     };
@@ -76,7 +76,7 @@
         else if (!$scope.user.password)
             Utils.alert("请输入密码");
         else {
-            Utils.login($scope.user, function (data, status) {
+            Utils.signin($scope.user, function (data, status) {
                 if (status == 0)
                     $location.url("select-family");
                 else if (status == 1003)
@@ -86,7 +86,7 @@
                 else if (status == 1015)
                     Utils.alert("账号未认证");
                 else
-                    Utils.alertError(data, status, "登录失败");
+                    Utils.error(data, status, "登录失败");
             });
         }
     }
@@ -116,12 +116,12 @@
                         $scope.current.familyId = data.Data[0].id;
                     }
                     else
-                        Utils.alertError(data, status, "初始化家庭失败");
+                        Utils.error(data, status, "初始化家庭失败");
                 });
             }
         }
         else
-            Utils.alertError(data, status, "获取家庭列表失败");
+            Utils.error(data, status, "获取家庭列表失败");
     });
 
     $scope.selected = function () {
@@ -132,7 +132,7 @@
                 $state.go("tab.dash");
             }
             else
-                Utils.alertError(data, status, "选择家庭失败");
+                Utils.error(data, status, "选择家庭失败");
         });
     };
 })
@@ -174,7 +174,7 @@
         if (status == 0)
             $scope.students = data.Data;
         else
-            Utils.alertError(data, status, "获取学生列表失败");
+            Utils.error(data, status, "获取学生列表失败");
     });
 
     $scope.del = function (student) {
@@ -182,7 +182,7 @@
             if (res) {
                 Student.del(student, function (data, status) {
                     if (status != 0)
-                        Utils.alertError(data, status, "删除学生失败");
+                        Utils.error(data, status, "删除学生失败");
                 });
             }
         });
@@ -240,7 +240,7 @@
                     $scope.student.sch_id = $scope.schools[0].id;
             }
             else
-                Utils.alertError(data, status, "查找学校失败");
+                Utils.error(data, status, "查找学校失败");
         });
     };
 
@@ -291,7 +291,7 @@
                 $scope.hideModal();
             }
             else
-                Utils.alertError(data, status, "获取年级列表失败");
+                Utils.error(data, status, "获取年级列表失败");
         });
     };
 
@@ -354,7 +354,7 @@
                 if (status == 0)
                     $state.go("tab.student");
                 else
-                    Utils.alertError(data, status, "添加学生失败");
+                    Utils.error(data, status, "添加学生失败");
             });
         }
     };
@@ -387,7 +387,7 @@
             }
         }
         else
-            Utils.alertError(data, status, "获取年级列表失败");
+            Utils.error(data, status, "获取年级列表失败");
     });
 
     $ionicModal.fromTemplateUrl('school-modal.html', {
@@ -417,7 +417,7 @@
                     $scope.student.sch_id = $scope.schools[0].id;
             }
             else
-                Utils.alertError(data, status, "查找学校失败");
+                Utils.error(data, status, "查找学校失败");
         });
     };
 
@@ -468,7 +468,7 @@
                 $scope.hideModal();
             }
             else
-                Utils.alertError(data, status, "获取年级列表失败");
+                Utils.error(data, status, "获取年级列表失败");
         });
     };
 
@@ -531,7 +531,7 @@
                 if (status == 0)
                     $state.go("tab.student");
                 else
-                    Utils.alertError(data, status, "修改学生失败");
+                    Utils.error(data, status, "修改学生失败");
             });
         }
     };
@@ -557,7 +557,7 @@
                         $state.go("tab.setting");
                     }
                     else
-                        Utils.alertError(data, status, "切换家庭失败");
+                        Utils.error(data, status, "切换家庭失败");
                 });
             }
         });
@@ -578,7 +578,7 @@
                 if (status == 0)
                     $state.go("tab.family");
                 else
-                    Utils.alertError(data, status, "添加家庭失败");
+                    Utils.error(data, status, "添加家庭失败");
             });
         }
     };
@@ -596,7 +596,7 @@
             }
         }
         else {
-            Utils.alertError(data, status, "获取家庭信息失败");
+            Utils.error(data, status, "获取家庭信息失败");
             $state.go("tab.family");
         }
     });
@@ -613,7 +613,7 @@
                 if (status == 0)
                     $state.go("tab.family");
                 else
-                    Utils.alertError(data, status, "修改家庭失败");
+                    Utils.error(data, status, "修改家庭失败");
             });
         }
     };
@@ -625,7 +625,7 @@
         if (status == 0)
             $scope.parents = data.Data;
         else
-            Utils.alertError(data, status, "获取家长列表失败");
+            Utils.error(data, status, "获取家长列表失败");
     });
 
     $scope.del = function (parent) {
@@ -637,7 +637,7 @@
                 }
                 Parent.del(parent, function (data, status) {
                     if (status != 0)
-                        Utils.alertError(data, status, "删除家长失败");
+                        Utils.error(data, status, "删除家长失败");
                 });
             }
         });
@@ -674,7 +674,7 @@
                 if (status == 0)
                     $state.go("tab.parent");
                 else
-                    Utils.alertError(data, status, "添加副家长失败");
+                    Utils.error(data, status, "添加副家长失败");
             });
         }
     };
@@ -686,7 +686,7 @@
         if (status == 0)
             $scope.cards = data.Data;
         else
-            Utils.alertError(data, status, "获取卡列表失败");
+            Utils.error(data, status, "获取卡列表失败");
     });
 
     $scope.changeStatus = function (card) {
@@ -695,7 +695,7 @@
             if (res) {
                 Card.updateStatus(card, function (data, status) {
                     if (status != 0)
-                        Utils.alertError(data, status, statusStr + "卡失败");
+                        Utils.error(data, status, statusStr + "卡失败");
                 });
             }
         });
@@ -746,7 +746,7 @@
                     $scope.card.sch_id = $scope.schools[0].id;
             }
             else
-                Utils.alertError(data, status, "查找学校失败");
+                Utils.error(data, status, "查找学校失败");
         });
     };
 
@@ -782,7 +782,7 @@
                 if (status == 0)
                     $state.go("tab.card");
                 else
-                    Utils.alertError(data, status, "添加卡失败");
+                    Utils.error(data, status, "添加卡失败");
             });
         }
     };
@@ -803,11 +803,11 @@
                         $scope.card.parentId = $scope.card.carry[0].id;
                 }
                 else
-                    Utils.alertError(data, status, "获取学生信息失败");
+                    Utils.error(data, status, "获取学生信息失败");
             });
         }
         else
-            Utils.alertError(data, status, "获取家长信息失败");
+            Utils.error(data, status, "获取家长信息失败");
     });
 
     $scope.save = function () {
@@ -823,7 +823,7 @@
                         if (status == 0)
                             $state.go("tab.card");
                         else
-                            Utils.alertError(data, status, "修改用户关联失败");
+                            Utils.error(data, status, "修改用户关联失败");
                     });
                 }
             });
@@ -860,11 +860,11 @@
                     }
                 }
                 else
-                    Utils.alertError(data, status, "获取推送关系失败");
+                    Utils.error(data, status, "获取推送关系失败");
             });
         }
         else
-            Utils.alertError(data, status, "获取家长信息失败");
+            Utils.error(data, status, "获取家长信息失败");
     });
 
     $scope.save = function () {
@@ -879,7 +879,7 @@
                 if (status == 0)
                     $state.go("tab.card");
                 else
-                    Utils.alertError(data, status, "修改推送关系失败");
+                    Utils.error(data, status, "修改推送关系失败");
             });
         }
         else {
@@ -891,7 +891,7 @@
                     if (status == 0)
                         $state.go("tab.card");
                     else
-                        Utils.alertError(data, status, "修改推送关系失败");
+                        Utils.error(data, status, "修改推送关系失败");
                 });
             }
             else if (item.oldValue && !item.checked) {
@@ -899,7 +899,7 @@
                     if (status == 0)
                         $state.go("tab.card");
                     else
-                        Utils.alertError(data, status, "修改推送关系失败");
+                        Utils.error(data, status, "修改推送关系失败");
                 });
             }
             else
@@ -924,7 +924,7 @@
             $scope.current.birthdayStr = $filter('date')($scope.profile.birthday, 'yyyy-MM-dd');
         }
         else
-            Utils.alertError(data, status, "获取个人信息失败");
+            Utils.error(data, status, "获取个人信息失败");
     });
 
     $scope.save = function () {
@@ -943,7 +943,7 @@
                 if (status == 0)
                     $state.go("tab.setting");
                 else
-                    Utils.alertError(data, status, "修改个人信息失败");
+                    Utils.error(data, status, "修改个人信息失败");
             });
         }
     };
@@ -957,11 +957,11 @@
                 if (status == 0)
                     $scope.students = data.Data;
                 else
-                    Utils.alertError(data, status, "获取学生信息失败");
+                    Utils.error(data, status, "获取学生信息失败");
             });
         }
         else
-            Utils.alertError(data, status, "获取家长信息失败");
+            Utils.error(data, status, "获取家长信息失败");
     });
 })
 

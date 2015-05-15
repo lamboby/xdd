@@ -415,7 +415,7 @@
 
     return {
         alert: _alertMsg,
-        alertError: function (data, status, prefix) {
+        error: function (data, status, prefix) {
             var msg = prefix + ", " + (data ? data.Code + " " + data.Msg : status);
             var signout = false;
             if (status == 404)
@@ -496,7 +496,7 @@
         checkDate: function check(date) {
             return (new Date(date).getDate() == date.substring(date.length - 2));
         },
-        login: function (user, callback) {
+        signin: function (user, callback) {
             var phone = _encrypt(user.phone);
             var pwd = _encrypt(user.password);
             var params = { username: phone, password: pwd };
