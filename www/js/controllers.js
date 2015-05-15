@@ -163,7 +163,7 @@
         Utils.confirm("确定要注销?", function (res) {
             if (!res)
                 return;
-            Utils.signout;
+            Utils.signout();
         });
     };
 })

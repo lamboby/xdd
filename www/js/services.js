@@ -399,10 +399,14 @@
 
             var url = _buildUrl("users/accessToken", { token: itru_loginToken() });
             $http.jsonp(url).success(function (data) {
-                itru_isLogin = true;
-                itru_accessToken = data.Data[0].access_token;
-                itru_lastGetTokenTime = new Date();
-                callback(0);
+                if (data.Code == 0) {
+                    itru_isLogin = true;
+                    itru_accessToken = data.Data[0].access_token;
+                    itru_lastGetTokenTime = new Date();
+                    callback(0);
+                }
+                else
+                    callback(data.Code);
             }).error(function (statusText) {
                 callback(statusText);
             });
@@ -416,7 +420,7 @@
             var signout = false;
             if (status == 404)
                 msg = "请求失败，请检查网络连接";
-            else if (data && data.code == 1000) {
+            else if (data && data.Code == 1000) {
                 msg = "令牌已失效，请重新登录"
                 signout = true;
             }
