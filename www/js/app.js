@@ -235,6 +235,25 @@
         templateUrl: 'templates/signin.html',
         controller: 'SigninCtrl'
     })
+
+//增加注册页面 
+    .state('regsubmit',{
+	url:'/regsubmit',
+	templateUrl:'templates/reg-submit.html',
+	controller:'RegisterCtrl'
+	})
+	
+	.state('regsendmsg',{
+	url:'/regsendmsg',
+	templateUrl:'templates/reg-sendmsg.html',
+	controller:'SendmsgCtrl'
+	})
+	
+	.state('regvalid',{
+	url:'/regvalid',
+	templateUrl:'templates/reg-valid.html',
+	controller:'RegisterCtrl'
+	})
     .state('select-family', {
         url: '/select-family',
         templateUrl: 'templates/select-family.html',
