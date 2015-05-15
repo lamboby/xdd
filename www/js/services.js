@@ -349,45 +349,7 @@
     }
 })
 
-.factory("Auth", function ($http, $q, $state, Utils) {
-    return {
-        login: function (user, callback) {
-            var phone = Utils.encrypt(user.phone);
-            var pwd = Utils.encrypt(user.password);
-            var params = { username: phone, password: pwd };
-            Utils.exec("users/tickets", params, callback, function (data) {
-                itru_isLogin = true;
-                itru_userId(data.Data[0].user_id);
-                itru_loginToken(data.Data[0].token);
-            });
-        },
-        refreshAccessToken: function () {
-            if (!itru_isLogin && !itru_loginToken()) {
-                $state.go("signin");
-                return -1;
-            }
-            else {
-                if (itru_lastGetTokenTime) {
-                    var nowTicks = Date.parse(new Date());
-                    var lastGetTicks = Date.parse(itru_lastGetTokenTime);
-                    if ((nowTicks - lastGetTicks) / 1000 < 7080)
-                        return 0;
-                }
-
-                var deferred = $q.defer();
-                var url = Utils.buildUrl("users/accessToken", { token: itru_loginToken() });
-                $http.jsonp(url).success(function (data) {
-                    deferred.resolve(data);
-                }).error(function (statusText) {
-                    deferred.reject(statusText);
-                });
-                return deferred.promise;
-            }
-        }
-    }
-})
-
-.factory("Utils", function ($http, $ionicPopup, $ionicLoading) {
+.factory("Utils", function ($http, $state, $ionicPopup, $ionicLoading, $location) {
     var _buildUrl = function (path, params) {
         var url = itru_serviceUrl + path + "?callback=JSON_CALLBACK";
         for (var item in params) {
@@ -399,20 +361,58 @@
         }
         return url;
     };
-
-    var alertMsg = function (msg) {
+    var _alertMsg = function (msg) {
         $ionicPopup.alert({
             title: '<strong>提示</strong>',
             template: msg,
             okText: '确定'
         });
     };
+    var _showLoading = function () {
+        $ionicLoading.show({ templateUrl: 'loading.html' });
+    };
+    var _hideLoading = function () {
+        $ionicLoading.hide();
+    };
+    var _encrypt = function (src) {
+        var keyHex = CryptoJS.enc.Utf8.parse(itru_encryptKey);
+        var encrypted = CryptoJS.DES.encrypt(src, keyHex, {
+            mode: CryptoJS.mode.ECB,
+            padding: CryptoJS.pad.ZeroPadding
+        });
+        return encrypted.toString();
+    };
+    var _accessToken = function (callback) {
+        if ((!itru_isLogin && !itru_loginToken()) || (!itru_familyId() && $location.url() != "/select-family")) {
+            callback(-1);
+        }
+        else {
+            if (itru_lastGetTokenTime) {
+                var nowTicks = Date.parse(new Date());
+                var lastGetTicks = Date.parse(itru_lastGetTokenTime);
+                if ((nowTicks - lastGetTicks) / 1000 < 7080) {
+                    callback(0);
+                    return;
+                }
+            }
+
+            var url = _buildUrl("users/accessToken", { token: itru_loginToken() });
+            $http.jsonp(url).success(function (data) {
+                itru_isLogin = true;
+                itru_accessToken = data.Data[0].access_token;
+                itru_lastGetTokenTime = new Date();
+                callback(0);
+            }).error(function (statusText) {
+                callback(statusText);
+            });
+        }
+    };
 
     return {
-        alert: alertMsg,
+        alert: _alertMsg,
         alertError: function (data, status, prefix) {
-            var msg = data ? data.Code + " " + data.Msg : status;
-            alertMsg(msg);
+            var msg = prefix + ", " + (data ? data.Code + " " + data.Msg : status);
+            _alertMsg(msg);
         },
         confirm: function (msg, callback) {
             var confirmPopup = $ionicPopup.confirm({
@@ -426,32 +426,44 @@
                     callback(res);
             });
         },
-        loading: function () {
-            $ionicLoading.show({ templateUrl: 'loading.html' });
-        },
-        hideLoading: function () {
-            $ionicLoading.hide();
-        },
-        encrypt: function (src) {
-            var keyHex = CryptoJS.enc.Utf8.parse(itru_encryptKey);
-            var encrypted = CryptoJS.DES.encrypt(src, keyHex, {
-                mode: CryptoJS.mode.ECB,
-                padding: CryptoJS.pad.ZeroPadding
-            });
-            return encrypted.toString();
-        },
+        loading: _showLoading,
+        hideLoading: _hideLoading,
+        encrypt: _encrypt,
         buildUrl: _buildUrl,
         exec: function (url, params, callback, code0_callback) {
-            $http.jsonp(_buildUrl(url, params)).success(function (data) {
-                if (data.Code == 0 && code0_callback)
-                    code0_callback(data);
-                if (callback)
-                    callback(data, data.Code);
-            }).error(function (data, statusText) {
-                if (callback)
-                    callback(data, statusText);
-            }).finally(function () {
-                $ionicLoading.hide();
+            _showLoading();
+            _accessToken(function (code) {
+                if (code == 0) {
+                    $http.jsonp(_buildUrl(url, params)).success(function (data) {
+                        if (data.Code == 0 && code0_callback)
+                            code0_callback(data);
+                        if (callback)
+                            callback(data, data.Code);
+                    }).error(function (data, statusText) {
+                        if (callback)
+                            callback(data, statusText);
+                    }).finally(function () {
+                        _hideLoading();
+                    });
+                }
+                else if (code == -1) {
+                    _hideLoading();
+                    $state.go("signin");
+                }
+                else if (code == 1005) {
+                    _hideLoading();
+                    _alertMsg("令牌已失效，请重新登录");
+                    itru_isLogin = false;
+                    $state.go("signin");
+                }
+                else if (code == 404) {
+                    _hideLoading();
+                    _alertMsg("请求失败，请检查网络连接");
+                }
+                else {
+                    _hideLoading();
+                    _alertMsg("获取令牌失败，请稍后重试");
+                }
             });
         },
         objToArray: function (obj) {
@@ -465,6 +477,28 @@
         },
         checkDate: function check(date) {
             return (new Date(date).getDate() == date.substring(date.length - 2));
-        }
+        },
+        login: function (user, callback) {
+            var phone = _encrypt(user.phone);
+            var pwd = _encrypt(user.password);
+            var params = { username: phone, password: pwd };
+            $http.jsonp(_buildUrl("users/tickets", params)).success(function (data) {
+                if (data.Code == 0) {
+                    itru_isLogin = true;
+                    itru_userId(data.Data[0].user_id);
+                    itru_loginToken(data.Data[0].token);
+                }
+                if (callback)
+                    callback(data, data.Code);
+            }).error(function (data, statusText) {
+                if (callback)
+                    callback(data, statusText);
+            }).finally(function () {
+                _hideLoading();
+            });
+        },
+        refreshAccessToken: _accessToken
     }
 });
+
+

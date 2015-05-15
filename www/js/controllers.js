@@ -1,6 +1,6 @@
 ﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope, $state, $filter, $ionicActionSheet, Dash, Auth, Utils) {
+.controller('DashCtrl', function ($scope, $state, $filter, $ionicActionSheet, Dash, Utils) {
     $scope.current = { date: null };
     $scope.items = [];
     $scope.refresh = function () {
@@ -37,7 +37,6 @@
             $scope.$broadcast('scroll.refreshComplete');
         });
     };
-
     $scope.show = function () {
         var today = $filter('date')(Utils.getDate(0), 'yyyy-MM-dd');
         var yesterday = $filter('date')(Utils.getDate(1), 'yyyy-MM-dd');
@@ -63,43 +62,10 @@
         });
     };
 
-    var res = Auth.refreshAccessToken();
-    if (res === -1) {
-        Utils.hideLoading();
-        $state.go("signin");
-    }
-    else if (res != 0) {
-        try {
-            res.then(function (data) {
-                Utils.hideLoading();
-                if (data.Code != 'undefined') {
-                    if (data.Code == 0) {
-                        itru_isLogin = true;
-                        itru_accessToken = data.Data[0].access_token;
-                        itru_lastGetTokenTime = new Date();
-                        $scope.refresh(null);
-                    }
-                    else {
-                        Utils.alert("令牌已失效，请重新登录");
-                        itru_isLogin = false;
-                        $state.go("signin");
-                    }
-                }
-                else
-                    Utils.alert("获取令牌失败，错误码：" + data)
-            });
-        }
-        finally {
-            Utils.hideLoading();
-        }
-    }
-    else {
-        $scope.refresh(null);
-        Utils.hideLoading();
-    }
+    $scope.refresh(null);
 })
 
-.controller('SigninCtrl', function ($scope, $window, Auth, Utils) {
+.controller('SigninCtrl', function ($scope, $state, $location, Utils) {
     $scope.user = {
         phone: '18627228035',
         password: '1234567890'
@@ -112,9 +78,9 @@
             Utils.alert("请输入密码");
         else {
             Utils.loading();
-            Auth.login($scope.user, function (data, status) {
+            Utils.login($scope.user, function (data, status) {
                 if (status == 0)
-                    $window.location.hash = "#/select-family";
+                    $location.url("select-family");
                 else if (status == 1003)
                     Utils.alert("账号不存在");
                 else if (status == 1004)
@@ -142,9 +108,22 @@
     $scope.current = { familyId: "" };
     Family.all(function (data, status) {
         if (status == 0) {
-            $scope.familys = data.Data;
-            if ($scope.familys && $scope.familys.length > 0)
-                $scope.current.familyId = $scope.familys[0].fml_id;
+            if (data.Data && data.Data.length > 0) {
+                $scope.familys = data.Data;
+                if ($scope.familys && $scope.familys.length > 0)
+                    $scope.current.familyId = $scope.familys[0].fml_id;
+            }
+            else {
+                Utils.loading();
+                Family.create({ fml_name: "我的家庭" }, function (data, status) {
+                    if (status == 0) {
+                        $scope.familys = [{ fml_id: data.Data[0].id, fml_name: "我的家庭" }];
+                        $scope.current.familyId = data.Data[0].id;
+                    }
+                    else
+                        Utils.alertError(data, status, "初始化家庭失败");
+                });
+            }
         }
         else
             Utils.alertError(data, status, "获取家庭列表失败");
