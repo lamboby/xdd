@@ -23,6 +23,10 @@
                         {
                             "xml": "<feature name=\"ImagePicker\"><param name=\"android-package\" value=\"com.synconset.ImagePicker\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Sms\"><param name=\"android-package\" value=\"com.cordova.plugins.sms.Sms\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -49,6 +53,18 @@
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
                             "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.SEND_SMS\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-feature android:name=\"android.hardware.telephony\" android:required=\"false\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -69,6 +85,9 @@
             "PACKAGE_NAME": "com.ionicframework.itrustoor265009"
         },
         "com.synconset.imagepicker": {
+            "PACKAGE_NAME": "com.ionicframework.itrustoor265009"
+        },
+        "com.cordova.plugins.sms": {
             "PACKAGE_NAME": "com.ionicframework.itrustoor265009"
         }
     },

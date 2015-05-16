@@ -1037,19 +1037,24 @@
     }
 
     $scope.sendmessage = function () {
-        var options = {
-            replaceLineBreaks: false, // true to replace \n by a new line, false by default
-            android: { intent: '' }
-        };
-        Utils.loading();
-        $cordovaSms.send($scope.icloudphone, $scope.password, options)
-		.then(function () {
-		    Utils.hideLoading();
-		    $state.go("regvalid");
-		},
-		function (error) {
-		    Utils.alert("短信发送失败,可手动发送密码至上面的手机号,或联系客服.");
-		});
+        try {
+            var options = {
+                replaceLineBreaks: false, // true to replace \n by a new line, false by default
+                android: { intent: '' }
+            };
+            Utils.loading();
+            $cordovaSms.send($scope.icloudphone, $scope.password, options)
+            .then(function () {
+                Utils.hideLoading();
+                $state.go("regvalid");
+            },
+            function (error) {
+                Utils.alert("短信发送失败,可手动发送密码至上面的手机号,或联系客服.");
+            });
+        }
+        catch (exception) {
+            Utils.alert(exception);
+        }
     }
 })
 
