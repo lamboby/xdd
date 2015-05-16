@@ -247,13 +247,11 @@
         templateUrl: 'templates/reg-submit.html',
         controller: 'RegisterCtrl'
     })
-
 	.state('regsendmsg', {
 	    url: '/regsendmsg',
 	    templateUrl: 'templates/reg-sendmsg.html',
 	    controller: 'SendmsgCtrl'
 	})
-
 	.state('regvalid', {
 	    url: '/regvalid',
 	    templateUrl: 'templates/reg-valid.html',
