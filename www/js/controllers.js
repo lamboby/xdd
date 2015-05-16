@@ -1049,6 +1049,7 @@
                 $state.go("regvalid");
             },
             function (error) {
+                Utils.hideLoading();
                 Utils.alert("短信发送失败,可手动发送密码至上面的手机号,或联系客服.");
             });
         }
