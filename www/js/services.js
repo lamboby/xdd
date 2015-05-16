@@ -341,63 +341,50 @@
     }
 })
 
-
-
-//保存用户名,密码,云手机号
-.factory('UserService', function() { 
-	var temp_icloudphone; 
-	var temp_regphone;
-	var temp_regpassword;
-	return { 
-		geticloudphone: function() { 
-			return temp_icloudphone; 
-		}, 
-		seticloudphone: function(user) { 
-			temp_icloudphone = user; 
-		} ,
-		getregphone: function() { 
-			return temp_regphone; 
-		}, 
-		setregphone: function(user) { 
-			temp_regphone = user; 
-		} ,
-		getregpassword: function() { 
-			return temp_regpassword; 
-		}, 
-		setregpassword: function(pwd) { 
-			temp_regpassword = pwd; 
-		} 
-	}; 
+.factory('UserService', function () {
+    var temp_icloudphone;
+    var temp_regphone;
+    var temp_regpassword;
+    return {
+        geticloudphone: function () {
+            return temp_icloudphone;
+        },
+        seticloudphone: function (user) {
+            temp_icloudphone = user;
+        },
+        getregphone: function () {
+            return temp_regphone;
+        },
+        setregphone: function (user) {
+            temp_regphone = user;
+        },
+        getregpassword: function () {
+            return temp_regpassword;
+        },
+        setregpassword: function (pwd) {
+            temp_regpassword = pwd;
+        }
+    };
 })
 
-.factory("Reg", function ($http, $q, $state, Utils) {
-	var phones= [];
+.factory("Reg", function ($http, $state, Utils) {
+    var phones = [];
 
-	    return {		
-        //获取手机号
-		getphone: function (callback) {
-            	var params = {}; 
-            	Utils.exec("configs/getPhones", params, callback, function (data) {
+    return {
+        getphone: function (callback) {
+            var params = {};
+            Utils.exec("configs/getPhones", params, callback, function (data) {
                 if (data.Data)
                     phones = data.Data;
                 else
                     phones.length = 0;
-           	 })	;
-	  },
-		 
-		
-		
-		
-		
-		//APP向云端发送注册请求
-		addreg: function (register,openid,callback) {
-            	var phone =register.phone; 
-			
-           		var params = {phone: phone, open_id: openid };
-            	Utils.exec("configs/addRegister", params, callback);
+            });
         },
-		
-	}
+        addreg: function (register, openid, callback) {
+            var params = { phone: register.phone, open_id: openid };
+            Utils.exec("configs/addRegister", params, callback);
+        }
+    }
 })
 
 .factory("Utils", function ($http, $state, $ionicPopup, $ionicLoading, $location) {
