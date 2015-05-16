@@ -1070,7 +1070,7 @@
         Reg.getphone(function (data, status) {
             try {
                 if (status == 0) {
-                    var index = Math.random() * data.Data.length;
+                    var index = Math.floor(Math.random() * data.Data.length);
                     if (index == data.Data.length)
                         index = index - 1;
                     $scope.icloudphone = data.Data[index].phone;
