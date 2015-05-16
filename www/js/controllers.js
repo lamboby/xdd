@@ -1039,14 +1039,11 @@
                 replaceLineBreaks: false, // true to replace \n by a new line, false by default
                 android: { intent: '' }
             };
-            Utils.loading();
             $cordovaSms.send($scope.icloudphone, $scope.password, options)
             .then(function () {
-                Utils.hideLoading();
                 $state.go("regvalid");
             },
             function (error) {
-                Utils.hideLoading();
                 Utils.alert("短信发送失败,可手动发送密码至上面的手机号,或联系客服.");
             });
         }
@@ -1087,11 +1084,9 @@
                     else if (!$scope.register.password)
                         Utils.alert("请输入密码");
                     else {
-                        Utils.loading();
                         UserService.setregphone($scope.register.phone);
                         UserService.setregpassword($scope.register.password);
                         Reg.addreg($scope.register, openid, function (data, status) {
-                            Utils.hideLoading();
                             if (status == 1901 || status == 0)
                                 $state.go("regsendmsg");
                             else if (status = 1009)
