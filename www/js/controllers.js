@@ -1032,9 +1032,6 @@
     $scope.icloudphone = UserService.geticloudphone();
     $scope.phone = UserService.getregphone();
     $scope.password = UserService.getregpassword();
-    $scope.goregsubmit = function () {
-        $state.go("regsubmit");
-    }
 
     $scope.sendmessage = function () {
         try {
