@@ -64,7 +64,7 @@
     $scope.refresh(null);
 })
 
-.controller('SigninCtrl', function ($scope, $state, $location, Utils) {
+.controller('SigninCtrl', function ($scope, $state, Utils) {
     $scope.user = {
         phone: '18627228035',
         password: '1234567890'
@@ -78,7 +78,7 @@
         else {
             Utils.signin($scope.user, function (data, status) {
                 if (status == 0)
-                    $location.url("select-family");
+                    $state.go("select-family");
                 else if (status == 1003)
                     Utils.alert("账号不存在");
                 else if (status == 1004)

@@ -16,8 +16,8 @@
         $ionicPlatform.registerBackButtonAction(function (e) {
             e.preventDefault();
             var path = $location.path();
-            if (!itru_isLogin || path == '/tab/dash'
-                || path == "/tab/news" || path == "/tab/setting" || path == "/select-family") {
+            if ((!itru_isLogin && path != "/regsubmit" && path != "/regsendmsg" && path != "/regvalid") ||
+                path == '/tab/dash' || path == "/tab/news" || path == "/tab/setting" || path == "/select-family") {
                 Utils.confirm("确定退出应用吗?", function (res) {
                     if (res)
                         ionic.Platform.exitApp();

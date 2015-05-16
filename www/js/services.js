@@ -366,6 +366,19 @@
     var _hideLoading = function () {
         $ionicLoading.hide();
     };
+    var _error = function (data, status, prefix) {
+        var msg = prefix + ", " + (data ? data.Code + " " + data.Msg : status);
+        var signout = false;
+        if (status == 404)
+            msg = "请求失败，请检查网络连接";
+        else if (data && data.Code == 1000) {
+            msg = "令牌已失效，请重新登录"
+            signout = true;
+        }
+        _alertMsg(msg);
+        if (signout)
+            _signout();
+    };
     var _encrypt = function (src) {
         var keyHex = CryptoJS.enc.Utf8.parse(itru_encryptKey);
         var encrypted = CryptoJS.DES.encrypt(src, keyHex, {
@@ -421,7 +434,7 @@
                 callback(data, data.Code);
         }).error(function (data, statusText) {
             if (statusText == 404)
-                _alertMsg("", statusText, "");
+                _error(null, statusText, null);
             else if (callback)
                 callback(data, statusText);
         }).finally(function () {
@@ -431,19 +444,7 @@
 
     return {
         alert: _alertMsg,
-        error: function (data, status, prefix) {
-            var msg = prefix + ", " + (data ? data.Code + " " + data.Msg : status);
-            var signout = false;
-            if (status == 404)
-                msg = "请求失败，请检查网络连接";
-            else if (data && data.Code == 1000) {
-                msg = "令牌已失效，请重新登录"
-                signout = true;
-            }
-            _alertMsg(msg);
-            if (signout)
-                _signout();
-        },
+        error: _error,
         confirm: function (msg, callback) {
             var confirmPopup = $ionicPopup.confirm({
                 title: '<strong>提示</strong>',
