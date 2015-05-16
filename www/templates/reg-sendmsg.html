@@ -1,21 +1,19 @@
-﻿<ion-view view-title="注册" hide-back-button="true">
+﻿<ion-view view-title="注册">
     <ion-content class="padding">
-		<div class="card">
-  			<div class="item item-text-wrap">
-    			提示:
+        <div class="card">
+            <div class="item item-text-wrap">
+                提示:
                 </br>
-            	该手机将以普通短信向[ {{icloudphone}} ]发送您的注册信息.
-            	<br/>
-            	<br/>
-            	用户名:{{phone}}
-            	<br/>
-           		密码:{{password}}            
-  			</div>
-		</div>
-	</ion-content>
+                该手机将以普通短信向[ {{icloudphone}} ]发送您的注册信息.
+                <br />
+                <br />
+                用户名:{{phone}}
+                <br />
+                密码:{{password}}
+            </div>
+        </div>
+        <br />
+        <button class="button button-block button-balanced" ng-click="sendmessage()" pull-right>发送</button>
+        <button class="button button-block button-stable" ng-click="goregsubmit()" pull-left>返回</button>
+    </ion-content>
 </ion-view>
-<div class="bar bar-footer bar-balanced" >
-	<br />
-		<button class="button button-clear" ng-click="goregsubmit()" pull-left>返回</button>
-		<button class="button button-clear" ng-click="sendmessage()" pull-right>发送</button>
-</div>

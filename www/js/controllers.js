@@ -1028,12 +1028,12 @@
     };
 })
 
-.controller('SendmsgCtrl', function ($scope, UserService, $window, $cordovaSms, Utils) {
+.controller('SendmsgCtrl', function ($scope, $state, $cordovaSms, UserService, Utils) {
     $scope.icloudphone = UserService.geticloudphone();
     $scope.phone = UserService.getregphone();
     $scope.password = UserService.getregpassword();
     $scope.goregsubmit = function () {
-        $window.location.hash = "#/regsubmit";
+        $state.go("regsubmit");
     }
 
     $scope.sendmessage = function () {
@@ -1045,15 +1045,15 @@
         $cordovaSms.send($scope.icloudphone, $scope.password, options)
 		.then(function () {
 		    Utils.hideLoading();
-		    $window.location.hash = "#/regvalid";
+		    $state.go("regvalid");
 		},
-			function (error) {
-			    Utils.alert("短信发送失败,可手动发送密码至上面的手机号,或联系客服.");
-			});
+		function (error) {
+		    Utils.alert("短信发送失败,可手动发送密码至上面的手机号,或联系客服.");
+		});
     }
 })
 
-.controller('RegisterCtrl', function ($scope, $window, Reg, UserService, Utils) {
+.controller('RegisterCtrl', function ($scope, $state, Reg, UserService, Utils) {
     var bolgetphone = false;
     var openid = 1;
     $scope.register = {
@@ -1062,44 +1062,46 @@
     };
 
     $scope.gologin = function () {
-        $window.location.hash = "#/signin";
+        $state.go("signin");
     }
 
     $scope.regsubmit = function () {
-
         //获取手机号
         Reg.getphone(function (data, status) {
-            if (status == 0) {
-                $scope.icloudphone = data.Data[Math.trunc(Math.random() * data.Data.length)].phone;
-                //获取手机号后发送注册信息,包括用户名,OPENID
-                UserService.seticloudphone($scope.icloudphone);
+            try {
+                if (status == 0) {
+                    $scope.icloudphone = data.Data[Math.trunc(Math.random() * data.Data.length)].phone;
+                    //获取手机号后发送注册信息,包括用户名,OPENID
+                    UserService.seticloudphone($scope.icloudphone);
+                    temp_icloudphone = $scope.icloudphone;
 
-                temp_icloudphone = $scope.icloudphone;
-
-                if (!$scope.register.phone)
-                    Utils.alert("手机号错误");
-                else if (!$scope.register.password)
-                    Utils.alert("请输入密码");
-                else {
-                    Utils.loading();
-                    UserService.setregphone($scope.register.phone);
-                    UserService.setregpassword($scope.register.password);
-                    Reg.addreg($scope.register, openid, function (data, status) {
-                        if (status == 1100)
-                            Utils.alert("数据库执行错误");
-                        else if ((status == 1901) | (status == 0))
-                            $window.location.hash = "#/regsendmsg";
-                        else if (status = 1009)
-                            Utils.alert("无效手机号");
-                        else
-                            Utils.alertError(data, status, "注册失败");
-                        Utils.hideLoading();
-                    })
+                    if (!$scope.register.phone)
+                        Utils.alert("手机号错误");
+                    else if (!$scope.register.password)
+                        Utils.alert("请输入密码");
+                    else {
+                        Utils.loading();
+                        UserService.setregphone($scope.register.phone);
+                        UserService.setregpassword($scope.register.password);
+                        Reg.addreg($scope.register, openid, function (data, status) {
+                            Utils.hideLoading();
+                            if (status == 1901 || status == 0)
+                                $state.go("regsendmsg");
+                            else if (status = 1009)
+                                Utils.alert("无效手机号");
+                            else if (status == 1100)
+                                Utils.alert("数据库执行错误");
+                            else
+                                Utils.error(data, status, "注册失败");
+                        })
+                    }
                 }
-
+                else
+                    Utils.error(data, status, "获取短信验证通道错误");
             }
-            else
-                Utils.alert("获取短信验证通道错误");
+            catch (exception) {
+                Utils.alert(exception);
+            }
         });
     }
 });

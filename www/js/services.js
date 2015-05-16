@@ -373,7 +373,7 @@
     return {
         getphone: function (callback) {
             var params = {};
-            Utils.exec("configs/getPhones", params, callback, function (data) {
+            Utils.execWithoutToken("configs/getPhones", params, callback, function (data) {
                 if (data.Data)
                     phones = data.Data;
                 else
@@ -382,7 +382,7 @@
         },
         addreg: function (register, openid, callback) {
             var params = { phone: register.phone, open_id: openid };
-            Utils.exec("configs/addRegister", params, callback);
+            Utils.execWithoutToken("configs/addRegister", params, callback);
         }
     }
 })
