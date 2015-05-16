@@ -458,6 +458,22 @@
             });
         }
     };
+    var _execWithoutToken = function (url, params, callback, code0_callback) {
+        _showLoading();
+        $http.jsonp(_buildUrl(url, params)).success(function (data) {
+            if (data.Code == 0 && code0_callback)
+                code0_callback(data);
+            if (callback)
+                callback(data, data.Code);
+        }).error(function (data, statusText) {
+            if (statusText == 404)
+                _alertMsg("", statusText, "");
+            else if (callback)
+                callback(data, statusText);
+        }).finally(function () {
+            _hideLoading();
+        });
+    };
 
     return {
         alert: _alertMsg,
@@ -496,19 +512,7 @@
             _accessToken(function (code) {
                 if (code == 0) {
                     params.token = itru_accessToken;
-                    $http.jsonp(_buildUrl(url, params)).success(function (data) {
-                        if (data.Code == 0 && code0_callback)
-                            code0_callback(data);
-                        if (callback)
-                            callback(data, data.Code);
-                    }).error(function (data, statusText) {
-                        if (statusText == 404)
-                            _alertMsg("请求失败，请检查网络连接");
-                        else if (callback)
-                            callback(data, statusText);
-                    }).finally(function () {
-                        _hideLoading();
-                    });
+                    _execWithoutToken(url, params, callback, code0_callback);
                 }
                 else if (code == -1) {
                     _hideLoading();
@@ -530,6 +534,7 @@
                 }
             });
         },
+        execWithoutToken: _execWithoutToken,
         objToArray: function (obj) {
             var array = [];
             for (var p in obj)
@@ -546,19 +551,10 @@
             var phone = _encrypt(user.phone);
             var pwd = _encrypt(user.password);
             var params = { username: phone, password: pwd };
-            $http.jsonp(_buildUrl("users/tickets", params)).success(function (data) {
-                if (data.Code == 0) {
-                    itru_isLogin = true;
-                    itru_userId(data.Data[0].user_id);
-                    itru_loginToken(data.Data[0].token);
-                }
-                if (callback)
-                    callback(data, data.Code);
-            }).error(function (data, statusText) {
-                if (callback)
-                    callback(data, statusText);
-            }).finally(function () {
-                _hideLoading();
+            _execWithoutToken("users/tickets", params, callback, function (data) {
+                itru_isLogin = true;
+                itru_userId(data.Data[0].user_id);
+                itru_loginToken(data.Data[0].token);
             });
         },
         refreshAccessToken: _accessToken

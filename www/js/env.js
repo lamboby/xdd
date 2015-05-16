@@ -1,5 +1,5 @@
 {
-    var itru_version = "1.0.3 Alpha";
+    var itru_version = "1.0.4 Alpha";
     var itru_isLogin = false;
     var itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
     var itru_accessToken = "";
