@@ -1070,7 +1070,11 @@
         Reg.getphone(function (data, status) {
             try {
                 if (status == 0) {
-                    $scope.icloudphone = data.Data[Math.trunc(Math.random() * data.Data.length)].phone;
+                    var index = Math.random() * data.Data.length;
+                    if (index == data.Data.length)
+                        index = index - 1;
+                    $scope.icloudphone = data.Data[index].phone;
+
                     //获取手机号后发送注册信息,包括用户名,OPENID
                     UserService.seticloudphone($scope.icloudphone);
                     temp_icloudphone = $scope.icloudphone;
