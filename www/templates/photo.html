@@ -1,7 +1,7 @@
 ﻿<ion-view view-title="选择成员拍照">
     <ion-content>
         <ion-list>
-            <div class="item item-divider">
+            <div class="item item-divider" ng-show="{{students && students.length > 0}}">
                 学生
             </div>
             <a class="item item-icon-right" href="#/tab/setting/photo/{{student.stu_id}}/0" ng-repeat="student in students">
@@ -9,7 +9,7 @@
                 <i class="icon ion-ios-arrow-right"></i>
             </a>
 
-            <div class="item item-divider">
+            <div class="item item-divider" ng-show="{{parents && parents.length > 0}}">
                 家长
             </div>
             <a class="item item-icon-right" href="#/tab/setting/photo/{{parent.user_id}}/1" ng-repeat="parent in parents">
