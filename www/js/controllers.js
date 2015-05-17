@@ -92,9 +92,10 @@
     }
 })
 
-.controller('AboutCtrl', function ($scope, Utils) {
-    $scope.version = itru_version;
-
+.controller('AboutCtrl', function ($scope, $cordovaAppVersion, Utils) {
+    $cordovaAppVersion.getAppVersion().then(function (version) {
+        $scope.version = version;
+    });
     $scope.checkVersion = function () {
         Utils.alert("当前已是最新版本");
     };

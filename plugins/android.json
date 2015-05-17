@@ -27,6 +27,10 @@
                         {
                             "xml": "<feature name=\"Sms\"><param name=\"android-package\" value=\"com.cordova.plugins.sms.Sms\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"AppVersion\"><param name=\"android-package\" value=\"uk.co.whiteoctober.cordova.AppVersion\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -88,6 +92,9 @@
             "PACKAGE_NAME": "com.ionicframework.itrustoor265009"
         },
         "com.cordova.plugins.sms": {
+            "PACKAGE_NAME": "com.ionicframework.itrustoor265009"
+        },
+        "uk.co.whiteoctober.cordova.appversion": {
             "PACKAGE_NAME": "com.ionicframework.itrustoor265009"
         }
     },

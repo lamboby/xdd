@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.itrustoor265009" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ice.itrustoor" version="1.0.5 Alpha" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>itrustoor</name>
   <description>
-        An Ionic Framework and Cordova project.
+        小叮当，报平安
     </description>
-  <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
+  <author email="hi@ionicframework" href="http://itrustoor.com/">
+      忠帮信息技术有限公司
     </author>
   <content src="index.html"/>
   <access origin="*"/>
