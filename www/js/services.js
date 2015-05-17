@@ -522,8 +522,7 @@
                 else if (code == 1005 || code == 1000) {
                     _hideLoading();
                     _alertMsg("令牌已失效，请重新登录");
-                    itru_isLogin = false;
-                    $state.go("signin");
+                    _signout();
                 }
                 else if (code == 404) {
                     _hideLoading();
