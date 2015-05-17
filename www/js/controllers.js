@@ -986,6 +986,7 @@
     }
 
     $scope.openCamera = function (type) {
+        $cordovaCamera.cleanup().then();
         var options = {
             quality: 50,
             destinationType: Camera.DestinationType.FILE_URI,
@@ -998,14 +999,13 @@
             correctOrientation: true,
             saveToPhotoAlbum: false
         };
-
         $cordovaCamera.getPicture(options).then(function (imageData) {
             $scope.user.picture = imageData;
         }, function (err) {
-            //Utils.alert(err);
+            if (err != "Camera cancelled." && err != "Selection cancelled.")
+                Utils.alert(err);
         });
     };
-
 
 
     //$scope.openLocalStore = function () {
