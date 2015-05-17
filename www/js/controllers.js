@@ -55,13 +55,13 @@
                     $scope.current.date = Utils.getDate(1);
                 else if (index == 2)
                     $scope.current.date = Utils.getDate(2);
-                $scope.refresh($scope.current.date);
+                $scope.refresh();
                 return true;
             }
         });
     };
 
-    $scope.refresh(null);
+    setTimeout($scope.refresh, 500);
 })
 
 .controller('SigninCtrl', function ($scope, $state, Utils) {
