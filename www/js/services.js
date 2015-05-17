@@ -17,7 +17,7 @@
                     }
                 }
 
-                maxtime = $filter('date')(maxtime, 'yyyy-MM-dd HH:mm:ss.sss');
+                maxtime = $filter('date')(maxtime, 'yyyy-MM-dd HH:mm:ss');
                 var params = { user_id: itru_userId(), time: maxtime };
                 Utils.exec("attends/list", params, function (data, status) {
                     if (status == 0) {
