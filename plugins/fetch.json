@@ -2,7 +2,7 @@
     "org.apache.cordova.device": {
         "source": {
             "type": "registry",
-            "id": "org.apache.cordova.device"
+            "id": "org.apache.cordova.device" 
         }
     },
     "org.apache.cordova.console": {
