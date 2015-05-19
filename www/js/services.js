@@ -17,7 +17,7 @@
                     }
                 }
 
-                maxtime = $filter('date')(maxtime, 'yyyy-MM-dd HH:mm:ss.sss');
+                maxtime = $filter('date')(maxtime, 'yyyy-MM-dd HH:mm:ss');
                 var params = { user_id: itru_userId(), time: maxtime };
                 Utils.exec("attends/list", params, function (data, status) {
                     if (status == 0) {
@@ -261,6 +261,18 @@
                 }
             }
         },
+        getProfile: function (userId, callback) {
+            var params = { user_id: userId };
+            Utils.exec("users/getUserById", params, callback);
+        },
+        update: function (parent, callback) {
+            var params = angular.copy(parent);
+            params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
+            Utils.exec("users/update", params, callback, function (data) {
+                if (parent.user_id == itru_userId())
+                    itru_userName = parent.realname;
+            });
+        },
         create: function (parent, callback) {
             var params = angular.copy(parent);
             params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
@@ -323,20 +335,6 @@
         },
         deleteCardPush: function (params, callback) {
             Utils.exec("families/deleteReceivers", params, callback);
-        }
-    }
-})
-
-.factory("Profile", function ($filter, Utils) {
-    return {
-        get: function (callback) {
-            var params = { user_id: itru_userId() };
-            Utils.exec("users/getUserById", params, callback);
-        },
-        update: function (profile, callback) {
-            var params = angular.copy(profile);
-            params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
-            Utils.exec("users/update", params, callback);
         }
     }
 })
@@ -461,6 +459,8 @@
                 if (data.Code == 0) {
                     itru_isLogin = true;
                     itru_accessToken = data.Data[0].access_token;
+                    itru_userName = data.Data[0].username;
+                    itru_userPicture = data.Data[0].picture;
                     itru_lastGetTokenTime = new Date();
                     callback(0);
                 }
@@ -522,8 +522,7 @@
                 else if (code == 1005 || code == 1000) {
                     _hideLoading();
                     _alertMsg("令牌已失效，请重新登录");
-                    itru_isLogin = false;
-                    $state.go("signin");
+                    _signout();
                 }
                 else if (code == 404) {
                     _hideLoading();
@@ -556,6 +555,8 @@
                 itru_isLogin = true;
                 itru_userId(data.Data[0].user_id);
                 itru_loginToken(data.Data[0].token);
+                itru_userName = data.Data[0].username;
+                itru_userPicture = data.Data[0].picture;
             });
         },
         refreshAccessToken: _accessToken

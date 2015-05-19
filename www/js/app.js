@@ -75,6 +75,7 @@
       })
     .state('tab.setting', {
         url: '/setting',
+        cache: false,
         views: {
             'tab-setting': {
                 templateUrl: 'templates/tab-setting.html',
@@ -157,6 +158,15 @@
             }
         }
     })
+    .state('tab.edit-parent', {
+        url: '/setting/parent/:parentId',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/edit-parent.html',
+                controller: 'EditParentCtrl'
+            }
+        }
+    })
     .state('tab.photo', {
         url: '/setting/photo',
         views: {
@@ -218,15 +228,6 @@
             'tab-setting': {
                 templateUrl: 'templates/about.html',
                 controller: 'AboutCtrl'
-            }
-        }
-    })
-    .state('tab.profile', {
-        url: '/setting/profile',
-        views: {
-            'tab-setting': {
-                templateUrl: 'templates/profile.html',
-                controller: 'ProfileCtrl'
             }
         }
     })

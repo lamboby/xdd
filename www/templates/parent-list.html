@@ -19,10 +19,14 @@
                         <p>身份证：{{parent.id_card}}</p>
                     </div>
 
-                    <div style='display:{{isPrimary ? "flex":"none"}}' cla class="item tabs tabs-secondary tabs-icon-left">
+                    <div style='display:{{isPrimary ? "flex":"none"}}' class="item tabs tabs-secondary tabs-icon-left">
                         <a class="tab-item" ng-click="del(parent)">
                             <i class="icon ion-trash-a"></i>
                             删除
+                        </a>
+                        <a class="tab-item" href="#/tab/setting/parent/{{item.user_id}}">
+                            <i class="icon ion-edit"></i>
+                            修改
                         </a>
                     </div>
                 </div>

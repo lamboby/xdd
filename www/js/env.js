@@ -9,6 +9,8 @@
     var itru_dbVersion = "1.0";
     var itru_dbSize = 1000000;
     var itru_db = null;
+    var itru_userName = "";
+    var itru_userPicture = "";
 
     var itru_loginToken = function (token) {
         if (token == -1)
