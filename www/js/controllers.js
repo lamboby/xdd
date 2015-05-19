@@ -66,8 +66,8 @@
 
 .controller('SigninCtrl', function ($scope, $state, Utils) {
     $scope.user = {
-        phone: '18627228035',
-        password: '1234567890'
+        phone: '18627920907',
+        password: 'abcde_12345'
     };
 
     $scope.signin = function () {
@@ -713,7 +713,7 @@
             if (!itru_supportDatePicker())
                 $scope.parent.birthday = new Date($scope.current.birthdayStr);
             Parent.update($scope.parent, function (data, status) {
-                if (status == 0) 
+                if (status == 0)
                     $state.go("tab.setting");
                 else
                     Utils.error(data, status, "修改家长失败");
@@ -1012,6 +1012,13 @@
         });
     };
 
+    $scope.save = function () {
+        if (!$scope.user.picture)
+            Utils.alert("请选择相片");
+        else {
+
+        }
+    };
 
     //$scope.openLocalStore = function () {
     //    var options = {
