@@ -1,13 +1,16 @@
 ﻿angular.module('itrustoor.controllers', [])
 
 .controller('DashCtrl', function ($scope, $state, $filter, $ionicActionSheet, Dash, Utils) {
+    if (!itru_isDbInit())
+        $state.go("signin");
+
     $scope.current = { date: null };
     $scope.items = [];
     $scope.refresh = function () {
         Dash.all($scope.current.date, function (data, status) {
             if (status == 0) {
                 $scope.items.length = 0;
-                if (data.length > 0) {
+                if (data && data.length > 0) {
                     for (i = 0; i < data.length; i++) {
                         var item = data.item(i);
                         item.display_time = $filter('date')(new Date(item.att_time), 'HH:mm');
@@ -60,14 +63,13 @@
             }
         });
     };
-
-    setTimeout($scope.refresh, 500);
+    $scope.refresh();
 })
 
 .controller('SigninCtrl', function ($scope, $state, Utils) {
     $scope.user = {
         phone: '18627920907',
-        password: 'abcde_12345'
+        password: 'wdx123'
     };
 
     $scope.signin = function () {

@@ -47,4 +47,12 @@
         var val = window.localStorage.getItem("SUPPORTDATEPICKER");
         return val != null && val === 'true';
     };
+    var itru_isDbInit = function (isInit) {
+        if (isInit == -1)
+            window.localStorage.removeItem("ISDBINIT");
+        else if (isInit != null && isInit != 'undefined')
+            window.localStorage.setItem("ISDBINIT", isInit);
+        var val = window.localStorage.getItem("ISDBINIT");
+        return val != null && val === 'true';
+    };
 }
