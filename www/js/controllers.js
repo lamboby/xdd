@@ -1095,8 +1095,74 @@
                         Reg.addreg($scope.register, openid, function (data, status) {
                             if (status == 1901 || status == 0)
                                 $state.go("regsendmsg");
-                            else if (status = 1009)
+                            else if (status == 1009)
                                 Utils.alert("无效手机号");
+							else if (status == 1006)
+							{
+                                Utils.alert("手机号已存在,继续将重新设置密码");
+								$state.go("regsendmsg");
+							}
+                            else if (status == 1100)
+                                Utils.alert("数据库执行错误");
+                            else
+                                Utils.error(data, status, "注册失败");
+                        })
+                    }
+                }
+                else
+                    Utils.error(data, status, "获取短信验证通道错误");
+            }
+            catch (exception) {
+                Utils.alert(exception);
+            }
+        });
+    }
+	
+})
+
+.controller('ChangepwdCtrl', function ($scope, $state, Reg, UserService, Utils) {
+    var bolgetphone = false;
+    var openid = 1;
+    $scope.register = {
+        phone: '',
+        password: ''
+    };
+
+    $scope.gologin = function () {
+        $state.go("signin");
+    }
+
+    $scope.changepwdsubmit = function () {
+        //获取手机号
+        Reg.getphone(function (data, status) {
+            try {
+                if (status == 0) {
+                    var index = Math.floor(Math.random() * data.Data.length);
+                    if (index == data.Data.length)
+                        index = index - 1;
+                    $scope.icloudphone = data.Data[index].phone;
+
+                    //获取手机号后发送注册信息,包括用户名,OPENID
+                    UserService.seticloudphone($scope.icloudphone);
+                    temp_icloudphone = $scope.icloudphone;
+
+                    if (!$scope.register.phone)
+                        Utils.alert("手机号错误");
+                    else if (!$scope.register.password)
+                        Utils.alert("请输入密码");
+                    else {
+                        UserService.setregphone($scope.register.phone);
+                        UserService.setregpassword($scope.register.password);
+                        Reg.addreg($scope.register, openid, function (data, status) {
+                            if (status == 1006)
+                                $state.go("regsendmsg");
+                            else if (status == 1009)
+                                Utils.alert("无效手机号");
+							else if (status == 1901 || status == 0)
+							{
+                                Utils.alert("手机号不存在,将为您新建用户");
+								$state.go("regsendmsg");
+							}
                             else if (status == 1100)
                                 Utils.alert("数据库执行错误");
                             else

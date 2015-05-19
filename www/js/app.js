@@ -16,7 +16,7 @@
         $ionicPlatform.registerBackButtonAction(function (e) {
             e.preventDefault();
             var path = $location.path();
-            if ((!itru_isLogin && path != "/regsubmit" && path != "/regsendmsg" && path != "/regvalid") ||
+            if ((!itru_isLogin && path != "/regsubmit"  && path != "/changepwd" && path != "/regsendmsg" && path != "/regvalid") ||
                 path == '/tab/dash' || path == "/tab/news" || path == "/tab/setting" || path == "/select-family") {
                 Utils.confirm("确定退出应用吗?", function (res) {
                     if (res)
@@ -257,6 +257,11 @@
 	    url: '/regvalid',
 	    templateUrl: 'templates/reg-valid.html',
 	    controller: 'RegisterCtrl'
+	})
+	.state('changepwd', {
+	    url: '/changepwd',
+	    templateUrl: 'templates/changepwd.html',
+	    controller: 'ChangepwdCtrl'
 	});
 
     $urlRouterProvider.otherwise('/tab/dash');
