@@ -188,6 +188,7 @@
                 name: student.stu_name,
                 gender: student.gender,
                 picture: student.picture,
+                phone: student.phone,
                 birthday: student.birthday ? $filter("date")(student.birthday, 'yyyy-MM-dd') : "",
                 sch_id: student.sch_id,
                 grade_id: student.grade_id,
