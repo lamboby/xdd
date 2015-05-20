@@ -1,23 +1,25 @@
 ﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope, $state, $filter, $ionicActionSheet, Dash, Utils) {
+.controller('DashCtrl', function ($scope, $state, $filter, $ionicActionSheet, $ionicScrollDelegate, Dash, Utils) {
     if (!itru_isDbInit())
         $state.go("signin");
 
     $scope.current = { date: null };
     $scope.items = [];
     $scope.refresh = function () {
+        if (!$scope.current.date)
+            $scope.current.date = new Date();
         Dash.all($scope.current.date, function (data, status) {
             if (status == 0) {
-                $scope.items.length = 0;
+                var items = [];
                 if (data && data.length > 0) {
                     for (i = 0; i < data.length; i++) {
                         var item = data.item(i);
                         item.display_time = $filter('date')(new Date(item.att_time), 'HH:mm');
-                        $scope.items.push(item);
+                        items.push(item);
                     }
 
-                    $scope.items.sort(function (a, b) {
+                    items.sort(function (a, b) {
                         var aTime = parseInt(a.display_time.replace(':', ''));
                         var bTime = parseInt(b.display_time.replace(':', ''));
                         return aTime > bTime ? 1 : -1;
@@ -25,17 +27,21 @@
 
                     for (i = 0; i <= 23; i++) {
                         var time = (i >= 10 ? "" + i : "0" + i) + ":00";
-                        for (j = 0; j < $scope.items.length; j++) {
-                            if ($scope.items[j].display_time.substr(0, 2) + ":00" == time) {
-                                $scope.items.splice(j, 0, { display_time: time, display_type: 0 });
+                        for (j = 0; j < items.length; j++) {
+                            if (items[j].display_time.substr(0, 2) + ":00" == time) {
+                                items.splice(j, 0, { display_time: time, display_type: 0 });
                                 break;
                             }
                         }
                     }
                 }
+                $scope.items = items;
             }
             else
                 Utils.error(data, status, "获取信息失败");
+
+            if ($scope.items && $scope.items.length > 0)
+                $ionicScrollDelegate.scrollBottom(true);
             $scope.$broadcast('scroll.refreshComplete');
         });
     };
@@ -53,12 +59,17 @@
             titleText: '历史',
             cancelText: '取消',
             buttonClicked: function (index) {
-                $scope.current.date = Utils.getDate(0);
+                var date = Utils.getDate(0);
                 if (index == 1)
-                    $scope.current.date = Utils.getDate(1);
+                    date = Utils.getDate(1);
                 else if (index == 2)
-                    $scope.current.date = Utils.getDate(2);
-                $scope.refresh();
+                    date = Utils.getDate(2);
+
+                if (!$scope.current.date || $filter('date')($scope.current.date, 'yyyy-MM-dd') != $filter('date')(date, 'yyyy-MM-dd')) {
+                    $scope.current.date = date;
+                    $scope.refresh();
+                    return true;
+                }
                 return true;
             }
         });
