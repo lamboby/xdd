@@ -3,42 +3,46 @@
 .factory('Dash', function ($filter, Utils, DB) {
     return {
         all: function (date, callback) {
-            if (date == null)
-                date = new Date();
-            date = $filter("date")(date, "yyyy-MM-dd");
+            if (itru_isDbInit()) {
+                if (date == null)
+                    date = new Date();
+                date = $filter("date")(date, "yyyy-MM-dd");
 
-            DB.query("select max(add_time) maxtime from attends", [], function (results) {
-                var maxtime = "";
-                for (i = 0; i < results.rows.length; i++) {
-                    var row = results.rows.item(i);
-                    if (row.maxtime != null) {
-                        maxtime = row.maxtime
-                        break;
+                DB.query("select max(add_time) maxtime from attends", [], function (results) {
+                    var maxtime = "";
+                    for (i = 0; i < results.rows.length; i++) {
+                        var row = results.rows.item(i);
+                        if (row.maxtime != null) {
+                            maxtime = row.maxtime
+                            break;
+                        }
                     }
-                }
 
-                maxtime = $filter('date')(maxtime, 'yyyy-MM-dd HH:mm:ss');
-                var params = { user_id: itru_userId(), time: maxtime };
-                Utils.exec("attends/list", params, function (data, status) {
-                    if (status == 0) {
-                        if (data.Data && data.Data.length > 0) {
-                            DB.insert("attends", ["stu_id", "stu_name", "att_time", "sch_id", "sch_name",
-                                "add_time", "type", "kind", "error", "entex_name", "entex_type"], data.Data, function () {
-                                    DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ?", [date], function (results) {
-                                        callback(results.rows, status);
+                    maxtime = $filter('date')(maxtime, 'yyyy-MM-dd HH:mm:ss');
+                    var params = { user_id: itru_userId(), time: maxtime };
+                    Utils.exec("attends/list", params, function (data, status) {
+                        if (status == 0) {
+                            if (data.Data && data.Data.length > 0) {
+                                DB.insert("attends", ["stu_id", "stu_name", "att_time", "sch_id", "sch_name",
+                                    "add_time", "type", "kind", "error", "entex_name", "entex_type"], data.Data, function () {
+                                        DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ?", [date], function (results) {
+                                            callback(results.rows, status);
+                                        });
                                     });
+                            }
+                            else {
+                                DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ?", [date], function (results) {
+                                    callback(results.rows, status);
                                 });
+                            }
                         }
-                        else {
-                            DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ?", [date], function (results) {
-                                callback(results.rows, status);
-                            });
-                        }
-                    }
-                    else
-                        callback(data, status);
+                        else
+                            callback(data, status);
+                    });
                 });
-            });
+            }
+            else
+                callback(null, 0);
         }
     }
 })
@@ -56,10 +60,15 @@
     return {
         getDb: getDb,
         init: function () {
+            if (itru_isDbInit())
+                return;
             var db = getDb();
             db.transaction(function (tx) {
                 //tx.executeSql('drop table if exists attends');
-                tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (stu_id,stu_name,att_time,sch_id,sch_name,add_time,type,kind,error,entex_name,entex_type)');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (stu_id,stu_name,att_time,sch_id,' +
+                    'sch_name,add_time,type,kind,error,entex_name,entex_type)', [], function (tx, results) {
+                        itru_isDbInit(true);
+                    });
             }, errorFunc);
         },
         query: function (sql, params, callback) {
