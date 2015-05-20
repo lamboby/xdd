@@ -8,6 +8,11 @@
             </label>
 
             <label class="item item-input">
+                <span class="input-label">手机</span>
+                <input type="text" placeholder="手机" ng-model="student.phone" required>
+            </label>
+
+            <label class="item item-input">
                 <span class="input-label">学校</span>
                 <input type="text" placeholder="学校" ng-model="student.sch_name" ng-click="showModal()" required>
             </label>
@@ -24,11 +29,6 @@
                     班级
                 </div>
                 <select ng-options="class.class_id as class.name for class in classes" ng-model="student.class_id" ng-change="selectClass()"></select>
-            </label>
-
-            <label class="item item-input">
-                <span class="input-label">手机</span>
-                <input type="text" placeholder="手机" ng-model="student.phone" required>
             </label>
 
             <label class="item item-input">
