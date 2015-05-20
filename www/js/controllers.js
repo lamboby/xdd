@@ -567,7 +567,7 @@
             Utils.alert("获取家庭列表失败，错误码：" + msg);
         }
     });
-
+    $scope.currentFamilyId = itru_familyId();
     $scope.switch = function (family) {
         Utils.confirm("确定要切换家庭吗?", function (res) {
             if (res) {

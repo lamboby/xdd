@@ -6,6 +6,9 @@
         <ion-list>
             <ion-item class="item-icon-right" href="#/tab/setting/family/{{family.fml_id}}" ng-repeat="family in familys">
                 {{family.fml_name}}
+                <span class="item-note" ng-if="currentFamilyId == family.fml_id">
+                &radic;
+                </span>
                 <i class="icon ion-ios-arrow-right"></i>
                 <ion-option-button class="button-balanced" ng-click="switch(family)">
                     切换
