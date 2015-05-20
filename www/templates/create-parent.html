@@ -19,18 +19,13 @@
 
             <label class="item item-input">
                 <span class="input-label">生日</span>
-                <input type="date" ng-show="{{supportDatePicker}}" placeholder="生日" ng-model="parent.birthday">
-                <input type="text" ng-hide="{{supportDatePicker}}" placeholder="格式:1990-01-01" ng-model="current.birthdayStr">
+                <!--<input type="date" ng-show="{{supportDatePicker}}" placeholder="生日" ng-model="parent.birthday">-->
+                <input type="text" placeholder="格式:1990-01-01" ng-model="current.birthdayStr">
             </label>
 
             <label class="item item-input">
                 <span class="input-label">手机</span>
                 <input type="tel" placeholder="手机" ng-model="parent.phone">
-            </label>
-
-            <label class="item item-input">
-                <span class="input-label">身份证</span>
-                <input type="text" placeholder="身份证" ng-model="parent.id_card">
             </label>
 
             <div class="padding">

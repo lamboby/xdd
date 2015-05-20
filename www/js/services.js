@@ -276,7 +276,8 @@
         },
         update: function (parent, callback) {
             var params = angular.copy(parent);
-            params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
+            if (params.birthday)
+                params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
             Utils.exec("users/update", params, callback, function (data) {
                 if (parent.user_id == itru_userId())
                     itru_userName = parent.realname;
@@ -284,7 +285,8 @@
         },
         create: function (parent, callback) {
             var params = angular.copy(parent);
-            params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
+            if (params.birthday)
+                params.birthday = $filter("date")(params.birthday, "yyyy-MM-dd");
             Utils.exec("users/createViceParents", params, callback);
         },
         del: function (parent, callback) {

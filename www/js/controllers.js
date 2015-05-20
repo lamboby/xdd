@@ -664,7 +664,7 @@
 })
 
 .controller('CreateParentCtrl', function ($scope, $state, Parent, Utils) {
-    $scope.supportDatePicker = itru_supportDatePicker();
+    //$scope.supportDatePicker = itru_supportDatePicker();
     $scope.current = { birthdayStr: "" };
 
     $scope.parent = {
@@ -682,13 +682,13 @@
             Utils.alert("家长姓名不能超过20个字符");
         else if (!$scope.parent.phone)
             Utils.alert("请输入手机号");
-        else if (itru_supportDatePicker() && !$scope.parent.birthday)
-            Utils.alert("请输入生日");
-        else if (!itru_supportDatePicker() && !Utils.checkDate($scope.current.birthdayStr))
+        else if ($scope.current.birthdayStr && !Utils.checkDate($scope.current.birthdayStr))
             Utils.alert("生日的格式不正确");
         else {
-            if (!itru_supportDatePicker())
+            if ($scope.current.birthdayStr)
                 $scope.parent.birthday = new Date($scope.current.birthdayStr);
+            else
+                $scope.parent.birthday = null;
             Parent.create($scope.parent, function (data, status) {
                 if (status == 0)
                     $state.go("tab.parent");
@@ -700,14 +700,16 @@
 })
 
 .controller('EditParentCtrl', function ($scope, $state, $filter, $stateParams, Parent, Utils) {
-    $scope.supportDatePicker = itru_supportDatePicker();
+    // $scope.supportDatePicker = itru_supportDatePicker();
     $scope.current = { birthdayStr: "" };
 
     Parent.getProfile($stateParams.parentId, function (data, status) {
         if (status == 0) {
             $scope.parent = data.Data[0];
-            $scope.parent.birthday = new Date($scope.parent.birthday);
-            $scope.current.birthdayStr = $filter('date')($scope.parent.birthday, 'yyyy-MM-dd');
+            if ($scope.parent.birthday) {
+                $scope.parent.birthday = new Date($scope.parent.birthday);
+                $scope.current.birthdayStr = $filter('date')($scope.parent.birthday, 'yyyy-MM-dd');
+            }
         }
         else
             Utils.error(data, status, "获取家长失败");
@@ -718,16 +720,16 @@
             Utils.alert("请输入姓名");
         else if ($scope.parent.realname.length > 20)
             Utils.alert("姓名不能超过20个字符");
-        else if (itru_supportDatePicker() && !$scope.parent.birthday)
-            Utils.alert("请输入生日");
-        else if (!itru_supportDatePicker() && !Utils.checkDate($scope.current.birthdayStr))
+        else if ($scope.current.birthdayStr && !Utils.checkDate($scope.current.birthdayStr))
             Utils.alert("生日的格式不正确");
         else {
-            if (!itru_supportDatePicker())
+            if ($scope.current.birthdayStr)
                 $scope.parent.birthday = new Date($scope.current.birthdayStr);
+            else
+                $scope.parent.birthday = null;
             Parent.update($scope.parent, function (data, status) {
                 if (status == 0)
-                    $state.go("tab.setting");
+                    $state.go("tab.parent");
                 else
                     Utils.error(data, status, "修改家长失败");
             });
