@@ -1,0 +1,18 @@
+﻿<ion-view view-title="问题反馈">
+    <ion-content>
+        <form ng-submit="save()" novalidate>
+            <br />
+            <label class="item item-input">
+                <span class="input-label">标题</span>
+                <input type="text" placeholder="标题" ng-model="bug.title" required>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">描述</span>
+                <textarea rows="8" placeholder="请详细说明您遇到的问题" ng-model="bug.desc" required></textarea>
+            </label>
+            <div class="padding">
+                <button class="button button-block button-balanced" type="submit">提 交</button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

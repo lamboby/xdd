@@ -348,6 +348,16 @@
     }
 })
 
+.factory("Bug", function ($filter, Utils) {
+    return {
+        create: function (bug, callback) {
+            var params = angular.copy(bug);
+            params.add_time = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
+            Utils.exec("problem/create", params, callback);
+        }
+    }
+})
+
 .factory('UserService', function () {
     var temp_icloudphone;
     var temp_regphone;

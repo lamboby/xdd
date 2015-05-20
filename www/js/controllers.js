@@ -1068,8 +1068,30 @@
 
 })
 
-.controller('BugCtrl', function ($scope, $state, Utils) {
+.controller('BugCtrl', function ($scope, $state, Bug, Utils) {
+    $scope.bug = {
+        user_id: itru_userId(),
+        fml_id: itru_familyId(),
+        title: "",
+        desc: ""
+    };
 
+    $scope.save = function () {
+        if (!$scope.bug.title)
+            Utils.alert("请输入标题");
+        else if (!$scope.bug.desc)
+            Utils.alert("请输入问题描述");
+        else {
+            Bug.create($scope.bug, function (data, status) {
+                if (status == 0) {
+                    Utils.alert("提交成功，感谢您的反馈");
+                    $state.go("tab.setting");
+                }
+                else
+                    Utils.err(data, status, "提交问题失败");
+            });
+        }
+    };
 })
 
 .controller('SendmsgCtrl', function ($scope, $state, $cordovaSms, UserService, Utils) {
