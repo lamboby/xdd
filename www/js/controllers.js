@@ -971,7 +971,17 @@
 .controller('PhotoCtrl', function ($scope, $state, Parent, Student, Utils) {
     Parent.all(function (data, status) {
         if (status == 0) {
-            $scope.parents = data.Data;
+            if (itru_isPrimary())
+                $scope.parents = data.Data;
+            else if (data.Data && data.Data.length > 0) {
+                for (i = 0; i < data.Data.length; i++) {
+                    if (data.Data[i].user_id == itru_userId()) {
+                        $scope.parents = [data.Data[i]];
+                        break;
+                    }
+                }
+            }
+
             Student.all(function (data, status) {
                 if (status == 0)
                     $scope.students = data.Data;
@@ -1054,6 +1064,14 @@
     };
 })
 
+.controller('RingtoneCtrl', function ($scope, $state, Utils) {
+
+})
+
+.controller('BugCtrl', function ($scope, $state, Utils) {
+
+})
+
 .controller('SendmsgCtrl', function ($scope, $state, $cordovaSms, UserService, Utils) {
     $scope.icloudphone = UserService.geticloudphone();
     $scope.phone = UserService.getregphone();
@@ -1117,11 +1135,10 @@
                                 $state.go("regsendmsg");
                             else if (status == 1009)
                                 Utils.alert("无效手机号");
-							else if (status == 1006)
-							{
+                            else if (status == 1006) {
                                 Utils.alert("手机号已存在,继续将重新设置密码");
-								$state.go("regsendmsg");
-							}
+                                $state.go("regsendmsg");
+                            }
                             else if (status == 1100)
                                 Utils.alert("数据库执行错误");
                             else
@@ -1137,7 +1154,7 @@
             }
         });
     }
-	
+
 })
 
 .controller('ChangepwdCtrl', function ($scope, $state, Reg, UserService, Utils) {
@@ -1178,11 +1195,10 @@
                                 $state.go("regsendmsg");
                             else if (status == 1009)
                                 Utils.alert("无效手机号");
-							else if (status == 1901 || status == 0)
-							{
+                            else if (status == 1901 || status == 0) {
                                 Utils.alert("手机号不存在,将为您新建用户");
-								$state.go("regsendmsg");
-							}
+                                $state.go("regsendmsg");
+                            }
                             else if (status == 1100)
                                 Utils.alert("数据库执行错误");
                             else

@@ -16,7 +16,7 @@
         $ionicPlatform.registerBackButtonAction(function (e) {
             e.preventDefault();
             var path = $location.path();
-            if ((!itru_isLogin && path != "/regsubmit"  && path != "/changepwd" && path != "/regsendmsg" && path != "/regvalid") ||
+            if ((!itru_isLogin && path != "/regsubmit" && path != "/changepwd" && path != "/regsendmsg" && path != "/regvalid") ||
                 path == '/tab/dash' || path == "/tab/news" || path == "/tab/setting" || path == "/select-family") {
                 Utils.confirm("确定退出应用吗?", function (res) {
                     if (res)
@@ -219,6 +219,24 @@
             'tab-setting': {
                 templateUrl: 'templates/card-push.html',
                 controller: 'CardPushCtrl'
+            }
+        }
+    })
+    .state('tab.ringtone', {
+        url: '/setting/ringtone',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/ringtone.html',
+                controller: 'RingtoneCtrl'
+            }
+        }
+    })
+    .state('tab.bug', {
+        url: '/setting/bug',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/bug.html',
+                controller: 'BugCtrl'
             }
         }
     })
