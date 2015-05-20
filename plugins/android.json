@@ -31,6 +31,10 @@
                         {
                             "xml": "<feature name=\"AppVersion\"><param name=\"android-package\" value=\"uk.co.whiteoctober.cordova.AppVersion\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NativeAudio\"><param name=\"android-package\" value=\"de.neofonie.cordova.plugin.nativeaudio.NativeAudio\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -44,6 +48,14 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
+                            "count": 2
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\" />",
                             "count": 1
                         }
                     ],
@@ -95,6 +107,9 @@
             "PACKAGE_NAME": "com.ice.itrustoor"
         },
         "uk.co.whiteoctober.cordova.appversion": {
+            "PACKAGE_NAME": "com.ice.itrustoor"
+        },
+        "de.neofonie.cordova.plugin.nativeaudio": {
             "PACKAGE_NAME": "com.ice.itrustoor"
         }
     },

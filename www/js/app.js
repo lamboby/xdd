@@ -30,6 +30,10 @@
 
         //初始化DB
         DB.init();
+
+        //默认铃声
+        if (!itru_ringtone())
+            itru_ringtone("lovely_baby_1s");
     });
 })
 

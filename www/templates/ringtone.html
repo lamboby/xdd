@@ -1,0 +1,10 @@
+﻿<ion-view view-title="提醒铃声">
+    <ion-content>
+        <ion-list>
+            <ion-radio ng-click="select(item.file_path)" name="ringtone-group" ng-value="{{item.file_path}}" ng-repeat="item in items">{{item.name}}</ion-radio>
+        </ion-list>
+        <div class="padding">
+            <button class="button button-block button-balanced" ng-click="save()">确 定</button>
+        </div>
+    </ion-content>
+</ion-view>

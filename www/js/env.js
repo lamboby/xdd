@@ -55,4 +55,11 @@
         var val = window.localStorage.getItem("ISDBINIT");
         return val != null && val === 'true';
     };
+    var itru_ringtone = function (path) {
+        if (path == -1)
+            window.localStorage.removeItem("RINGTONEPATH");
+        else if (path)
+            window.localStorage.setItem("RINGTONEPATH", path);
+        return window.localStorage.getItem("RINGTONEPATH");
+    };
 }

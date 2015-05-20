@@ -1064,8 +1064,39 @@
     };
 })
 
-.controller('RingtoneCtrl', function ($scope, $state, Utils) {
+.controller('RingtoneCtrl', function ($scope, $state, $cordovaNativeAudio, Utils) {
+    var items = [{
+        name: "可爱宝宝",
+        file_path: "lovely_baby_1s.mp3"
+    }, {
+        name: "舒缓",
+        file_path: "slow_4s.mp3"
+    }, {
+        name: "儿童笑声",
+        file_path: "baby_smile_5s.mp3"
+    }, {
+        name: "你好",
+        file_path: "hello_9s.mp3"
+    }, {
+        name: "顽皮猫王",
+        file_path: "cat_11s.mp3"
+    }];
 
+    $scope.current = { path: itru_ringtone() };
+    $scope.items = items;
+    $scope.select = function (path) {
+        $scope.current.path = path;
+        var filePath = "ringtone/" + path;
+        $cordovaNativeAudio.preloadSimple(filePath, filePath).then(function (msg) {
+            Utils.alert(msg);
+        }, function (msg) {
+            Utils.alert(msg);
+        });
+    };
+    $scope.save = function () {
+        itru_ringtone($scope.current.path);
+        $state.go("tab.setting");
+    };
 })
 
 .controller('BugCtrl', function ($scope, $state, Bug, Utils) {
