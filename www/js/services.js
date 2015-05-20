@@ -176,7 +176,8 @@
         create: function (student, callback) {
             var params = angular.copy(student);
             params.name = student.stu_name;
-            params.birthday = $filter("date")(params.birthday, 'yyyy-MM-dd');
+            if (params.birthday)
+                params.birthday = $filter("date")(params.birthday, 'yyyy-MM-dd');
             params.fml_id = itru_familyId();
             Utils.exec("students/create", params, callback);
         },
@@ -186,7 +187,7 @@
                 name: student.stu_name,
                 gender: student.gender,
                 picture: student.picture,
-                birthday: $filter("date")(student.birthday, 'yyyy-MM-dd'),
+                birthday: student.birthday ? $filter("date")(student.birthday, 'yyyy-MM-dd') : "",
                 sch_id: student.sch_id,
                 grade_id: student.grade_id,
                 class_id: student.class_id,

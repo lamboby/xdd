@@ -27,6 +27,11 @@
             </label>
 
             <label class="item item-input">
+                <span class="input-label">手机</span>
+                <input type="text" placeholder="手机" ng-model="student.phone" required>
+            </label>
+
+            <label class="item item-input">
                 <span class="input-label">学号</span>
                 <input type="text" placeholder="学号" ng-model="student.sid" required>
             </label>
@@ -43,8 +48,7 @@
 
             <label class="item item-input">
                 <span class="input-label">生日</span>
-                <input type="date" ng-show="{{supportDatePicker}}" placeholder="生日" ng-model="student.birthday">
-                <input type="text" ng-hide="{{supportDatePicker}}" placeholder="格式:1990-01-01" ng-model="current.birthdayStr">
+                <input type="text" placeholder="格式:1990-01-01" ng-model="current.birthdayStr">
             </label>
             <div class="padding">
                 <button class="button button-block button-balanced" type="submit">保 存</button>
