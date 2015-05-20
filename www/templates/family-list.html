@@ -7,7 +7,7 @@
             <ion-item class="item-icon-right" href="#/tab/setting/family/{{family.fml_id}}" ng-repeat="family in familys">
                 {{family.fml_name}}
                 <span class="item-note" ng-if="currentFamilyId == family.fml_id">
-                &radic;
+                    &radic;
                 </span>
                 <i class="icon ion-ios-arrow-right"></i>
                 <ion-option-button class="button-balanced" ng-click="switch(family)">
@@ -15,5 +15,6 @@
                 </ion-option-button>
             </ion-item>
         </ion-list>
+        <span class="no-data">向左划动切换家庭</span>
     </ion-content>
 </ion-view>
