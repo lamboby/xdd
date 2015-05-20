@@ -20,7 +20,7 @@
                     <div style="display:{{item.display_type == 1 ? 'block':'none'}}">
                         <span class="line">&nbsp;</span>
                         <label class="title-label">{{item.display_time}}</label>
-                        <span ng-class="item.type == 0 ? 'blue-span':'green-span'">{{item.stu_name + (item.type == 0 ? "进入":"离开") + item.sch_name }}</span>
+                        <span ng-class="item.type == 0 ? 'blue-span':'green-span'">{{item.stu_name + " " + item.sch_name }}</span>
                     </div>
                     <div style="display:{{item.display_type == 0 ? 'block':'none'}}">&nbsp;</div>
                 </div>
