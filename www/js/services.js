@@ -1,6 +1,6 @@
 ﻿angular.module('itrustoor.services', [])
 
-.factory('Dash', function ($filter, Utils, DB) {
+.factory('Dash', function ($filter, Utils, DB, Ringtone) {
     return {
         all: function (date, callback) {
             if (itru_isDbInit()) {
@@ -27,6 +27,7 @@
                                     "add_time", "type", "kind", "error", "entex_name", "entex_type"], data.Data, function () {
                                         DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ?", [date], function (results) {
                                             callback(results.rows, status);
+                                            Ringtone.play(itru_ringtone());
                                         });
                                     });
                             }
@@ -357,6 +358,31 @@
             var params = angular.copy(bug);
             params.add_time = $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
             Utils.exec("problem/create", params, callback);
+        }
+    }
+})
+
+.factory("Ringtone", function ($cordovaNativeAudio, Utils) {
+    return {
+        init: function () {
+            if (!itru_ringtone())
+                itru_ringtone("lovely_baby_1s");
+
+            try {
+                for (i = 0; i < itru_ringtones.length; i++) {
+                    $cordovaNativeAudio.preloadSimple(itru_ringtones[i].file_path, "ringtone/" + itru_ringtones[i].file_path)
+                        .then(function (msg) { }, function (msg) { Utils.alert(msg); });
+                }
+            }
+            catch (exception) { }
+        },
+        play: function (path) {
+            for (i = 0; i < itru_ringtones.length; i++)
+                $cordovaNativeAudio.stop(itru_ringtones[i].file_path);
+            $cordovaNativeAudio.play(path);
+        },
+        stop: function (path) {
+            $cordovaNativeAudio.stop(path);
         }
     }
 })

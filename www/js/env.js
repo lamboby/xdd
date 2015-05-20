@@ -1,4 +1,4 @@
-{
+﻿{
     var itru_isLogin = false;
     var itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
     var itru_accessToken = "";
@@ -62,4 +62,20 @@
             window.localStorage.setItem("RINGTONEPATH", path);
         return window.localStorage.getItem("RINGTONEPATH");
     };
+    var itru_ringtones = [{
+        name: "可爱宝宝",
+        file_path: "lovely_baby_1s.mp3"
+    }, {
+        name: "舒缓",
+        file_path: "slow_4s.mp3"
+    }, {
+        name: "儿童笑声",
+        file_path: "baby_smile_5s.mp3"
+    }, {
+        name: "你好",
+        file_path: "hello_9s.mp3"
+    }, {
+        name: "顽皮猫王",
+        file_path: "cat_11s.mp3"
+    }];
 }

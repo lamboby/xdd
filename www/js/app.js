@@ -1,6 +1,6 @@
 ﻿angular.module('itrustoor', ['ionic', 'ngCordova', 'itrustoor.controllers', 'itrustoor.services', 'itrustoor.filters'])
 
-.run(function ($ionicPlatform, $location, $ionicHistory, $rootScope, $urlRouter, $state, Utils, DB) {
+.run(function ($ionicPlatform, $location, $ionicHistory, $rootScope, $urlRouter, $state, Utils, DB, Ringtone) {
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard)
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -32,8 +32,7 @@
         DB.init();
 
         //默认铃声
-        if (!itru_ringtone())
-            itru_ringtone("lovely_baby_1s");
+        Ringtone.init();
     });
 })
 
