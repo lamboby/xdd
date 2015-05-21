@@ -367,7 +367,7 @@
     return {
         init: function () {
             if (!itru_ringtone())
-                itru_ringtone("lovely_baby_1s");
+                itru_ringtone("lovely_baby_1s.mp3");
 
             try {
                 for (i = 0; i < itru_ringtones.length; i++) {
@@ -378,17 +378,22 @@
             catch (exception) { }
         },
         play: function (path) {
-            for (i = 0; i < itru_ringtones.length; i++)
-                $cordovaNativeAudio.stop(itru_ringtones[i].file_path);
-            $cordovaNativeAudio.play(path);
+            try {
+                for (i = 0; i < itru_ringtones.length; i++)
+                    $cordovaNativeAudio.stop(itru_ringtones[i].path);
+                $cordovaNativeAudio.play(path);
+            }
+            catch (exception) { }
         },
         stop: function (path) {
-            $cordovaNativeAudio.stop(path);
+            try {
+                $cordovaNativeAudio.stop(path);
+            } catch (exception) { }
         }
     }
 })
 
-.factory('UserService', function () {
+.factory('UserService', function (Utils) {
     var temp_icloudphone;
     var temp_regphone;
     var temp_regpassword;
@@ -410,6 +415,16 @@
         },
         setregpassword: function (pwd) {
             temp_regpassword = pwd;
+        },
+        initOpenId: function () {
+            try {
+                $cordovaFile.readAsText(cordova.file.dataDirectory, "openid.txt").then(function (success) {
+                    itru_openId = success;
+                }, function (error) {
+                    Utils.alert("获取OPENID失败");
+                });
+            }
+            catch (exception) { }
         }
     };
 })
@@ -431,10 +446,10 @@
             var params = { phone: register.phone, open_id: openid };
             Utils.execWithoutToken("configs/addRegister", params, callback);
         },
-		updateopenid:function(user,itru_openId,callback){
-	    	var params = { phone: user.phone, open_id: itru_openId };
+        updateopenid: function (user, itru_openId, callback) {
+            var params = { phone: user.phone, open_id: itru_openId };
             Utils.execWithoutToken("configs/updateOpenId", params, callback);
-		}	
+        }
     }
 })
 
@@ -611,7 +626,7 @@
                 itru_userName = data.Data[0].username;
                 itru_userPicture = data.Data[0].picture;
             });
-        },	    	
+        },
         refreshAccessToken: _accessToken
     }
 });
