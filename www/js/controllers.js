@@ -1134,19 +1134,19 @@
     }
 })
 
-.controller('RegisterCtrl', function ($scope, $state,$cordovaFile, Reg, UserService, Utils) {
+.controller('RegisterCtrl', function ($scope, $state, $cordovaFile, Reg, UserService, Utils) {
     var bolgetphone = false;
-	
+
     $scope.register = {
         phone: '',
         password: ''
     };
-	//获取OPENID					
-	$cordovaFile.readAsText(cordova.file.dataDirectory,"openid.txt").then(function (success) {
-		itru_openId=success;
-	}, function (error) {
-		Utils.alert("获取推送接口错误");
-	});
+    //获取OPENID					
+    $cordovaFile.readAsText(cordova.file.dataDirectory, "openid.txt").then(function (success) {
+        itru_openId = success;
+    }, function (error) {
+        Utils.alert("获取推送接口错误");
+    });
 
     $scope.gologin = function () {
         $state.go("signin");
@@ -1161,8 +1161,8 @@
                     if (index == data.Data.length)
                         index = index - 1;
                     $scope.icloudphone = data.Data[index].phone;
-					
-    				//获取手机号后发送注册信息,包括用户名,OPENID
+
+                    //获取手机号后发送注册信息,包括用户名,OPENID
                     UserService.seticloudphone($scope.icloudphone);
                     temp_icloudphone = $scope.icloudphone;
 
@@ -1173,7 +1173,7 @@
                     else {
                         UserService.setregphone($scope.register.phone);
                         UserService.setregpassword($scope.register.password);
-                        Reg.addreg($scope.register,itru_openId, function (data, status) {
+                        Reg.addreg($scope.register, itru_openId, function (data, status) {
                             if (status == 1901 || status == 0)
                                 $state.go("regsendmsg");
                             else if (status == 1009)
@@ -1197,22 +1197,21 @@
             }
         });
     }
-
 })
 
-.controller('ChangepwdCtrl', function ($scope, $state,$cordovaFile, Reg, UserService, Utils) {
+.controller('ChangepwdCtrl', function ($scope, $state, $cordovaFile, Reg, UserService, Utils) {
     var bolgetphone = false;
     var openid = 1;
     $scope.register = {
         phone: '',
         password: ''
     };
-	//获取OPENID					
-	$cordovaFile.readAsText(cordova.file.dataDirectory,"openid.txt").then(function (success) {
-		itru_openId=success;
-	}, function (error) {
-		Utils.alert("获取推送接口错误");
-	});
+    //获取OPENID					
+    $cordovaFile.readAsText(cordova.file.dataDirectory, "openid.txt").then(function (success) {
+        itru_openId = success;
+    }, function (error) {
+        Utils.alert("获取推送接口错误");
+    });
 
     $scope.gologin = function () {
         $state.go("signin");
@@ -1227,8 +1226,8 @@
                     if (index == data.Data.length)
                         index = index - 1;
                     $scope.icloudphone = data.Data[index].phone;
-					
-					//获取手机号后发送注册信息,包括用户名,OPENID
+
+                    //获取手机号后发送注册信息,包括用户名,OPENID
                     UserService.seticloudphone($scope.icloudphone);
                     temp_icloudphone = $scope.icloudphone;
 
@@ -1239,7 +1238,7 @@
                     else {
                         UserService.setregphone($scope.register.phone);
                         UserService.setregpassword($scope.register.password);
-                        Reg.addreg($scope.register,itru_openId, function (data, status) {
+                        Reg.addreg($scope.register, itru_openId, function (data, status) {
                             if (status == 1006)
                                 $state.go("regsendmsg");
                             else if (status == 1009)
