@@ -62,20 +62,11 @@
             window.localStorage.setItem("RINGTONEPATH", path);
         return window.localStorage.getItem("RINGTONEPATH");
     };
-    var itru_ringtones = [{
-        name: "可爱宝宝",
-        file_path: "lovely_baby_1s.mp3"
-    }, {
-        name: "舒缓",
-        file_path: "slow_4s.mp3"
-    }, {
-        name: "儿童笑声",
-        file_path: "baby_smile_5s.mp3"
-    }, {
-        name: "你好",
-        file_path: "hello_9s.mp3"
-    }, {
-        name: "顽皮猫王",
-        file_path: "cat_11s.mp3"
-    }];
+    var itru_ringtones = [
+        new Object({ "name": "可爱宝宝", "path": "lovely_baby_1s.mp3" }),
+        new Object({ "name": "舒缓", "path": "slow_4s.mp3" }),
+        new Object({ "name": "儿童笑声", "path": "baby_smile_5s.mp3" }),
+        new Object({ "name": "你好", "path": "hello_9s.mp3" }),
+        new Object({ "name": "顽皮猫王", "path": "cat_11s.mp3" })
+    ];
 }
