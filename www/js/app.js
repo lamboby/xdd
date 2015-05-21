@@ -32,7 +32,7 @@
         DB.init();
 
         //默认铃声
-        //Ringtone.init();
+        Ringtone.init();
 
         //获取OPENID					
         $cordovaFile.readAsText(cordova.file.dataDirectory, "openid.txt").then(function (success) {

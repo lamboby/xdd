@@ -35,7 +35,6 @@
         <meta-data android:name="XG_V2_ACCESS_ID" android:value="2100115240" />
         <meta-data android:name="XG_V2_ACCESS_KEY" android:value="AT57D6TGL34L" />
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -56,4 +55,5 @@
     <uses-permission android:name="android.permission.BATTERY_STATS" />
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

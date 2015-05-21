@@ -371,7 +371,7 @@
 
             try {
                 for (i = 0; i < itru_ringtones.length; i++) {
-                    $cordovaNativeAudio.preloadSimple(itru_ringtones[i].file_path, "ringtone/" + itru_ringtones[i].file_path)
+                    $cordovaNativeAudio.preloadSimple(itru_ringtones[i].path, "ringtone/" + itru_ringtones[i].path)
                         .then(function (msg) { }, function (msg) { Utils.alert(msg); });
                 }
             }
