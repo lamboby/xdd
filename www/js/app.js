@@ -1,6 +1,6 @@
 ﻿angular.module('itrustoor', ['ionic', 'ngCordova', 'itrustoor.controllers', 'itrustoor.services', 'itrustoor.filters'])
 
-.run(function ($ionicPlatform, $location, $ionicHistory, $rootScope,$cordovaFile, $urlRouter, $state, Utils, DB, Ringtone) {
+.run(function ($ionicPlatform, $location, $ionicHistory, $rootScope, $cordovaFile, $urlRouter, $state, Utils, DB, Ringtone) {
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard)
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -33,13 +33,11 @@
 
         //默认铃声
         //Ringtone.init();
-		
-		//获取OPENID					
-		$cordovaFile.readAsText(cordova.file.dataDirectory,"openid.txt").then(function (success) {
-			itru_openId=success;
-		}, function (error) {
-		});
-		
+
+        //获取OPENID					
+        $cordovaFile.readAsText(cordova.file.dataDirectory, "openid.txt").then(function (success) {
+            itru_openId = success;
+        }, function (error) { });
     });
 })
 
