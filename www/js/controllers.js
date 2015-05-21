@@ -4,8 +4,10 @@
     if (!itru_isDbInit())
         $state.go("signin");
 
+    $scope.first = true;
     $scope.current = { date: null };
     $scope.items = [];
+
     $scope.refresh = function () {
         if (!$scope.current.date)
             $scope.current.date = new Date();
@@ -40,8 +42,12 @@
             else
                 Utils.error(data, status, "获取信息失败");
 
-            if ($scope.items && $scope.items.length > 0)
+            if (!$scope.first && $scope.items && $scope.items.length > 0)
                 $ionicScrollDelegate.scrollBottom(true);
+            else
+                $ionicScrollDelegate.scrollTop(true);
+
+            $scope.first = false;
             $scope.$broadcast('scroll.refreshComplete');
         });
     };
@@ -67,6 +73,7 @@
 
                 if (!$scope.current.date || $filter('date')($scope.current.date, 'yyyy-MM-dd') != $filter('date')(date, 'yyyy-MM-dd')) {
                     $scope.current.date = date;
+                    $scope.first = true;
                     $scope.refresh();
                     return true;
                 }
@@ -1073,17 +1080,31 @@
     };
 })
 
-.controller('RingtoneCtrl', function ($scope, $state, Ringtone, Utils) {
+.controller('RingtoneCtrl', function ($scope, $state, Ringtone, Parent, Utils) {
     $scope.current = { path: itru_ringtone() };
-    $scope.items = itru_ringtones;
+    //$scope.items = itru_ringtones;
 
-    $scope.select = function (path) {
-        $scope.current.path = path;
-        Ringtone.play(path);
+    //var array = new Array();
+    //var obj1 = new Object({ "name": "可爱宝宝", "path": "lovely_baby_1s.mp3" });
+    //var obj2 = new Object({ "name": "舒缓", "path": "slow_4s.mp3" });
+    //var obj3 = new Object({ "name": "儿童笑声", "path": "baby_smile_5s.mp3" });
+    //array.push(obj1);
+    //array.push(obj2);
+    //array.push(obj3);
+    //$scope.items = array;
+
+    Parent.all(function (data, status) {
+
+        $scope.items = data.Data;
+    });
+
+
+    $scope.select = function () {
+        //Ringtone.play($scope.current.path);
     };
     $scope.save = function () {
         itru_ringtone($scope.current.path);
-        Ringtone.stop($scope.current.path);
+        //Ringtone.stop($scope.current.path);
         $state.go("tab.setting");
     };
 })
