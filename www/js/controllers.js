@@ -4,8 +4,10 @@
     if (!itru_isDbInit())
         $state.go("signin");
 
+    $scope.first = true;
     $scope.current = { date: null };
     $scope.items = [];
+
     $scope.refresh = function () {
         if (!$scope.current.date)
             $scope.current.date = new Date();
@@ -40,8 +42,12 @@
             else
                 Utils.error(data, status, "获取信息失败");
 
-            if ($scope.items && $scope.items.length > 0)
+            if (!$scope.first && $scope.items && $scope.items.length > 0)
                 $ionicScrollDelegate.scrollBottom(true);
+            else
+                $ionicScrollDelegate.scrollTop(true);
+
+            $scope.first = false;
             $scope.$broadcast('scroll.refreshComplete');
         });
     };
@@ -67,6 +73,7 @@
 
                 if (!$scope.current.date || $filter('date')($scope.current.date, 'yyyy-MM-dd') != $filter('date')(date, 'yyyy-MM-dd')) {
                     $scope.current.date = date;
+                    $scope.first = true;
                     $scope.refresh();
                     return true;
                 }
