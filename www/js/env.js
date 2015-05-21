@@ -11,6 +11,7 @@
     var itru_db = null;
     var itru_userName = "";
     var itru_userPicture = "";
+    var itru_openId="0";
 
     var itru_loginToken = function (token) {
         if (token == -1)
