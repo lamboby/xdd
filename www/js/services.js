@@ -430,7 +430,11 @@
         addreg: function (register, openid, callback) {
             var params = { phone: register.phone, open_id: openid };
             Utils.execWithoutToken("configs/addRegister", params, callback);
-        }
+        },
+		updateopenid:function(user,itru_openId,callback){
+	    	var params = { phone: user.phone, open_id: itru_openId };
+            Utils.execWithoutToken("configs/updateOpenId", params, callback);
+		}	
     }
 })
 
@@ -607,7 +611,7 @@
                 itru_userName = data.Data[0].username;
                 itru_userPicture = data.Data[0].picture;
             });
-        },
+        },	    	
         refreshAccessToken: _accessToken
     }
 });
