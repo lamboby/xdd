@@ -370,10 +370,8 @@
                 itru_ringtone("lovely_baby_1s.mp3");
 
             try {
-                for (i = 0; i < itru_ringtones.length; i++) {
-                    $cordovaNativeAudio.preloadSimple(itru_ringtones[i].path, "ringtone/" + itru_ringtones[i].path)
-                        .then(function (msg) { }, function (msg) { Utils.alert(msg); });
-                }
+                for (i = 0; i < itru_ringtones.length; i++)
+                    $cordovaNativeAudio.preloadSimple(itru_ringtones[i].path, "ringtone/" + itru_ringtones[i].path).then(function (msg) { });
             }
             catch (exception) { }
         },
