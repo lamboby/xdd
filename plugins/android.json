@@ -39,6 +39,10 @@
                         {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -48,7 +52,7 @@
                     "/*": [
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 2
+                            "count": 3
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />",
@@ -117,6 +121,9 @@
             "PACKAGE_NAME": "com.ice.itrustoor"
         },
         "org.apache.cordova.network-information": {
+            "PACKAGE_NAME": "com.ice.itrustoor"
+        },
+        "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ice.itrustoor"
         }
     },
