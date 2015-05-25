@@ -1035,7 +1035,7 @@
             quality: 50,
             destinationType: Camera.DestinationType.FILE_URI,
             sourceType: type == 0 ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY,
-            allowEdit: true,
+            allowEdit: false,
             encodingType: Camera.EncodingType.JPEG,
             //targetWidth: 600,
             //targetHeight: 600,
