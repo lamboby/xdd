@@ -1077,7 +1077,7 @@
         var signature = b64_hmac_sha1(accessSecret, policyBase64);
         //var file = document.getElementById("test-file").files[0];
         var key = itru_userId() + '-' + (new Date).getTime() + '-' + $scope.current.photo_path;
-        var url = "http://iimg.oss-cn-hangzhou.aliyuncs.com?OSSAccessKeyId=" + accessKey + "&Expires=" + Date.UTC(2015, 5, 30) + "&Signature=" + signature;
+        var url = "http://iimg.oss-cn-hangzhou.aliyuncs.com?OSSAccessKeyId=" + accessKey + "&Expires=" + Date.UTC(2015, 5, 30) + "&Signature=" + encodeURIComponent(signature);
         Utils.alert(url);
 
         var options = {};
