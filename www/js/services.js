@@ -391,7 +391,7 @@
     }
 })
 
-.factory('UserService', function (Utils) {
+.factory('UserService', function (Utils, $cordovaFile) {
     var temp_icloudphone;
     var temp_regphone;
     var temp_regpassword;
@@ -418,11 +418,12 @@
             try {
                 $cordovaFile.readAsText(cordova.file.dataDirectory, "openid.txt").then(function (success) {
                     itru_openId = success;
+                    if (itru_openId == 0) { Utils.alert("Openid错误,将无法正常使用推送服务,可稍后重启软件或联系客服.") };
                 }, function (error) {
-                    Utils.alert("获取OPENID失败");
+                    Utils.alert("查询Openid遇到错误中止.");
                 });
             }
-            catch (exception) { }
+            catch (exception) { Utils.alert("检测到推送服务异常,可稍后重试或联系客服!"); }
         }
     };
 })

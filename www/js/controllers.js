@@ -1010,7 +1010,8 @@
     });
 })
 
-.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaImagePicker, $http, Parent, Student, Utils) {
+.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaImagePicker, $http, $cordovaFileTransfer, Parent, Student, Utils) {
+    $scope.current = { photo_path: "c://test.jpg" };
     $scope.user = {
         userId: $stateParams.userId,
         type: $stateParams.userType,
@@ -1045,7 +1046,7 @@
         };
         $cordovaCamera.getPicture(options).then(function (imageData) {
             $scope.user.picture = imageData;
-            document.getElementById("file-test").value = imageData;
+            $scope.current.photo_path = imageData;
         }, function (err) {
             if (err != "Camera cancelled." && err != "Selection cancelled.")
                 Utils.alert(err);
@@ -1053,88 +1054,67 @@
     };
 
     $scope.save = function () {
+        if (!$scope.current.photo_path) {
+            Utils.alert("请选择照片");
+            return;
+        }
+
         var accessKey = "aTo0TsVGQN3xkZh5";
         var accessSecret = "KFVnhUT2BN4cPwnzgT72FLWHV9CUiL";
         var bucket = "iimg";
-        var url = "http://iimg.oss-cn-hangzhou.aliyuncs.com";
 
         var POLICY_JSON = {
             "expiration": "2020-12-01T12:00:00.000Z",
             "conditions": [
-            ["starts-with", "$key", ""],
-            { "bucket": "iimg" },
-            ["starts-with", "$Content-Type", ""],
-            ["content-length-range", 0, 524288000]
+                ["starts-with", "$key", ""],
+                { "bucket": "iimg" },
+                ["starts-with", "$Content-Type", ""],
+                ["content-length-range", 0, 524288000]
             ]
         };
 
-        var secret = accessSecret;
         var policyBase64 = Base64.encode(JSON.stringify(POLICY_JSON));
-        console.debug("policy:" + policyBase64)
-        var signature = b64_hmac_sha1(secret, policyBase64);
-        console.debug("signature:" + signature);
+        var signature = b64_hmac_sha1(accessSecret, policyBase64);
+        //var file = document.getElementById("test-file").files[0];
+        var key = itru_userId() + '-' + (new Date).getTime() + '-' + $scope.current.photo_path;
+        var url = "http://iimg.oss-cn-hangzhou.aliyuncs.com?OSSAccessKeyId=" + accessKey + "&Expires=" + Date.UTC(2015, 5, 30) + "&Signature=" + signature;
+        Utils.alert(url);
 
-        var file = document.getElementById("test-file").files[0];
-
-        var fd = new FormData();
-        var key = (new Date).getTime() + '-' + file.name;
-        fd.append('key', key);
-        fd.append('Content-Type', file.type);
-        fd.append('OSSAccessKeyId', accessKey);
-        fd.append('policy', policyBase64)
-        fd.append('signature', signature);
-        fd.append("file", file);
-        var xhr = new XMLHttpRequest()
-        xhr.upload.addEventListener("progress", function (evt) {
-            Utils.alert("progress:" + evt.type);
-        }, false);
-        xhr.addEventListener("load", function (evt) {
-            Utils.alert("load:" + evt.type);
-        }, false);
-        xhr.addEventListener("error", function (evt) {
-            Utils.alert("error:" + evt.type);
-        }, false);
-        xhr.addEventListener("abort", function (evt) {
-            Utils.alert("abort:" + evt.type);
-        }, false);
-
-        xhr.open('POST', url, true); //MUST BE LAST LINE BEFORE YOU SEND 
-        xhr.send(fd);
+        var options = {};
+        $cordovaFileTransfer.upload(url, $scope.current.photo_path, options)
+         .then(function (result) {
+             Utils.alert(result.responseCode + " " + result.response);
+         }, function (error) {
+             Utils.alert(error.code + " " + error.source + " " + error.target);
+         }, function (progress) {
+             //Utils.alert(progress);
+         });
 
 
-
-        //var data = {
-        //    OSSAccessKeyId: accessKey,//需要根据自己的bucket填写 详情请见oss api
-        //    policy: '',
-        //    signature: 'aaaa',
-        //    success_action_status: '201',
-        //    key: 'img/111/${filename}'
-        //};
 
         //var form = new FormData();
-        //for (var field in data)
-        //    form.append(field, data[field]);
-        //form.append("file", "c://test.jpg");
+        //form.append('key', key);
+        //form.append('Content-Type', 'img/jpeg');
+        //form.append('OSSAccessKeyId', accessKey);
+        //form.append('policy', policyBase64)
+        //form.append('signature', signature);
+        //form.append("file", file);
 
-        //var oReq = new XMLHttpRequest();
-        ////上传进度监听
-        //oReq.upload.onprogress = function (e) {
-        //    if (e.type == 'progress') {
-        //        var percent = Math.round(e.loaded / e.total * 100, 2) + '%';
-        //        console.debug(percent);
-        //    }
-        //};
-        ////上传结果
-        //oReq.onreadystatechange = function (e) {
-        //    if (oReq.readyState == 4) {
-        //        if (oReq.status == 201)//这里如果成功返回的是 success_action_status设置的值
-        //            Utils.alert('成功');
-        //        else
-        //            Utils.alert('失败');
-        //    }
-        //};
-        //oReq.open("POST", url);
-        //oReq.send(form);
+        //var xhr = new XMLHttpRequest()
+        ////xhr.upload.addEventListener("progress", function (evt) {}, false);
+        //xhr.addEventListener("load", function (evt) {
+        //    Utils.alert("上传成功");
+        //    $state.go("tab.setting");
+        //}, false);
+        //xhr.addEventListener("error", function (evt) {
+        //    Utils.alert("上传失败，" + evt.type);
+        //}, false);
+        //xhr.addEventListener("abort", function (evt) {
+        //    Utils.alert("上传中止！");
+        //}, false);
+
+        //xhr.open('POST', url, true);
+        //xhr.send(form);
     };
 
     //$scope.openLocalStore = function () {
