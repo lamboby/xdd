@@ -1045,6 +1045,7 @@
         };
         $cordovaCamera.getPicture(options).then(function (imageData) {
             $scope.user.picture = imageData;
+            document.getElementById("file-test").value = imageData;
         }, function (err) {
             if (err != "Camera cancelled." && err != "Selection cancelled.")
                 Utils.alert(err);
