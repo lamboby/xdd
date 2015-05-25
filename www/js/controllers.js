@@ -1074,8 +1074,6 @@
         var signature = b64_hmac_sha1(secret, policyBase64);
         console.debug("signature:" + signature);
 
-        //var file = "c://test.jpg";
-
         var file = document.getElementById("test-file").files[0];
 
         var fd = new FormData();
@@ -1088,16 +1086,16 @@
         fd.append("file", file);
         var xhr = new XMLHttpRequest()
         xhr.upload.addEventListener("progress", function (evt) {
-            console.debug("progress:" + evt);
+            Utils.alert("progress:" + evt.type);
         }, false);
         xhr.addEventListener("load", function (evt) {
-            console.debug("load:" + evt);
+            Utils.alert("load:" + evt.type);
         }, false);
         xhr.addEventListener("error", function (evt) {
-            console.debug("error:" + evt);
+            Utils.alert("error:" + evt.type);
         }, false);
         xhr.addEventListener("abort", function (evt) {
-            console.debug("abort:" + evt);
+            Utils.alert("abort:" + evt.type);
         }, false);
 
         xhr.open('POST', url, true); //MUST BE LAST LINE BEFORE YOU SEND 
