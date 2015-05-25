@@ -1018,8 +1018,6 @@
         picture: ""
     };
 
-    $scope.current = { fileData: null };
-
     if ($stateParams.userType == 0) {
         var student = Student.get($stateParams.userId);
         $scope.user.userName = student.stu_name;
@@ -1059,7 +1057,6 @@
         var bucket = "iimg";
         var url = "http://iimg.oss-cn-hangzhou.aliyuncs.com";
 
-
         var POLICY_JSON = {
             "expiration": "2020-12-01T12:00:00.000Z",
             "conditions": [
@@ -1069,17 +1066,21 @@
             ["content-length-range", 0, 524288000]
             ]
         };
+
         var secret = accessSecret;
         var policyBase64 = Base64.encode(JSON.stringify(POLICY_JSON));
         console.debug("policy:" + policyBase64)
         var signature = b64_hmac_sha1(secret, policyBase64);
         console.debug("signature:" + signature);
 
-        var file = "c://test.jpg";
+        //var file = "c://test.jpg";
+
+        var file = document.getElementById("test-file").files[0];
+
         var fd = new FormData();
-        var key = "events/" + (new Date).getTime() + '-' + file;
+        var key = (new Date).getTime() + '-' + file.name;
         fd.append('key', key);
-        fd.append('Content-Type', 'image/jpeg');
+        fd.append('Content-Type', file.type);
         fd.append('OSSAccessKeyId', accessKey);
         fd.append('policy', policyBase64)
         fd.append('signature', signature);
@@ -1098,7 +1099,7 @@
             console.debug("abort:" + evt);
         }, false);
 
-        xhr.open('POST', 'http://iimg.oss-cn-hangzhou.aliyuncs.com', true); //MUST BE LAST LINE BEFORE YOU SEND 
+        xhr.open('POST', url, true); //MUST BE LAST LINE BEFORE YOU SEND 
         xhr.send(fd);
 
 
