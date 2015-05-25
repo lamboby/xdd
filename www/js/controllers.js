@@ -86,8 +86,8 @@
 
 .controller('SigninCtrl', function ($scope, $state, Utils, Reg) {
     $scope.user = {
-        phone: '18627920907',
-        password: 'wdx123'
+        phone: '13660595464',
+        password: '123'
     };
 
     $scope.signin = function () {
@@ -1010,13 +1010,15 @@
     });
 })
 
-.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaImagePicker, Parent, Student, Utils) {
+.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaImagePicker, $http, Parent, Student, Utils) {
     $scope.user = {
         userId: $stateParams.userId,
         type: $stateParams.userType,
         userName: "",
         picture: ""
     };
+
+    $scope.current = { fileData: null };
 
     if ($stateParams.userType == 0) {
         var student = Student.get($stateParams.userId);
@@ -1052,11 +1054,87 @@
     };
 
     $scope.save = function () {
-        if (!$scope.user.picture)
-            Utils.alert("请选择相片");
-        else {
+        var accessKey = "aTo0TsVGQN3xkZh5";
+        var accessSecret = "KFVnhUT2BN4cPwnzgT72FLWHV9CUiL";
+        var bucket = "iimg";
+        var url = "http://iimg.oss-cn-hangzhou.aliyuncs.com";
 
-        }
+
+        var POLICY_JSON = {
+            "expiration": "2020-12-01T12:00:00.000Z",
+            "conditions": [
+            ["starts-with", "$key", ""],
+            { "bucket": "iimg" },
+            ["starts-with", "$Content-Type", ""],
+            ["content-length-range", 0, 524288000]
+            ]
+        };
+        var secret = accessSecret;
+        var policyBase64 = Base64.encode(JSON.stringify(POLICY_JSON));
+        console.debug("policy:" + policyBase64)
+        var signature = b64_hmac_sha1(secret, policyBase64);
+        console.debug("signature:" + signature);
+
+        var file = "c://test.jpg";
+        var fd = new FormData();
+        var key = "events/" + (new Date).getTime() + '-' + file;
+        fd.append('key', key);
+        fd.append('Content-Type', 'image/jpeg');
+        fd.append('OSSAccessKeyId', accessKey);
+        fd.append('policy', policyBase64)
+        fd.append('signature', signature);
+        fd.append("file", file);
+        var xhr = new XMLHttpRequest()
+        xhr.upload.addEventListener("progress", function (evt) {
+            console.debug("progress:" + evt);
+        }, false);
+        xhr.addEventListener("load", function (evt) {
+            console.debug("load:" + evt);
+        }, false);
+        xhr.addEventListener("error", function (evt) {
+            console.debug("error:" + evt);
+        }, false);
+        xhr.addEventListener("abort", function (evt) {
+            console.debug("abort:" + evt);
+        }, false);
+
+        xhr.open('POST', 'http://iimg.oss-cn-hangzhou.aliyuncs.com', true); //MUST BE LAST LINE BEFORE YOU SEND 
+        xhr.send(fd);
+
+
+
+        //var data = {
+        //    OSSAccessKeyId: accessKey,//需要根据自己的bucket填写 详情请见oss api
+        //    policy: '',
+        //    signature: 'aaaa',
+        //    success_action_status: '201',
+        //    key: 'img/111/${filename}'
+        //};
+
+        //var form = new FormData();
+        //for (var field in data)
+        //    form.append(field, data[field]);
+        //form.append("file", "c://test.jpg");
+
+        //var oReq = new XMLHttpRequest();
+        ////上传进度监听
+        //oReq.upload.onprogress = function (e) {
+        //    if (e.type == 'progress') {
+        //        var percent = Math.round(e.loaded / e.total * 100, 2) + '%';
+        //        console.debug(percent);
+        //    }
+        //};
+        ////上传结果
+        //oReq.onreadystatechange = function (e) {
+        //    if (oReq.readyState == 4) {
+        //        if (oReq.status == 201)//这里如果成功返回的是 success_action_status设置的值
+        //            Utils.alert('成功');
+        //        else
+        //            Utils.alert('失败');
+        //    }
+        //};
+        //oReq.open("POST", url);
+        //oReq.send(form);
     };
 
     //$scope.openLocalStore = function () {
@@ -1074,10 +1152,6 @@
     //        //Utils.alert(error);
     //    });
     //};
-
-    $scope.save = function () {
-
-    };
 })
 
 .controller('RingtoneCtrl', function ($scope, $state, Ringtone, Parent, Utils) {
