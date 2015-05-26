@@ -197,6 +197,10 @@
                 sid: student.stu_sid
             };
             Utils.exec("students/update", params, callback);
+        },
+        updatePicture: function (id, picture, callback) {
+            var params = { stu_id: id, picture: picture };
+            Utils.exec("students/updatePicture", params, callback);
         }
     };
 })
@@ -297,6 +301,10 @@
             Utils.exec("users/deleteViceParents", params, callback, function (data) {
                 parents.splice(parents.indexOf(parent), 1);
             });
+        },
+        updatePicture: function (id, picture, callback) {
+            var params = { user_id: id, picture: picture };
+            Utils.exec("users/updatePicture", params, callback);
         }
     }
 })
@@ -387,6 +395,23 @@
             try {
                 $cordovaNativeAudio.stop(path);
             } catch (exception) { }
+        }
+    }
+})
+
+.factory("Oss", function (Utils) {
+    return {
+        get: function (callback) {
+            if (!itru_ossKey) {
+                var params = {};
+                Utils.exec("configs/oss", params, callback, function (data) {
+                    itru_ossKey = data.Data[0].accesskey;
+                    itru_ossSecret = data.Data[0].secret;
+                    itru_ossBucket = data.Data[0].bucket;
+                });
+            }
+            else
+                callback(null, 0);
         }
     }
 })

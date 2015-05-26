@@ -175,6 +175,7 @@
     })
     .state('tab.photo', {
         url: '/setting/photo',
+        cache: false,
         views: {
             'tab-setting': {
                 templateUrl: 'templates/photo.html',
