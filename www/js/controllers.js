@@ -1012,9 +1012,9 @@
 
 .controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaImagePicker, $http, $cordovaFileTransfer, Parent, Student, Utils) {
     $scope.current = {
-        photo_path: "c://test.jpg",
+        photo_path: "",
         progress: 0,
-        remark: ""
+        showProgress: false
     };
 
     $scope.user = {
@@ -1036,12 +1036,12 @@
     }
 
     $scope.openCamera = function (type) {
-        //$cordovaCamera.cleanup().then();
+        //$cordovaCamera.cleanup().then(function (msg) { Utils.alert("success:" + msg); }, function (msg) { Utils.alert("error:" + msg); });
         var options = {
             quality: 50,
             destinationType: Camera.DestinationType.FILE_URI,
             sourceType: type == 0 ? Camera.PictureSourceType.CAMERA : Camera.PictureSourceType.PHOTOLIBRARY,
-            allowEdit: false,
+            allowEdit: true,
             encodingType: Camera.EncodingType.JPEG,
             //targetWidth: 600,
             //targetHeight: 600,
@@ -1064,6 +1064,7 @@
             return;
         }
 
+        $scope.current.showProgress = true;
         var accessKey = "aTo0TsVGQN3xkZh5";
         var accessSecret = "KFVnhUT2BN4cPwnzgT72FLWHV9CUiL";
         var bucket = "iimg";
@@ -1080,68 +1081,40 @@
 
         var policyBase64 = Base64.encode(JSON.stringify(POLICY_JSON));
         var signature = b64_hmac_sha1(accessSecret, policyBase64);
-        //var file = document.getElementById("test-file").files[0];
-        var key = itru_userId() + '-' + (new Date).getTime();
-        //var url = "http://iimg.oss-cn-hangzhou.aliyuncs.com?OSSAccessKeyId=" + accessKey + "&Expires=" + Date.UTC(2015, 5, 30) + "&Signature=" + encodeURIComponent(signature);
-        var url = "http://iimg.oss-cn-hangzhou.aliyuncs.com";
-        Utils.alert("path:" + $scope.current.photo_path);
+        var url = "http://" + bucket + ".oss-cn-hangzhou.aliyuncs.com";
+        var fileName = itru_userId() + "-" + new Date().getTime();
 
         var options = new FileUploadOptions();
         options.fileKey = "file";
-        options.fileName = key;
+        options.fileName = fileName;
         options.mineType = "img/jpeg";
-        var params = {
-            "key": key,
+        options.params = {
+            "key": fileName,
             "Content-Type": "img/jpeg",
             "OSSAccessKeyId": accessKey,
             "policy": policyBase64,
             "signature": signature
         };
-        options.params = params;
 
-        try {
-            $cordovaFileTransfer.upload(url, $scope.current.photo_path, options)
-             .then(function (result) {
-                 Utils.alert(result.responseCode + " " + result.response);
-             }, function (error) {
-                 $scope.current.remark =
-                     "code:" + error.code + "\n" +
-                     "status:" + error.http_status + "\n" +
-                     "body:" + error.body + "\n" +
-                     "exception:" + error.exception;
-             }, function (progress) {
-                 $scope.current.progress = progress.loaded / progress.total;
-             });
-        }
-        catch (exception) {
-            Utils.alert("上传报错了:" + exception);
-        }
-
-
-
-        //var form = new FormData();
-        //form.append('key', key);
-        //form.append('Content-Type', 'img/jpeg');
-        //form.append('OSSAccessKeyId', accessKey);
-        //form.append('policy', policyBase64)
-        //form.append('signature', signature);
-        //form.append("file", file);
-
-        //var xhr = new XMLHttpRequest()
-        ////xhr.upload.addEventListener("progress", function (evt) {}, false);
-        //xhr.addEventListener("load", function (evt) {
-        //    Utils.alert("上传成功");
-        //    $state.go("tab.setting");
-        //}, false);
-        //xhr.addEventListener("error", function (evt) {
-        //    Utils.alert("上传失败，" + evt.type);
-        //}, false);
-        //xhr.addEventListener("abort", function (evt) {
-        //    Utils.alert("上传中止！");
-        //}, false);
-
-        //xhr.open('POST', url, true);
-        //xhr.send(form);
+        Utils.loading();
+        $cordovaFileTransfer.upload(url, $scope.current.photo_path, options)
+         .then(function (result) {
+             $scope.current.showProgress = false;
+             Utils.hideLoading();
+             Utils.alert("上传成功");
+             $state.go("tab.photo");
+         }, function (error) {
+             $scope.current.showProgress = false;
+             Utils.hideLoading();
+             var remark = "上传失败!</br>" +
+                  "code:" + error.code + "</br>" +
+                  "status:" + error.http_status + "</br>" +
+                  "body:" + error.body + "</br>" +
+                  "exception:" + error.exception;
+             Utils.alert(remark);
+         }, function (progress) {
+             $scope.current.progress = (progress.loaded / progress.total).toFixed(2) * 100.00;
+         });
     };
 
     //$scope.openLocalStore = function () {
