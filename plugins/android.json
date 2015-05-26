@@ -33,15 +33,15 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"FileTransfer\"><param name=\"android-package\" value=\"org.apache.cordova.filetransfer.FileTransfer\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"NetworkStatus\"><param name=\"android-package\" value=\"org.apache.cordova.networkinformation.NetworkManager\" /></feature>",
                             "count": 1
                         },
                         {
                             "xml": "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"FileTransfer\"><param name=\"android-package\" value=\"org.apache.cordova.filetransfer.FileTransfer\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -52,7 +52,7 @@
                     "/*": [
                         {
                             "xml": "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />",
-                            "count": 3
+                            "count": 4
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\" />",
@@ -117,13 +117,13 @@
         "de.neofonie.cordova.plugin.nativeaudio": {
             "PACKAGE_NAME": "com.ice.itrustoor"
         },
-        "cordova-plugin-file-transfer": {
-            "PACKAGE_NAME": "com.ice.itrustoor"
-        },
         "org.apache.cordova.network-information": {
             "PACKAGE_NAME": "com.ice.itrustoor"
         },
         "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ice.itrustoor"
+        },
+        "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.ice.itrustoor"
         }
     },
