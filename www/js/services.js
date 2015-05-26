@@ -566,17 +566,17 @@
     var _execWithoutToken = function (url, params, callback, code0_callback) {
         _showLoading();
         $http.jsonp(_buildUrl(url, params)).success(function (data) {
+            _hideLoading();
             if (data.Code == 0 && code0_callback)
                 code0_callback(data);
             if (callback)
                 callback(data, data.Code);
         }).error(function (data, statusText) {
+            _hideLoading();
             if (statusText == 404)
                 _error(null, statusText, null);
             else if (callback)
                 callback(data, statusText);
-        }).finally(function () {
-            _hideLoading();
         });
     };
 

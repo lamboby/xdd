@@ -1100,13 +1100,15 @@
                      var photoUrl = url + "/" + fileName;
                      executer.updatePicture($scope.user.userId, photoUrl, function (data, status) {
                          if (status == 0) {
+                             itru_userPicture = photoUrl;
                              $scope.current.showProgress = false;
-                             Utils.hideLoading();
                              Utils.alert("上传成功");
                              $state.go("tab.photo");
                          }
-                         else
+                         else {
+                             $scope.current.showProgress = false;
                              Utils.error(data, status, "更新照片信息失败");
+                         }
                      });
                  }, function (error) {
                      $scope.current.showProgress = false;
