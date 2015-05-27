@@ -101,7 +101,7 @@
 		if (itru_isTest)
 			itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
 		else
-			itru_serviceUrl="http://svr.itrustoor.com:8080/api/";	
+			itru_serviceUrl="http://test.itrustoor.com:8080/api/";	
         
 		if (!$scope.user.phone)
             Utils.alert("请输入手机号");
