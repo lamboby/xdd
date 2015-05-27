@@ -38,16 +38,14 @@
     },
     "uk.co.whiteoctober.cordova.appversion": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
-            "subdir": "."
+            "type": "registry",
+            "id": "uk.co.whiteoctober.cordova.appversion"
         }
     },
     "de.neofonie.cordova.plugin.nativeaudio": {
         "source": {
-            "type": "git",
-            "url": "https://github.com/SidneyS/cordova-plugin-nativeaudio.git",
-            "subdir": "."
+            "type": "registry",
+            "id": "de.neofonie.cordova.plugin.nativeaudio"
         }
     },
     "cordova-plugin-file": {
