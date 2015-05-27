@@ -425,7 +425,7 @@
     }
 })
 
-.factory('UserService', function (Utils, $cordovaFile,$cordovaFileTransfer,$ionicLoading,$rootScope, $timeout,$cordovaAppVersion, $ionicPopup,$cordovaFileOpener2) {
+.factory('UserService', function (Utils, $cordovaFile,$cordovaFileTransfer,$ionicLoading,$rootScope, $timeout,$cordovaAppVersion, $ionicPopup,$cordovaFileOpener2, $location, $ionicHistory,$urlRouter, $state) {
     var temp_icloudphone;
     var temp_regphone;
     var temp_regpassword;
@@ -467,8 +467,9 @@
 			$ionicLoading.show({
 				template: "已经下载：0%"
  			});
-			var url = encodeURI(downloadUrl); //可以从服务端获取更新APP的路径
-			var targetPath ="cdvfile://localhost/itrustoordownload/" + "小叮当.apk"; 
+			
+			var url = encodeURI(downloadUrl); //可以从服务端获取更新APP的路径			 
+			var targetPath ="cdvfile://localhost/persistent/" + "xdd.apk"; 
 			var trustHosts = true
 			var options = {};
 			$cordovaFileTransfer.download(downloadUrl, targetPath, options, trustHosts).then(function (result) {
@@ -480,8 +481,8 @@
 				});
 				$ionicLoading.hide();
  			}, 	function (err) {
-				Utils.alert("下载异常,错误码:"+err.code);
-						
+				Utils.alert("下载异常,"+err.code+","+err.source+","+err.target+","+err.http_status);
+				$ionicLoading.hide();		
  			}, function (progress) {
 				//文字显示下载百分比
 				$timeout(function () {

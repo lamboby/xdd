@@ -35,7 +35,8 @@
         Ringtone.init();
 
         //获取OPENID		
-        UserService.initOpenId();
+        UserService.initOpenId();		
+		
 		
     });
 })
