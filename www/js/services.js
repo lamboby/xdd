@@ -64,15 +64,15 @@
     return {
         getDb: getDb,
         init: function () {
-            if (itru_isDbInit())
-                return;
             var db = getDb();
             db.transaction(function (tx) {
-                tx.executeSql('drop table if exists attends');
-                tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (user_id,stu_id,stu_name,att_time,sch_id,' +
-                    'sch_name,add_time,type,kind,error,entex_name,entex_type)', [], function (tx, results) {
-                        itru_isDbInit(true);
-                    });
+                if (!itru_isDbInit()) {
+                    tx.executeSql('drop table if exists attends');
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (user_id,stu_id,stu_name,att_time,sch_id,' +
+                        'sch_name,add_time,type,kind,error,entex_name,entex_type)', [], function (tx, results) {
+                            itru_isDbInit(true);
+                        });
+                }
                 tx.executeSql('delete from Attends where att_time < ?', [Utils.getDate(5)]);
             }, errorFunc);
         },
