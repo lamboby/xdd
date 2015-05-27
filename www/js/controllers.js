@@ -159,7 +159,7 @@
                 			})
 						}
 						else {
-							if(bols) Utils.alert("当前已是最新版本");
+							Utils.alert("当前已是最新版本");
 						}
 					});
 				}
