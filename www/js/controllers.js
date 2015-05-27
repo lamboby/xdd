@@ -1197,7 +1197,7 @@
     };
 })
 
-.controller('SendmsgCtrl', function ($scope, $state, $cordovaSms, UserService, Utils) {
+.controller('SendmsgCtrl', function ($scope, $state, $cordovaSms,$ionicLoading, UserService, Utils) {
     $scope.icloudphone = UserService.geticloudphone();
     $scope.phone = UserService.getregphone();
     $scope.password = UserService.getregpassword();
@@ -1208,15 +1208,21 @@
                 replaceLineBreaks: false, // true to replace \n by a new line, false by default
                 android: { intent: '' }
             };
+			$ionicLoading.show({
+                        template: "短信发送中..."
+                    });
             $cordovaSms.send($scope.icloudphone, $scope.password, options)
             .then(function () {
+				$ionicLoading.hide();
                 $state.go("regvalid");
             },
             function (error) {
+				$ionicLoading.hide();
                 Utils.alert("短信发送失败,可手动发送密码至上面的手机号,或联系客服.");
             });
         }
         catch (exception) {
+			$ionicLoading.hide();
             Utils.alert(exception);
         }
     }
