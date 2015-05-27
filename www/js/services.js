@@ -23,16 +23,19 @@
                     Utils.exec("attends/list", params, function (data, status) {
                         if (status == 0) {
                             if (data.Data && data.Data.length > 0) {
-                                DB.insert("attends", ["stu_id", "stu_name", "att_time", "sch_id", "sch_name",
+                                for (i = 0; i < data.Data.length; i++)
+                                    data.Data[i].user_id = itru_userId();
+
+                                DB.insert("attends", ["user_id", "stu_id", "stu_name", "att_time", "sch_id", "sch_name",
                                     "add_time", "type", "kind", "error", "entex_name", "entex_type"], data.Data, function () {
-                                        DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ?", [date], function (results) {
+                                        DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ? and user_id = ?", [date, itru_userId()], function (results) {
                                             callback(results.rows, status);
                                             Ringtone.play(itru_ringtone());
                                         });
                                     });
                             }
                             else {
-                                DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ?", [date], function (results) {
+                                DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ? and user_id = ?", [date, itru_userId()], function (results) {
                                     callback(results.rows, status);
                                 });
                             }
@@ -48,7 +51,7 @@
     }
 })
 
-.factory('DB', function (Utils) {
+.factory('DB', function ($filter, Utils) {
     var errorFunc = function (err) {
         Utils.alert("操作数据失败，错误码：" + err.code + " " + err.message);
     };
@@ -65,11 +68,12 @@
                 return;
             var db = getDb();
             db.transaction(function (tx) {
-                //tx.executeSql('drop table if exists attends');
-                tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (stu_id,stu_name,att_time,sch_id,' +
+                tx.executeSql('drop table if exists attends');
+                tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (user_id,stu_id,stu_name,att_time,sch_id,' +
                     'sch_name,add_time,type,kind,error,entex_name,entex_type)', [], function (tx, results) {
                         itru_isDbInit(true);
                     });
+                tx.executeSql('delete from Attends where att_time < ?', [Utils.getDate(5)]);
             }, errorFunc);
         },
         query: function (sql, params, callback) {
@@ -125,12 +129,12 @@
         time: '2015-09-08 10:00:55',
         content: '系统于今日 12:00发生故障，现已修复，不便之处请见谅'
     }];
-	if(itru_isTest==true) news=[{
-		id:0,
-		title:'版本信息',
-		time:'',
-		content:'正在使用内部测试版本'
-	}];
+    if (itru_isTest == true) news = [{
+        id: 0,
+        title: '版本信息',
+        time: '',
+        content: '正在使用内部测试版本'
+    }];
     return {
         all: function () {
             return news;
@@ -571,13 +575,9 @@
         itru_loginToken(-1);
         itru_familyId(-1);
         itru_userId(-1);
-		itru_isTest=false;
-		//$state.go("signin");
-		//Boby 150527 
-		//跳转到登录页面后,切换用户重新登录,
-		//家庭等信息还是上次登录用户的信息.暂改为直接退出
-		//仍存一BUG,切换用户登录后,上个用户的报平安信息还在当前用户这里显示
-		ionic.Platform.exitApp();
+        itru_isTest = false;
+        itru_reload = true;
+        $state.go("signin");
     };
     var _accessToken = function (callback) {
         if ((!itru_isLogin && !itru_loginToken()) || (!itru_familyId() && $location.url() != "/select-family"))

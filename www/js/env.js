@@ -15,7 +15,9 @@
     var itru_ossKey = "";
     var itru_ossSecret = "";
     var itru_ossBucket = "";
-	var itru_isTest=false;
+    var itru_isTest = false;
+    var itru_reload = false;
+
     var itru_loginToken = function (token) {
         if (token == -1)
             window.localStorage.removeItem("LOGIN_TOKEN");
