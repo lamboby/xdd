@@ -86,12 +86,24 @@
 
 .controller('SigninCtrl', function ($scope, $state, Utils, Reg) {
     $scope.user = {
-        phone: '13660595464',
-        password: '123'
+        phone: '',
+        password: ''
     };
-
+	$scope.telchange=function() {
+		if ($scope.user.phone=="0.01"){
+			$scope.pattern="[内测模式]";
+			itru_isTest=true;
+			$scope.user.phone="";
+			Utils.alert("秘道被你发现了,欢迎进入内测模式");
+		}
+	}
     $scope.signin = function () {
-        if (!$scope.user.phone)
+		if (itru_isTest)
+			itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
+		else
+			itru_serviceUrl="http://svr.itrustoor.com:8080/api/";	
+        
+		if (!$scope.user.phone)
             Utils.alert("请输入手机号");
         else if (!$scope.user.password)
             Utils.alert("请输入密码");
@@ -102,6 +114,7 @@
                         if (status != 0)
                             Utils.alert("更新OpenID错误");
                     });
+					$scope.pattern="";
                     $state.go("select-family");
                 }
                 else if (status == 1003)

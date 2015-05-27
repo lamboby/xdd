@@ -125,7 +125,12 @@
         time: '2015-09-08 10:00:55',
         content: '系统于今日 12:00发生故障，现已修复，不便之处请见谅'
     }];
-
+	if(itru_isTest==true) news=[{
+		id:0,
+		title:'版本信息',
+		time:'',
+		content:'正在使用内部测试版本'
+	}];
     return {
         all: function () {
             return news;
@@ -443,9 +448,9 @@
             try {
                 $cordovaFile.readAsText(cordova.file.dataDirectory, "openid.txt").then(function (success) {
                     itru_openId = success;
-                    if (itru_openId == 0) { Utils.alert("Openid错误,将无法正常使用推送服务,可稍后重启软件或联系客服.") };
+                    if (itru_openId == 0) { Utils.alert("Openid异常,将无法正常使用推送服务,可稍后重启软件或联系客服.") };
                 }, function (error) {
-                    Utils.alert("查询Openid遇到错误中止.");
+                    Utils.alert("无法查询Openid,将影响推送服务,App首次运行可能出现此提示,可稍后重启或联系客服.");
                 });
             }
             catch (exception) { Utils.alert("检测到推送服务异常,可稍后重试或联系客服!"); }
@@ -531,7 +536,13 @@
         itru_loginToken(-1);
         itru_familyId(-1);
         itru_userId(-1);
-        $state.go("signin");
+		itru_isTest=false;
+		//$state.go("signin");
+		//Boby 150527 
+		//跳转到登录页面后,切换用户重新登录,
+		//家庭等信息还是上次登录用户的信息.暂改为直接退出
+		//仍存一BUG,切换用户登录后,上个用户的报平安信息还在当前用户这里显示
+		ionic.Platform.exitApp();
     };
     var _accessToken = function (callback) {
         if ((!itru_isLogin && !itru_loginToken()) || (!itru_familyId() && $location.url() != "/select-family"))
