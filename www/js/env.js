@@ -1,6 +1,6 @@
 ﻿{
     var itru_isLogin = false;
-    var itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
+    var itru_serviceUrl = "http://svr.itrustoor.com:8080/api/";
     var itru_accessToken = "";
     var itru_lastGetTokenTime = null;
     var itru_tokenExpires = 7200;
@@ -16,6 +16,7 @@
     var itru_ossSecret = "";
     var itru_ossBucket = "";
     var itru_isTest = false;
+    var itru_reload = false;
 
     var itru_loginToken = function (token) {
         if (token == -1)

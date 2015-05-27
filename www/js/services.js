@@ -541,8 +541,8 @@
         itru_familyId(-1);
         itru_userId(-1);
         itru_isTest = false;
-
-        //$state.go("signin");
+        itru_reload = true;
+        $state.go("signin");
     };
     var _accessToken = function (callback) {
         if ((!itru_isLogin && !itru_loginToken()) || (!itru_familyId() && $location.url() != "/select-family"))

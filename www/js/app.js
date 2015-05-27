@@ -258,6 +258,7 @@
     })
     .state('signin', {
         url: '/signin',
+        cache: false,
         templateUrl: 'templates/signin.html',
         controller: 'SigninCtrl'
     })
