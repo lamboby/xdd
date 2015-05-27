@@ -36,6 +36,7 @@
 
         //获取OPENID		
         UserService.initOpenId();
+		
     });
 })
 
