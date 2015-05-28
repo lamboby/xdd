@@ -136,41 +136,41 @@
     }
 })
 
-.controller('AboutCtrl', function ($scope, $cordovaAppVersion, UserService,Utils,$cordovaFile,$rootScope, $timeout,$cordovaAppVersion, $ionicPopup) {
+.controller('AboutCtrl', function ($scope, $cordovaAppVersion, UserService, Utils, $cordovaFile, $rootScope, $timeout, $cordovaAppVersion, $ionicPopup) {
     $cordovaAppVersion.getAppVersion().then(function (version) {
         $scope.version = version;
     });
     $scope.checkVersion = function () {
         //Utils.alert("当前已是最新版本");
-		UserService.checkUpdate(function(data,status){
-			if (status == 0) {
-		  		if (data.Data){
-                	$cordovaAppVersion.getAppVersion().then(function (version) {
-                    	var serverAppVersion=data.Data[0].new_ver;
-						if (version != serverAppVersion) {
-                    		var confirmPopup = $ionicPopup.confirm({
-                				title: '检测到更新',
-                				template: data.Data[0].content,
-                				cancelText: '以后再说',
-                				okText: '开始更新'
-            				});
-            				confirmPopup.then(function (res) {
-                				if (res) UserService.updateApp(data.Data[0].path);
-                			})
-						}
-						else {
-							Utils.alert("当前已是最新版本");
-						}
-					});
-				}
-				else{
-					Utils.alert("当前已是最新版本");
-				}
-			}
-			else
-				Utils.alert("无法检测最新版本信息.");
-		});
-	}
+        UserService.checkUpdate(function (data, status) {
+            if (status == 0) {
+                if (data.Data) {
+                    $cordovaAppVersion.getAppVersion().then(function (version) {
+                        var serverAppVersion = data.Data[0].new_ver;
+                        if (version != serverAppVersion) {
+                            var confirmPopup = $ionicPopup.confirm({
+                                title: '检测到更新',
+                                template: data.Data[0].content,
+                                cancelText: '以后再说',
+                                okText: '开始更新'
+                            });
+                            confirmPopup.then(function (res) {
+                                if (res) UserService.updateApp(data.Data[0].path);
+                            })
+                        }
+                        else {
+                            Utils.alert("当前已是最新版本");
+                        }
+                    });
+                }
+                else {
+                    Utils.alert("当前已是最新版本");
+                }
+            }
+            else
+                Utils.alert("无法检测最新版本信息.");
+        });
+    }
 })
 
 .controller('SelectFamilyCtrl', function ($scope, $state, Family, Utils) {
@@ -1095,6 +1095,8 @@
             saveToPhotoAlbum: false
         };
         $cordovaCamera.getPicture(options).then(function (imageData) {
+            if (type != 0)
+                $scope.user.picture = "";
             $scope.user.picture = imageData;
             $scope.current.photo_path = imageData;
         }, function (err) {
