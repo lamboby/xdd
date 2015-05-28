@@ -54,3 +54,10 @@
     margin-top: 50px;
     display: block;
 }
+.left-data {
+    width: 100%;
+    text-align: left;
+    color: #a4a4a4;
+    margin-top: 20px;
+    display: block;
+}
