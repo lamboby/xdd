@@ -21,15 +21,15 @@
                     <div class="item tabs tabs-secondary tabs-icon-left">
                         <a class="tab-item" ng-click="changeStatus(card)" style='display:{{isPrimary ? "inline-block":"none"}}'>
                             <i class="icon {{card.enabled == 0 ? 'ion-ios-checkmark':'ion-ios-close'}}"></i>
-                            {{card.enabled == 0 ? "启用":"禁用"}}
+                            {{card.enabled == 0 ? "启用":"停用"}}
                         </a>
                         <a class="tab-item" href="#/tab/setting/card-user/{{card.card}}" style='display:{{isPrimary ? "inline-block":"none"}}'>
                             <i class="icon ion-person-stalker"></i>
-                            用户关联
+                            携带者
                         </a>
                         <a class="tab-item" href="#/tab/setting/card-push/{{card.card}}">
                             <i class="icon ion-ios-star"></i>
-                            推送关系
+                            消息推送
                         </a>
                     </div>
                 </div>
