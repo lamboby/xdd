@@ -136,7 +136,7 @@
     }
 })
 
-.controller('AboutCtrl', function ($scope, $cordovaAppVersion, UserService, Utils, $cordovaFile, $rootScope, $timeout, $cordovaAppVersion, $ionicPopup) {
+.controller('AboutCtrl', function ($scope, $cordovaAppVersion, UserService, Utils, $cordovaAppVersion, $ionicPopup) {
     $cordovaAppVersion.getAppVersion().then(function (version) {
         $scope.version = version;
     });
@@ -1383,6 +1383,7 @@
         });
     }
 })
+
 .controller('HelpaddstrCtrl', function ($scope,$state){
     $scope.gocreatestudent=function(){
          $state.go("tab.create-student");
