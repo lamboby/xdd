@@ -248,15 +248,14 @@
 
 .controller('StudentCtrl', function ($scope, $state, Student, Utils) {
     $scope.isPrimary = itru_isPrimary();
-	itru_temp=true;//临时使用,后期删除
+	
     Student.all(function (data, status) {
         if (status == 0)
             $scope.students = data.Data;
         else
             Utils.error(data, status, "获取学生列表失败");
     });
-
-    $scope.del = function (student) {
+	$scope.del = function (student) {
         Utils.confirm("确定要删除学生吗?", function (res) {
             if (res) {
                 Student.del(student, function (data, status) {
@@ -273,7 +272,10 @@
     $scope.grades = [];
     $scope.classes = [];
     //$scope.supportDatePicker = itru_supportDatePicker();
-
+	$scope.gohelp=function(){
+		itru_temp=true;//临时使用,后期删除
+		 $state.go("tab.helpaddstu");		
+	}
     $scope.current = {
         query: "",
         birthdayStr: ""
@@ -1395,8 +1397,8 @@
 .controller('HelpaddstrCtrl', function ($scope,$state){
     $scope.gocreatestudent=function(){
 		if (itru_temp){
-        	$state.go("tab.create-student");
 			itru_temp=false;
+        	$state.go("tab.create-student");			
 		}
 		else
 			$state.go("tab.student");			
