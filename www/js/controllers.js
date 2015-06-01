@@ -1060,7 +1060,7 @@
 .controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaFileTransfer, Parent, Student, Oss, Utils) {
     $scope.current = {
         photo_path: "",
-        progress: "预处理中……",
+        progress: "上 传",
         showProgress: false
     };
 
@@ -1111,7 +1111,9 @@
             return;
         }
 
+        $scope.current.progress = "预处理中……";
         $scope.current.showProgress = true;
+
         Oss.get(function (data, status) {
             if (status == 0) {
                 var POLICY_JSON = {
@@ -1150,6 +1152,7 @@
                      var photoUrl = url + "/" + fileName;
                      var executer = $stateParams.userType == 0 ? Student : Parent;
                      executer.updatePicture($scope.user.userId, photoUrl, function (data, status) {
+                         $scope.current.progress = "上 传";
                          if (status == 0) {
                              itru_userPicture = photoUrl;
                              $scope.current.showProgress = false;
@@ -1162,6 +1165,7 @@
                          }
                      });
                  }, function (error) {
+                     $scope.current.progress = "上 传";
                      $scope.current.showProgress = false;
                      Utils.hideLoading();
                      var msg = "上传失败!</br>" +
@@ -1172,8 +1176,10 @@
                      $scope.current.progress = "正在上传 " + (progress.loaded / progress.total).toFixed(2) * 100.00 + "%";
                  });
             }
-            else
+            else {
+                $scope.current.progress = "上 传";
                 Utils.error(data, status, "获取OSS信息失败");
+            }
         });
     };
 
