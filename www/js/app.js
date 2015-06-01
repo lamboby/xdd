@@ -11,7 +11,7 @@
             itru_supportDatePicker(false);
         else
             itru_supportDatePicker(true);
-
+		
         //处理android返回键
         $ionicPlatform.registerBackButtonAction(function (e) {
             e.preventDefault();
@@ -27,7 +27,7 @@
                 $ionicHistory.goBack();
             return false;
         }, 101);
-
+		
         //初始化DB
         DB.init();
 
@@ -37,7 +37,13 @@
         //获取OPENID		
         UserService.initOpenId();		
 		
-		
+		//恢复到前台时,打开报平安页面
+		$ionicPlatform.on("resume",function(){
+			if($location.path() !="tab.dash")
+				$state.go("tab.dash");
+		});
+		//检测更新
+		UserService.appUpdate();
     });
 })
 

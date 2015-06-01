@@ -248,6 +248,7 @@
 
 .controller('StudentCtrl', function ($scope, $state, Student, Utils) {
     $scope.isPrimary = itru_isPrimary();
+	itru_temp=true;//临时使用,后期删除
     Student.all(function (data, status) {
         if (status == 0)
             $scope.students = data.Data;
@@ -1383,6 +1384,11 @@
 })
 .controller('HelpaddstrCtrl', function ($scope,$state){
     $scope.gocreatestudent=function(){
-         $state.go("tab.create-student");
+		if (itru_temp){
+        	$state.go("tab.create-student");
+			itru_temp=false;
+		}
+		else
+			$state.go("tab.student");			
     }
 });

@@ -17,6 +17,8 @@
     var itru_ossBucket = "";
     var itru_isTest = false;
     var itru_reload = false;
+	var itru_force=0;
+	var itru_temp=false;//测试用,以后删除
 
     var itru_loginToken = function (token) {
         if (token == -1)
