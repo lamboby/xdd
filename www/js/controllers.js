@@ -1060,7 +1060,7 @@
 .controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaFileTransfer, Parent, Student, Oss, Utils) {
     $scope.current = {
         photo_path: "",
-        progress: 0,
+        progress: "预处理中……",
         showProgress: false
     };
 
@@ -1111,6 +1111,7 @@
             return;
         }
 
+        $scope.current.showProgress = true;
         Oss.get(function (data, status) {
             if (status == 0) {
                 var POLICY_JSON = {
@@ -1141,12 +1142,13 @@
                 };
 
                 Utils.loading();
-                $scope.current.showProgress = true;
+                $scope.current.progress = "正在上传 0%";
 
                 $cordovaFileTransfer.upload(url, $scope.current.photo_path, options)
                  .then(function (result) {
-                     var executer = $stateParams.userType == 0 ? Student : Parent;
+                     $scope.current.progress = "后期处理中……";
                      var photoUrl = url + "/" + fileName;
+                     var executer = $stateParams.userType == 0 ? Student : Parent;
                      executer.updatePicture($scope.user.userId, photoUrl, function (data, status) {
                          if (status == 0) {
                              itru_userPicture = photoUrl;
@@ -1167,7 +1169,7 @@
                           "status:" + error.http_status;
                      Utils.alert(msg);
                  }, function (progress) {
-                     $scope.current.progress = (progress.loaded / progress.total).toFixed(2) * 100.00;
+                     $scope.current.progress = "正在上传 " + (progress.loaded / progress.total).toFixed(2) * 100.00 + "%";
                  });
             }
             else
@@ -1384,8 +1386,8 @@
     }
 })
 
-.controller('HelpaddstrCtrl', function ($scope,$state){
-    $scope.gocreatestudent=function(){
-         $state.go("tab.create-student");
+.controller('HelpaddstrCtrl', function ($scope, $state) {
+    $scope.gocreatestudent = function () {
+        $state.go("tab.create-student");
     }
 });
