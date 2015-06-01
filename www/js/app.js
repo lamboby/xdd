@@ -39,8 +39,8 @@
 		
 		//恢复到前台时,打开报平安页面
 		$ionicPlatform.on("resume",function(){
-			if($location.path() !="tab.dash")
-				$state.go("tab.dash");
+			//if($location.path() !="tab.dash")
+				$state.go("tab.dash",{}, {reload: true});
 		});
 		//检测更新
 		UserService.appUpdate();
