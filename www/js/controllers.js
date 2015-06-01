@@ -1382,4 +1382,9 @@
             }
         });
     }
+})
+.controller('HelpaddstrCtrl', function ($scope,$state){
+    $scope.gocreatestudent=function(){
+         $state.go("tab.create-student");
+    }
 });

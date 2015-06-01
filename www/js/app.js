@@ -290,7 +290,15 @@
 	    url: '/changepwd',
 	    templateUrl: 'templates/changepwd.html',
 	    controller: 'ChangepwdCtrl'
-	});
-
+	})
+    .state('tab.helpaddstu',{
+        url:'/setting/helpaddstu',
+        views:{
+            'tab-setting':{
+                templateUrl: 'templates/help-createstudent.html',
+                controller: 'HelpaddstrCtrl'              
+            }
+        }
+    });
     $urlRouterProvider.otherwise('/tab/dash');
 });
