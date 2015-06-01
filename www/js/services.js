@@ -425,7 +425,7 @@
     }
 })
 
-.factory('UserService', function (Utils, $cordovaFile, $cordovaFileTransfer, $ionicLoading, $rootScope, $timeout, $cordovaAppVersion, $ionicPopup, $cordovaFileOpener2, $location, $ionicHistory, $urlRouter, $state) {
+.factory('UserService', function (Utils, $cordovaFile, $cordovaFileTransfer, $ionicLoading, $timeout, $cordovaFileOpener2) {
     var temp_icloudphone;
     var temp_regphone;
     var temp_regpassword;
@@ -494,7 +494,6 @@
                 })
             });
         }
-
     };
 })
 
