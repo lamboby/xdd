@@ -136,41 +136,41 @@
     }
 })
 
-.controller('AboutCtrl', function ($scope, $cordovaAppVersion, UserService,Utils,$cordovaFile,$rootScope, $timeout,$cordovaAppVersion, $ionicPopup) {
+.controller('AboutCtrl', function ($scope, $cordovaAppVersion, UserService, Utils, $cordovaAppVersion, $ionicPopup) {
     $cordovaAppVersion.getAppVersion().then(function (version) {
         $scope.version = version;
     });
     $scope.checkVersion = function () {
         //Utils.alert("当前已是最新版本");
-		UserService.checkUpdate(function(data,status){
-			if (status == 0) {
-		  		if (data.Data){
-                	$cordovaAppVersion.getAppVersion().then(function (version) {
-                    	var serverAppVersion=data.Data[0].new_ver;
-						if (version != serverAppVersion) {
-                    		var confirmPopup = $ionicPopup.confirm({
-                				title: '检测到更新',
-                				template: data.Data[0].content,
-                				cancelText: '以后再说',
-                				okText: '开始更新'
-            				});
-            				confirmPopup.then(function (res) {
-                				if (res) UserService.updateApp(data.Data[0].path);
-                			})
-						}
-						else {
-							Utils.alert("当前已是最新版本");
-						}
-					});
-				}
-				else{
-					Utils.alert("当前已是最新版本");
-				}
-			}
-			else
-				Utils.alert("无法检测最新版本信息.");
-		});
-	}
+        UserService.checkUpdate(function (data, status) {
+            if (status == 0) {
+                if (data.Data) {
+                    $cordovaAppVersion.getAppVersion().then(function (version) {
+                        var serverAppVersion = data.Data[0].new_ver;
+                        if (version != serverAppVersion) {
+                            var confirmPopup = $ionicPopup.confirm({
+                                title: '检测到更新',
+                                template: data.Data[0].content,
+                                cancelText: '以后再说',
+                                okText: '开始更新'
+                            });
+                            confirmPopup.then(function (res) {
+                                if (res) UserService.updateApp(data.Data[0].path);
+                            })
+                        }
+                        else {
+                            Utils.alert("当前已是最新版本");
+                        }
+                    });
+                }
+                else {
+                    Utils.alert("当前已是最新版本");
+                }
+            }
+            else
+                Utils.alert("无法检测最新版本信息.");
+        });
+    }
 })
 
 .controller('SelectFamilyCtrl', function ($scope, $state, Family, Utils) {
@@ -1061,7 +1061,7 @@
 .controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaFileTransfer, Parent, Student, Oss, Utils) {
     $scope.current = {
         photo_path: "",
-        progress: 0,
+        progress: "上 传",
         showProgress: false
     };
 
@@ -1096,6 +1096,8 @@
             saveToPhotoAlbum: false
         };
         $cordovaCamera.getPicture(options).then(function (imageData) {
+            if (type != 0)
+                $scope.user.picture = "";
             $scope.user.picture = imageData;
             $scope.current.photo_path = imageData;
         }, function (err) {
@@ -1109,6 +1111,9 @@
             Utils.alert("请选择照片");
             return;
         }
+
+        $scope.current.progress = "预处理中……";
+        $scope.current.showProgress = true;
 
         Oss.get(function (data, status) {
             if (status == 0) {
@@ -1140,13 +1145,15 @@
                 };
 
                 Utils.loading();
-                $scope.current.showProgress = true;
+                $scope.current.progress = "正在上传 0%";
 
                 $cordovaFileTransfer.upload(url, $scope.current.photo_path, options)
                  .then(function (result) {
-                     var executer = $stateParams.userType == 0 ? Student : Parent;
+                     $scope.current.progress = "后期处理中……";
                      var photoUrl = url + "/" + fileName;
+                     var executer = $stateParams.userType == 0 ? Student : Parent;
                      executer.updatePicture($scope.user.userId, photoUrl, function (data, status) {
+                         $scope.current.progress = "上 传";
                          if (status == 0) {
                              itru_userPicture = photoUrl;
                              $scope.current.showProgress = false;
@@ -1159,6 +1166,7 @@
                          }
                      });
                  }, function (error) {
+                     $scope.current.progress = "上 传";
                      $scope.current.showProgress = false;
                      Utils.hideLoading();
                      var msg = "上传失败!</br>" +
@@ -1166,11 +1174,13 @@
                           "status:" + error.http_status;
                      Utils.alert(msg);
                  }, function (progress) {
-                     $scope.current.progress = (progress.loaded / progress.total).toFixed(2) * 100.00;
+                     $scope.current.progress = "正在上传 " + (progress.loaded / progress.total).toFixed(2) * 100.00 + "%";
                  });
             }
-            else
+            else {
+                $scope.current.progress = "上 传";
                 Utils.error(data, status, "获取OSS信息失败");
+            }
         });
     };
 
@@ -1390,5 +1400,6 @@
 		}
 		else
 			$state.go("tab.student");			
+
     }
 });

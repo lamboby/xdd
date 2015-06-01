@@ -12,14 +12,10 @@
             从图库选择
         </div>
 
-        <div class="item" style="display:{{current.showProgress ? 'block':'none'}}">
-            上传进度: {{current.progress}}%
-        </div>
-
         <div class="padding">
             <br />
             <button class="button button-block button-balanced" ng-click="save()">
-                上 传
+                {{current.progress}}
             </button>
         </div>
     </ion-content>
