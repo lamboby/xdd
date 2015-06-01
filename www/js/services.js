@@ -425,7 +425,7 @@
     }
 })
 
-.factory('UserService', function (Utils, $cordovaFile, $cordovaFileTransfer, $ionicLoading, $timeout, $cordovaFileOpener2) {
+.factory('UserService', function (Utils, $cordovaFile, $cordovaFileTransfer, $ionicLoading, $timeout,$cordovaAppVersion, $cordovaFileOpener2,$ionicPopup) {
     var temp_icloudphone;
     var temp_regphone;
     var temp_regpassword;
@@ -533,38 +533,7 @@
             var params = {};
             Utils.execWithoutToken("configs/getUpdate", params, callback);
         },
-        updateApp: function (downloadUrl) {
-            $ionicLoading.show({
-                template: "已经下载：0%"
-            });
-
-            var url = encodeURI(downloadUrl); //可以从服务端获取更新APP的路径			 
-            var targetPath = "cdvfile://localhost/persistent/" + "xdd.apk";
-            var trustHosts = true
-            var options = {};
-            $cordovaFileTransfer.download(downloadUrl, targetPath, options, trustHosts).then(function (result) {
-                // 打开下载下来的APP
-                $cordovaFileOpener2.open(targetPath, 'application/vnd.android.package-archive').then(function () {
-
-                }, function (err) {
-                    Utils.alert("打开安装程序遇到错误,更新失败");
-                });
-                $ionicLoading.hide();
-            }, function (err) {
-                Utils.alert("下载异常," + err.code + "," + err.source + "," + err.target + "," + err.http_status);
-                $ionicLoading.hide();
-            }, function (progress) {
-                //文字显示下载百分比
-                $timeout(function () {
-                    var downloadProgress = (progress.loaded / progress.total) * 100;
-                    $ionicLoading.show({
-                        template: "已经下载：" + Math.floor(downloadProgress) + "%"
-                    });
-                    if (downloadProgress > 99) $ionicLoading.hide();
-                })
-            });
-        }
-
+        updateApp: _temp_download
     };
 })
 
