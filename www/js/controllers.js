@@ -1208,6 +1208,8 @@
                                 if (status == 0) {
                                     itru_userPicture = photoUrl;
                                     $scope.user.picture = photoUrl;
+                                    $scope.current.photo_path = "";
+                                    $scope.current.origin_path = "";
                                     $scope.current.showProgress = false;
                                     Utils.alert("上传成功");
                                 }
