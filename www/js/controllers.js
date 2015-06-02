@@ -1,10 +1,11 @@
 ﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope, $state, $filter, $ionicActionSheet, $ionicScrollDelegate, Dash, Utils) {
+.controller('DashCtrl', function ($scope, $state, $filter,$ionicActionSheet, $ionicScrollDelegate, Dash, Utils) {
     if (!itru_isDbInit())
         $state.go("signin");
-
-    $scope.first = true;
+	if (itru_isTest())
+		itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
+	$scope.first = true;
     $scope.current = { date: null };
     $scope.items = [];
 
@@ -95,17 +96,17 @@
         phone: '',
         password: ''
     };
-	if (itru_isTest) $scope.pattern = "[内测模式]";
+	if (itru_isTest()) $scope.pattern = "[内测模式]";
     $scope.telchange = function () {
         if ($scope.user.phone == "0.01") {
             $scope.pattern = "[内测模式]";
-			itru_isTest = true;
+			itru_isTest(true) ;
             $scope.user.phone = "";
-            Utils.alert("内测模式暂不支持自动登录,我们正努力解决中..");
+            Utils.alert("秘密被你发现了,欢迎进入内测模式.");
         }
     }
     $scope.signin = function () {
-        if (itru_isTest)
+        if (itru_isTest())
             itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
         else
             itru_serviceUrl = "http://svr.itrustoor.com:8080/api/";
@@ -274,7 +275,6 @@
     $scope.classes = [];
     //$scope.supportDatePicker = itru_supportDatePicker();
     $scope.gohelp = function () {
-        //itru_temp = true;//临时使用,后期删除
         $state.go("tab.helpaddstu");
     }
     $scope.current = {
@@ -1398,12 +1398,6 @@
 
 .controller('HelpaddstrCtrl', function ($scope, $state) {
     $scope.gocreatestudent = function () {
-       // if (itru_temp) {
-       //    itru_temp = false;
 		$state.go("tab.create-student");
-      //  }
-       // else
-         //   $state.go("tab.student");
-
     }
 });

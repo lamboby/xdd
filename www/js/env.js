@@ -18,10 +18,9 @@
     var itru_ossChannel = "";//服务节点
     var itru_ossStyle = "";//样式规则
     var itru_ossDomain = "";//域名
-    var itru_isTest = false;
     var itru_reload = false;
 	var itru_force=0;
-	var itru_temp=false;//测试用,以后删除
+	var itru_temp=true;//测试用
 
     var itru_loginToken = function (token) {
         if (token == -1)
@@ -87,5 +86,12 @@
             window.localStorage.setItem("VERSION", version);
         return window.localStorage.getItem("VERSION");
     };
-	
+	//内测模式判断
+	var itru_isTest = function(test){
+		if ( test== -1)
+			window.localStorage.removeItem("ISTEST");
+        else if (test!=null && test!='undefined')
+			window.localStorage.setItem("ISTEST", test);
+        return window.localStorage.getItem("ISTEST");
+	}	
 }
