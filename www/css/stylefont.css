@@ -1,0 +1,35 @@
+@font-face {
+	font-family: 'itrufont';
+	src:url('fonts/itrufont.eot?jgo3su');
+	src:url('fonts/itrufont.eot?#iefixjgo3su') format('embedded-opentype'),
+		url('fonts/itrufont.ttf?jgo3su') format('truetype'),
+		url('fonts/itrufont.woff?jgo3su') format('woff'),
+		url('fonts/itrufont.svg?jgo3su#itrufont') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+i {
+	font-family: 'itrufont';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	text-rendering:auto;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+
+.itrumessagemessage .path3:before {
+	content: "\e602";
+	margin-left: 0em;
+	color: rgb(24, 191, 70);
+	font-size:26px;
+}
+
+}
