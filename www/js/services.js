@@ -488,7 +488,7 @@
                     itru_openId = success;
                     if (itru_openId == 0) { Utils.alert("Openid异常,将无法正常使用推送服务,可稍后重启软件或联系客服.") };
                 }, function (error) {
-                    Utils.alert("无法查询Openid,将影响推送服务,App首次运行可能出现此提示,可稍后重启或联系客服.");
+                    Utils.alert("无法查询Openid,将影响推送服务,App首次运行可能出现此提示,请检查网络或稍后重启.");
                 });
             }
             catch (exception) { Utils.alert("检测到推送服务异常,可稍后重试或联系客服!"); }
@@ -502,7 +502,7 @@
                     		var serverAppVersion=data.Data[0].new_ver;
 							if (itru_force!=data.Data[0].force){
 								var confirmPopup = $ionicPopup.confirm({
-                					title: '发现新版本:',
+                					title: '发现新版本:V'+data.Data[0].app_new_ver,
                 					template: data.Data[0].content,
                 					cancelText: '以后再说',
                 					okText: '开始更新'
@@ -516,7 +516,7 @@
 									if (itru_showUpdate()!=serverAppVersion){
 										itru_showUpdate(serverAppVersion);
                     					var confirmPopup = $ionicPopup.confirm({
-                							title: '发现新版本',
+                							title: '发现新版本:'+data.Data[0].app_new_ver,
                 							template: data.Data[0].content,
                 							cancelText: '以后再说',
                 							okText: '开始更新'
@@ -528,7 +528,7 @@
 								}
 							};							
 												
-						});
+						},true);
 					}
 				}				
 			});			
@@ -654,8 +654,9 @@
             });
         }
     };
-    var _execWithoutToken = function (url, params, callback, code0_callback) {
-        _showLoading();
+    var _execWithoutToken = function (url, params,callback,code0_callback, notShowLoading) {
+        if (notShowLoading==true)
+			_showLoading();
         $http.jsonp(_buildUrl(url, params)).success(function (data) {
             _hideLoading();
             if (data.Code == 0 && code0_callback)

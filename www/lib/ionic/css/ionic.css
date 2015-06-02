@@ -188,7 +188,6 @@
 
 .ion-android-contacts:before {
 	color:#18bf46;
-  font-size:24px;
   content: "\f2d9"; }
 
 .ion-android-contract:before {
@@ -256,7 +255,6 @@
 
 .ion-android-home:before {
   color:#18bf46;
-  font-size:24px;
   content: "\f38f"; }
 
 .ion-android-image:before {
@@ -315,7 +313,6 @@
 
 .ion-android-people:before {
   color:#18bf46;
-  font-size:24px;
   content: "\f39e"; }
 
 .ion-android-person:before {
@@ -566,7 +563,6 @@
 
 .ion-bug:before {
   color:#18bf46;
-  font-size:24px;
   content: "\f2be"; }
 
 .ion-calculator:before {
@@ -580,7 +576,6 @@
 
 .ion-card:before {
   color:#18bf46;
-  font-size:24px;
   content: "\f119"; }
 
 .ion-cash:before {
@@ -798,8 +793,7 @@
 
 .ion-home:before {
 	color:#18bf46;
-  font-size:24px;
-  content: "\f144"; }
+   content: "\f144"; }
 
 .ion-icecream:before {
   content: "\f27d"; }
@@ -821,7 +815,6 @@
 
 .ion-ios-alarm:before {
 	color:#18bf46;
-  font-size:24px;
   content: "\f3c8"; }
 
 .ion-ios-alarm-outline:before {
@@ -858,8 +851,6 @@
   content: "\f3d2"; }
 
 .ion-ios-arrow-right:before {
-
-  font-size:24px;
   content: "\f3d3"; }
 
 .ion-ios-arrow-thin-down:before {
@@ -963,7 +954,6 @@
 
 .ion-ios-camera:before {
   color:#18bf46;
-  font-size:24px;
   content: "\f3f6"; }
 
 .ion-ios-camera-outline:before {
@@ -1223,7 +1213,6 @@
 
 .ion-ios-information:before {
   color:#18bf46;
-  font-size:24px;
   content: "\f44d"; }
 
 .ion-ios-information-empty:before {
@@ -2236,7 +2225,6 @@
 
 .ion-volume-medium:before {
   color:#18bf46;
-  font-size:24px;
   content: "\f259"; }
 
 .ion-volume-mute:before {

@@ -101,7 +101,7 @@
             $scope.pattern = "[内测模式]";
 			itru_isTest = true;
             $scope.user.phone = "";
-            Utils.alert("秘道被你发现了,欢迎进入内测模式");
+            Utils.alert("内测模式暂不支持自动登录,我们正努力解决中..");
         }
     }
     $scope.signin = function () {
@@ -150,7 +150,7 @@
                         var serverAppVersion = data.Data[0].new_ver;
                         if (version != serverAppVersion) {
                             var confirmPopup = $ionicPopup.confirm({
-                                title: '检测到更新',
+                                title: '检测到更新:V'+data.Data[0].app_new_ver,
                                 template: data.Data[0].content,
                                 cancelText: '以后再说',
                                 okText: '开始更新'
@@ -274,7 +274,7 @@
     $scope.classes = [];
     //$scope.supportDatePicker = itru_supportDatePicker();
     $scope.gohelp = function () {
-        itru_temp = true;//临时使用,后期删除
+        //itru_temp = true;//临时使用,后期删除
         $state.go("tab.helpaddstu");
     }
     $scope.current = {
@@ -1398,12 +1398,12 @@
 
 .controller('HelpaddstrCtrl', function ($scope, $state) {
     $scope.gocreatestudent = function () {
-        if (itru_temp) {
-            itru_temp = false;
-            $state.go("tab.create-student");
-        }
-        else
-            $state.go("tab.student");
+       // if (itru_temp) {
+       //    itru_temp = false;
+		$state.go("tab.create-student");
+      //  }
+       // else
+         //   $state.go("tab.student");
 
     }
 });
