@@ -129,7 +129,7 @@
         time: '2015-09-08 10:00:55',
         content: '系统于今日 12:00发生故障，现已修复，不便之处请见谅'
     }];
-    if (itru_isTest == true) news = [{
+    if (itru_isTest) news = [{
         id: 0,
         title: '版本信息',
         time: '',
@@ -499,28 +499,29 @@
                     		var serverAppVersion=data.Data[0].new_ver;
 							if (itru_force!=data.Data[0].force){
 								var confirmPopup = $ionicPopup.confirm({
-                					title: '温馨提示:',
-                					template:'检测到重大更新,app升级后才能保证正常使用',
-                					cancelText: '退出',
+                					title: '发现新版本:',
+                					template: data.Data[0].content,
+                					cancelText: '以后再说',
                 					okText: '开始更新'
             					});
 								confirmPopup.then(function (res) {
                 					if (res) _temp_download(data.Data[0].path);
-									else
-										ionic.Platform.exitApp();
-                				})
+								})
 							}
 							else{
 								if (version != serverAppVersion) {
-                    				var confirmPopup = $ionicPopup.confirm({
-                						title: '检测到更新',
-                						template: data.Data[0].content,
-                						cancelText: '以后再说',
-                						okText: '开始更新'
-            						});
-            						confirmPopup.then(function (res) {
-                						if (res) _temp_download(data.Data[0].path);
-                					})
+									if (itru_showUpdate()!=serverAppVersion){
+										itru_showUpdate(serverAppVersion);
+                    					var confirmPopup = $ionicPopup.confirm({
+                							title: '发现新版本',
+                							template: data.Data[0].content,
+                							cancelText: '以后再说',
+                							okText: '开始更新'
+            							});
+            							confirmPopup.then(function (res) {
+                							if (res) _temp_download(data.Data[0].path);
+                						})
+									}
 								}
 							};							
 												
@@ -614,9 +615,9 @@
         itru_isPrimary(false);
         itru_loginToken(-1);
         itru_familyId(-1);
-        itru_userId(-1);
-        itru_isTest = false;
+        itru_userId(-1);        
         itru_reload = true;
+		itru_isTest=false;
         $state.go("signin");
     };
     var _accessToken = function (callback) {

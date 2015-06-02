@@ -77,4 +77,12 @@
         new Object({ "name": "你好", "path": "hello_9s.mp3" }),
         new Object({ "name": "顽皮猫王", "path": "cat_11s.mp3" })
     ];
+	var itru_showUpdate = function (version) {
+        if ( version== -1)
+            window.localStorage.removeItem("VERSION");
+        else if (version!=null && version!='undefined')
+            window.localStorage.setItem("VERSION", version);
+        return window.localStorage.getItem("VERSION");
+    };
+	
 }

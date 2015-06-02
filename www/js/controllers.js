@@ -95,10 +95,11 @@
         phone: '',
         password: ''
     };
+	if (itru_isTest) $scope.pattern = "[内测模式]";
     $scope.telchange = function () {
         if ($scope.user.phone == "0.01") {
             $scope.pattern = "[内测模式]";
-            itru_isTest = true;
+			itru_isTest = true;
             $scope.user.phone = "";
             Utils.alert("秘道被你发现了,欢迎进入内测模式");
         }
