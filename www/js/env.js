@@ -19,8 +19,8 @@
     var itru_ossStyle = "";//样式规则
     var itru_ossDomain = "";//域名
     var itru_reload = false;
-	var itru_force=0;
-	var itru_temp=true;//测试用
+    var itru_force = 0;
+    var itru_temp = true;//测试用
 
     var itru_loginToken = function (token) {
         if (token == -1)
@@ -79,19 +79,19 @@
         new Object({ "name": "你好", "path": "hello_9s.mp3" }),
         new Object({ "name": "顽皮猫王", "path": "cat_11s.mp3" })
     ];
-	var itru_showUpdate = function (version) {
-        if ( version== -1)
+    var itru_showUpdate = function (version) {
+        if (version == -1)
             window.localStorage.removeItem("VERSION");
-        else if (version!=null && version!='undefined')
+        else if (version != null && version != 'undefined')
             window.localStorage.setItem("VERSION", version);
         return window.localStorage.getItem("VERSION");
     };
-	//内测模式判断
-	var itru_isTest = function(test){
-		if ( test== -1)
-			window.localStorage.removeItem("ISTEST");
-        else if (test!=null && test!='undefined')
-			window.localStorage.setItem("ISTEST", test);
+    //内测模式判断
+    var itru_isTest = function (test) {
+        if (test == -1)
+            window.localStorage.removeItem("ISTEST");
+        else if (test != null && test != 'undefined')
+            window.localStorage.setItem("ISTEST", test);
         return window.localStorage.getItem("ISTEST");
-	}	
+    }
 }

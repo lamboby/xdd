@@ -1,11 +1,11 @@
 ﻿angular.module('itrustoor.controllers', [])
 
-.controller('DashCtrl', function ($scope, $state, $filter,$ionicActionSheet, $ionicScrollDelegate, Dash, Utils) {
+.controller('DashCtrl', function ($scope, $state, $filter, $ionicActionSheet, $ionicScrollDelegate, Dash, Utils) {
     if (!itru_isDbInit())
         $state.go("signin");
-	if (itru_isTest())
-		itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
-	$scope.first = true;
+    if (itru_isTest())
+        itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
+    $scope.first = true;
     $scope.current = { date: null };
     $scope.items = [];
 
@@ -96,11 +96,11 @@
         phone: '',
         password: ''
     };
-	if (itru_isTest()) $scope.pattern = "[内测模式]";
+    if (itru_isTest()) $scope.pattern = "[内测模式]";
     $scope.telchange = function () {
         if ($scope.user.phone == "0.01") {
             $scope.pattern = "[内测模式]";
-			itru_isTest(true) ;
+            itru_isTest(true);
             $scope.user.phone = "";
 			itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
             Utils.alert("秘密被你发现了,欢迎进入内测模式.");
@@ -152,7 +152,7 @@
                         var serverAppVersion = data.Data[0].new_ver;
                         if (version != serverAppVersion) {
                             var confirmPopup = $ionicPopup.confirm({
-                                title: '检测到更新:V'+data.Data[0].app_new_ver,
+                                title: '检测到更新:V' + data.Data[0].app_new_ver,
                                 template: data.Data[0].content,
                                 cancelText: '以后再说',
                                 okText: '开始更新'
@@ -1065,6 +1065,7 @@
 .controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaFileTransfer, Parent, Student, Oss, Utils) {
     $scope.current = {
         photo_path: "",
+        origin_path: "",
         progress: "上 传",
         showProgress: false
     };
@@ -1110,6 +1111,79 @@
         });
     };
 
+    $scope.getPolicy = function () {
+        var POLICY_JSON = {
+            "expiration": "2099-12-01T12:00:00.000Z",
+            "conditions": [
+                ["starts-with", "$key", ""],
+                { "bucket": itru_ossBucket },
+                ["starts-with", "$Content-Type", ""],
+                ["content-length-range", 0, 524288000]
+            ]
+        };
+        return Base64.encode(JSON.stringify(POLICY_JSON));
+    };
+
+    $scope.getSignature = function () {
+        return b64_hmac_sha1(itru_ossSecret, $scope.getPolicy());
+    };
+
+    $scope.upload = function (img, showProgress, callback) {
+        Utils.loading();
+        var url = "http://" + itru_ossBucket + ".oss-cn-" + itru_ossChannel + ".aliyuncs.com";
+        var fileName = itru_userId() + "-" + new Date().getTime();
+
+        var options = new FileUploadOptions();
+        options.fileKey = "file";
+        options.fileName = fileName;
+        options.mineType = "image/jpeg";
+        options.params = {
+            "key": fileName,
+            "Content-Type": "image/jpeg",
+            "OSSAccessKeyId": itru_ossKey,
+            "policy": $scope.getPolicy(),
+            "signature": $scope.getSignature()
+        };
+
+        if (showProgress)
+            $scope.current.progress = "正在上传 0%";
+
+        $cordovaFileTransfer.upload(url, img, options)
+            .then(function (result) {
+                callback(url, fileName);
+            }, function (error) {
+                $scope.current.progress = "上 传";
+                $scope.current.showProgress = false;
+                Utils.hideLoading();
+                var msg = "上传失败!</br>" +
+                    "code:" + error.code + "</br>" +
+                    "status:" + error.http_status;
+                Utils.alert(msg);
+            }, function (progress) {
+                if (showProgress)
+                    $scope.current.progress = "正在上传 " + (progress.loaded / progress.total).toFixed(2) * 100.00 + "%";
+            });
+    };
+
+    $scope.delete = function (callback) {
+        var url = "http://" + itru_ossBucket + ".oss-cn-" + itru_ossChannel + ".aliyuncs.com/" + $scope.current.origin_path;
+        $.ajax({
+            type: "DELETE",
+            url: url,
+            data: {
+                Date: new Date(),
+                Authorization: $scope.getSignature()
+            },
+            dataType: "json",
+            success: function (data) {
+                callback();
+            },
+            error: function () {
+                callback();
+            }
+        });
+    };
+
     $scope.save = function () {
         if (!$scope.current.photo_path) {
             Utils.alert("请选择照片");
@@ -1121,65 +1195,33 @@
 
         Oss.get(function (data, status) {
             if (status == 0) {
-                var POLICY_JSON = {
-                    "expiration": "2099-12-01T12:00:00.000Z",
-                    "conditions": [
-                        ["starts-with", "$key", ""],
-                        { "bucket": itru_ossBucket },
-                        ["starts-with", "$Content-Type", ""],
-                        ["content-length-range", 0, 524288000]
-                    ]
-                };
+                $scope.upload($scope.current.photo_path, true, function (url, fileName) {
+                    $scope.current.origin_path = fileName;
+                    $scope.current.progress = "后期处理中……";
+                    var src = "http://" + itru_ossDomain + "/" + fileName + "@" + itru_ossStyle;
 
-                var policyBase64 = Base64.encode(JSON.stringify(POLICY_JSON));
-                var signature = b64_hmac_sha1(itru_ossSecret, policyBase64);
-                var url = "http://" + itru_ossBucket + ".oss-cn-" + itru_ossChannel + ".aliyuncs.com";
-                var fileName = itru_userId() + "-" + new Date().getTime();
-
-                var options = new FileUploadOptions();
-                options.fileKey = "file";
-                options.fileName = fileName;
-                options.mineType = "image/jpeg";
-                options.params = {
-                    "key": fileName,
-                    "Content-Type": "image/jpeg",
-                    "OSSAccessKeyId": itru_ossKey,
-                    "policy": policyBase64,
-                    "signature": signature
-                };
-
-                Utils.loading();
-                $scope.current.progress = "正在上传 0%";
-
-                $cordovaFileTransfer.upload(url, $scope.current.photo_path, options)
-                 .then(function (result) {
-                     $scope.current.progress = "后期处理中……";
-                     var photoUrl = "http://" + itru_ossDomain + "/" + fileName + "@" + itru_ossStyle;
-                     var executer = $stateParams.userType == 0 ? Student : Parent;
-                     executer.updatePicture($scope.user.userId, photoUrl, function (data, status) {
-                         $scope.current.progress = "上 传";
-                         if (status == 0) {
-                             itru_userPicture = photoUrl;
-                             $scope.user.picture = photoUrl;
-                             $scope.current.showProgress = false;
-                             Utils.alert("上传成功");
-                         }
-                         else {
-                             $scope.current.showProgress = false;
-                             Utils.error(data, status, "更新照片信息失败");
-                         }
-                     });
-                 }, function (error) {
-                     $scope.current.progress = "上 传";
-                     $scope.current.showProgress = false;
-                     Utils.hideLoading();
-                     var msg = "上传失败!</br>" +
-                          "code:" + error.code + "</br>" +
-                          "status:" + error.http_status;
-                     Utils.alert(msg);
-                 }, function (progress) {
-                     $scope.current.progress = "正在上传 " + (progress.loaded / progress.total).toFixed(2) * 100.00 + "%";
-                 });
+                    $scope.upload(src, false, function (url, fileName) {
+                        $scope.delete(function () {
+                            var photoUrl = url + "/" + fileName;
+                            var executer = $stateParams.userType == 0 ? Student : Parent;
+                            executer.updatePicture($scope.user.userId, photoUrl, function (data, status) {
+                                $scope.current.progress = "上 传";
+                                if (status == 0) {
+                                    itru_userPicture = photoUrl;
+                                    $scope.user.picture = photoUrl;
+                                    $scope.current.photo_path = "";
+                                    $scope.current.origin_path = "";
+                                    $scope.current.showProgress = false;
+                                    Utils.alert("上传成功");
+                                }
+                                else {
+                                    $scope.current.showProgress = false;
+                                    Utils.error(data, status, "更新照片信息失败");
+                                }
+                            });
+                        });
+                    });
+                });
             }
             else {
                 $scope.current.progress = "上 传";
@@ -1187,22 +1229,6 @@
             }
         });
     };
-
-    //$scope.openLocalStore = function () {
-    //    var options = {
-    //        maximumImagesCount: 1,
-    //        width: 600,
-    //        height: 600,
-    //        quality: 50
-    //    };
-
-    //    $cordovaImagePicker.getPictures(options)
-    //    .then(function (results) {
-    //        $scope.user.picture = results[0];
-    //    }, function (error) {
-    //        //Utils.alert(error);
-    //    });
-    //};
 })
 
 .controller('RingtoneCtrl', function ($scope, $state, Ringtone, Parent, Utils) {
@@ -1399,6 +1425,6 @@
 
 .controller('HelpaddstrCtrl', function ($scope, $state) {
     $scope.gocreatestudent = function () {
-		$state.go("tab.create-student");
+        $state.go("tab.create-student");
     }
 });
