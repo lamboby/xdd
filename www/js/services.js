@@ -502,7 +502,7 @@
                     		var serverAppVersion=data.Data[0].new_ver;
 							if (itru_force!=data.Data[0].force){
 								var confirmPopup = $ionicPopup.confirm({
-                					title: '发现新版本V'+data.Data[0].app_new_ver,
+                					title: '发现新版本V'+serverAppVersion,
                 					template:'此版本有较大更新,强烈建议您更新后使用.<br>'+data.Data[0].content,
                 					cancelText: '以后再说',
                 					okText: '开始更新'
@@ -516,7 +516,7 @@
 									if (itru_showUpdate()!=serverAppVersion){
 										itru_showUpdate(serverAppVersion);
                     					var confirmPopup = $ionicPopup.confirm({
-                							title: '发现新版本:'+data.Data[0].app_new_ver,
+                							title: '发现新版本:'+serverAppVersion,
                 							template: data.Data[0].content,
                 							cancelText: '以后再说',
                 							okText: '开始更新'

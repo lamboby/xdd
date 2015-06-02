@@ -158,7 +158,7 @@
                         var serverAppVersion = data.Data[0].new_ver;
                         if (version != serverAppVersion) {
                             var confirmPopup = $ionicPopup.confirm({
-                                title: '检测到更新:V' + data.Data[0].app_new_ver,
+                                title: '检测到更新:V' + serverAppVersion,
                                 template: data.Data[0].content,
                                 cancelText: '以后再说',
                                 okText: '开始更新'
