@@ -18,7 +18,7 @@
     var itru_ossChannel = "";//服务节点
     var itru_ossStyle = "";//样式规则
     var itru_ossDomain = "";//域名
-    var itru_isTest = false;
+    var itru_isTest = true;
     var itru_reload = false;
 	var itru_force=0;
 	var itru_temp=false;//测试用,以后删除
