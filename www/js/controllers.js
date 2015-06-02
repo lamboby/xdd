@@ -96,7 +96,13 @@
         phone: '',
         password: ''
     };
-    if (itru_isTest()) $scope.pattern = "[内测模式]";
+    if (itru_isTest()) {
+		$scope.pattern = "[内测模式]";
+		itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
+	}
+	else
+		itru_serviceUrl = "http://svr.itrustoor.com:8080/api/";
+		
     $scope.telchange = function () {
         if ($scope.user.phone == "0.01") {
             $scope.pattern = "[内测模式]";
