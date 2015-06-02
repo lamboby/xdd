@@ -1128,48 +1128,44 @@
     };
 
     $scope.upload = function (img, showProgress, callback) {
-        try {
-            Utils.loading();
-            var url = "http://" + itru_ossBucket + ".oss-cn-" + itru_ossChannel + ".aliyuncs.com";
-            var fileName = itru_userId() + "-" + new Date().getTime();
+        Utils.loading();
+        var url = "http://" + itru_ossBucket + ".oss-cn-" + itru_ossChannel + ".aliyuncs.com";
+        var fileName = itru_userId() + "-" + new Date().getTime();
 
-            var options = new FileUploadOptions();
-            options.fileKey = "file";
-            options.fileName = fileName;
-            options.mineType = "image/jpeg";
-            options.params = {
-                "key": fileName,
-                "Content-Type": "image/jpeg",
-                "OSSAccessKeyId": itru_ossKey,
-                "policy": $scope.getPolicy(),
-                "signature": $scope.getSignature()
-            };
+        var options = new FileUploadOptions();
+        options.fileKey = "file";
+        options.fileName = fileName;
+        options.mineType = "image/jpeg";
+        options.params = {
+            "key": fileName,
+            "Content-Type": "image/jpeg",
+            "OSSAccessKeyId": itru_ossKey,
+            "policy": $scope.getPolicy(),
+            "signature": $scope.getSignature()
+        };
 
+        if (showProgress)
             $scope.current.progress = "正在上传 0%";
 
-            $cordovaFileTransfer.upload(url, img, options)
-             .then(function (result) {
-                 callback(url, fileName);
-             }, function (error) {
-                 $scope.current.progress = "上 传";
-                 $scope.current.showProgress = false;
-                 Utils.hideLoading();
-                 var msg = "上传失败!</br>" +
-                      "code:" + error.code + "</br>" +
-                      "status:" + error.http_status;
-                 Utils.alert(msg);
-             }, function (progress) {
-                 if (showProgress)
-                     $scope.current.progress = "正在上传 " + (progress.loaded / progress.total).toFixed(2) * 100.00 + "%";
-             });
-        }
-        catch (ex) {
-            Utils.alert("exception:" + ex);
-        }
+        $cordovaFileTransfer.upload(url, img, options)
+         .then(function (result) {
+             callback(url, fileName);
+         }, function (error) {
+             $scope.current.progress = "上 传";
+             $scope.current.showProgress = false;
+             Utils.hideLoading();
+             var msg = "上传失败!</br>" +
+                  "code:" + error.code + "</br>" +
+                  "status:" + error.http_status;
+             Utils.alert(msg);
+         }, function (progress) {
+             if (showProgress)
+                 $scope.current.progress = "正在上传 " + (progress.loaded / progress.total).toFixed(2) * 100.00 + "%";
+         });
     };
 
-    $scope.delete = function () {
-        var url = "http://" + itru_ossBucket + ".oss-cn-" + itru_ossChannel + ".aliyuncs.com/DELETE/" + $scope.current.origin_path;
+    $scope.delete = function (callback) {
+        var url = "http://" + itru_ossBucket + ".oss-cn-" + itru_ossChannel + ".aliyuncs.com/" + $scope.current.origin_path;
         $.ajax({
             type: "DELETE",
             url: url,
@@ -1178,36 +1174,13 @@
                 Authorization: $scope.getSignature()
             },
             dataType: "json",
-            success: function (data, textStatus) {
-                var msg = "";
-                for (var item in data) {
-                    var val = data[item];
-                    if (val instanceof Array)
-                        msg += item + ":" + JSON.stringify(val) + "<br/>";
-                    else
-                        msg += item + ":" + val + "<br/>";
-                }
-                Utils.alert(textStatus + "<br/>" + msg);
+            success: function (data) {
+                callback();
+            },
+            error: function () {
+                callback();
             }
         });
-
-
-        //    url, {
-        //    'bucketName': itru_ossBucket,
-        //    'location': url,
-        //    'objects': $scope.current.origin_path,
-        //    'secToken': $scope.getSignature()
-        //}, function (data, textStatus) {
-        //    var msg = "";
-        //    for (var item in data) {
-        //        var val = data[item];
-        //        if (val instanceof Array)
-        //            msg += item + ":" + JSON.stringify(val) + "<br/>";
-        //        else
-        //            msg += item + ":" + val + "<br/>";
-        //    }
-        //    Utils.alert(msg);
-        //}, 'json');
     };
 
     $scope.save = function () {
@@ -1227,35 +1200,24 @@
                     var src = "http://" + itru_ossDomain + "/" + fileName + "@" + itru_ossStyle;
 
                     $scope.upload(src, false, function (url, fileName) {
-
-                        $scope.delete();
-
-                        var photoUrl = url + "/" + fileName;
-                        var executer = $stateParams.userType == 0 ? Student : Parent;
-                        executer.updatePicture($scope.user.userId, photoUrl, function (data, status) {
-                            $scope.current.progress = "上 传";
-                            if (status == 0) {
-                                itru_userPicture = photoUrl;
-                                $scope.user.picture = photoUrl;
-                                $scope.current.showProgress = false;
-                                Utils.alert("上传成功");
-                            }
-                            else {
-                                $scope.current.showProgress = false;
-                                Utils.error(data, status, "更新照片信息失败");
-                            }
+                        $scope.delete(function () {
+                            var photoUrl = url + "/" + fileName;
+                            var executer = $stateParams.userType == 0 ? Student : Parent;
+                            executer.updatePicture($scope.user.userId, photoUrl, function (data, status) {
+                                $scope.current.progress = "上 传";
+                                if (status == 0) {
+                                    itru_userPicture = photoUrl;
+                                    $scope.user.picture = photoUrl;
+                                    $scope.current.showProgress = false;
+                                    Utils.alert("上传成功");
+                                }
+                                else {
+                                    $scope.current.showProgress = false;
+                                    Utils.error(data, status, "更新照片信息失败");
+                                }
+                            });
                         });
                     });
-
-                    //var targetPath = "cdvfile://localhost/persistent/" + fileName + ".jpg";
-                    //var trustHosts = true
-                    //var options = {};
-                    //$cordovaFileTransfer.download(photoUrl, targetPath, options, trustHosts).then(function (result) {
-
-                    //}, function (err) {
-                    //    Utils.alert("下载异常,错误码:" + err.http_status);
-                    //    $ionicLoading.hide();
-                    //});
                 });
             }
             else {
@@ -1264,22 +1226,6 @@
             }
         });
     };
-
-    //$scope.openLocalStore = function () {
-    //    var options = {
-    //        maximumImagesCount: 1,
-    //        width: 600,
-    //        height: 600,
-    //        quality: 50
-    //    };
-
-    //    $cordovaImagePicker.getPictures(options)
-    //    .then(function (results) {
-    //        $scope.user.picture = results[0];
-    //    }, function (error) {
-    //        //Utils.alert(error);
-    //    });
-    //};
 })
 
 .controller('RingtoneCtrl', function ($scope, $state, Ringtone, Parent, Utils) {
