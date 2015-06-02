@@ -248,14 +248,14 @@
 
 .controller('StudentCtrl', function ($scope, $state, Student, Utils) {
     $scope.isPrimary = itru_isPrimary();
-	
+
     Student.all(function (data, status) {
         if (status == 0)
             $scope.students = data.Data;
         else
             Utils.error(data, status, "获取学生列表失败");
     });
-	$scope.del = function (student) {
+    $scope.del = function (student) {
         Utils.confirm("确定要删除学生吗?", function (res) {
             if (res) {
                 Student.del(student, function (data, status) {
@@ -272,10 +272,10 @@
     $scope.grades = [];
     $scope.classes = [];
     //$scope.supportDatePicker = itru_supportDatePicker();
-	$scope.gohelp=function(){
-		itru_temp=true;//临时使用,后期删除
-		 $state.go("tab.helpaddstu");		
-	}
+    $scope.gohelp = function () {
+        itru_temp = true;//临时使用,后期删除
+        $state.go("tab.helpaddstu");
+    }
     $scope.current = {
         query: "",
         birthdayStr: ""
@@ -1131,7 +1131,7 @@
 
                 var policyBase64 = Base64.encode(JSON.stringify(POLICY_JSON));
                 var signature = b64_hmac_sha1(itru_ossSecret, policyBase64);
-                var url = "http://" + itru_ossBucket + ".oss-cn-hangzhou.aliyuncs.com";
+                var url = "http://" + itru_ossBucket + ".oss-cn-" + itru_ossChannel + ".aliyuncs.com";
                 var fileName = itru_userId() + "-" + new Date().getTime();
 
                 var options = new FileUploadOptions();
@@ -1152,15 +1152,15 @@
                 $cordovaFileTransfer.upload(url, $scope.current.photo_path, options)
                  .then(function (result) {
                      $scope.current.progress = "后期处理中……";
-                     var photoUrl = url + "/" + fileName;
+                     var photoUrl = "http://" + itru_ossDomain + "/" + fileName + "@" + itru_ossStyle;
                      var executer = $stateParams.userType == 0 ? Student : Parent;
                      executer.updatePicture($scope.user.userId, photoUrl, function (data, status) {
                          $scope.current.progress = "上 传";
                          if (status == 0) {
                              itru_userPicture = photoUrl;
+                             $scope.user.picture = photoUrl;
                              $scope.current.showProgress = false;
                              Utils.alert("上传成功");
-                             $state.go("tab.photo");
                          }
                          else {
                              $scope.current.showProgress = false;
@@ -1394,14 +1394,15 @@
         });
     }
 })
-.controller('HelpaddstrCtrl', function ($scope,$state){
-    $scope.gocreatestudent=function(){
-		if (itru_temp){
-			itru_temp=false;
-        	$state.go("tab.create-student");			
-		}
-		else
-			$state.go("tab.student");			
+
+.controller('HelpaddstrCtrl', function ($scope, $state) {
+    $scope.gocreatestudent = function () {
+        if (itru_temp) {
+            itru_temp = false;
+            $state.go("tab.create-student");
+        }
+        else
+            $state.go("tab.student");
 
     }
 });

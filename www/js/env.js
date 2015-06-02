@@ -9,12 +9,15 @@
     var itru_dbVersion = "1.0";
     var itru_dbSize = 1000000;
     var itru_db = null;
-    var itru_userName = "";
-    var itru_userPicture = "";
+    var itru_userName = "";//当前用户名
+    var itru_userPicture = "";//当前用户图片
     var itru_openId = "0";
     var itru_ossKey = "";
     var itru_ossSecret = "";
     var itru_ossBucket = "";
+    var itru_ossChannel = "";//服务节点
+    var itru_ossStyle = "";//样式规则
+    var itru_ossDomain = "";//域名
     var itru_isTest = false;
     var itru_reload = false;
 	var itru_force=0;

@@ -417,6 +417,9 @@
                     itru_ossKey = data.Data[0].accesskey;
                     itru_ossSecret = data.Data[0].secret;
                     itru_ossBucket = data.Data[0].bucket;
+                    itru_ossChannel = data.Data[0].node;
+                    itru_ossDomain = data.Data[0].domain;
+                    itru_ossStyle = data.Data[0].style;
                 });
             }
             else
@@ -425,41 +428,41 @@
     }
 })
 
-.factory('UserService', function (Utils, $cordovaFile, $cordovaFileTransfer, $ionicLoading, $timeout,$cordovaAppVersion, $cordovaFileOpener2,$ionicPopup) {
+.factory('UserService', function (Utils, $cordovaFile, $cordovaFileTransfer, $ionicLoading, $timeout, $cordovaAppVersion, $cordovaFileOpener2, $ionicPopup) {
     var temp_icloudphone;
     var temp_regphone;
     var temp_regpassword;
-	var _temp_download=function(downloadUrl){			
-			$ionicLoading.show({
-				template: "已经下载：0%"
- 			});
-			
-			var url = encodeURI(downloadUrl); //可以从服务端获取更新APP的路径			 
-			var targetPath ="cdvfile://localhost/persistent/" + "xdd.apk"; 
-			var trustHosts = true
-			var options = {};
-			$cordovaFileTransfer.download(downloadUrl, targetPath, options, trustHosts).then(function (result) {
-				 // 打开下载下来的APP
-				$cordovaFileOpener2.open(targetPath, 'application/vnd.android.package-archive').then(function () {
-                 
-				}, function (err) {
-                 	Utils.alert("打开安装程序遇到错误,更新失败");
-				});
-				$ionicLoading.hide();
- 			}, 	function (err) {
-				Utils.alert("下载异常,错误码:"+err.http_status);
-				$ionicLoading.hide();		
- 			}, function (progress) {
-				//文字显示下载百分比
-				$timeout(function () {
-      				var downloadProgress = (progress.loaded / progress.total) * 100;
-					$ionicLoading.show({
- 						template: "已经下载：" + Math.floor(downloadProgress) + "%"
-					});
-					if (downloadProgress > 99) $ionicLoading.hide();
-				})
-			});
-		};
+    var _temp_download = function (downloadUrl) {
+        $ionicLoading.show({
+            template: "已经下载：0%"
+        });
+
+        var url = encodeURI(downloadUrl); //可以从服务端获取更新APP的路径			 
+        var targetPath = "cdvfile://localhost/persistent/" + "xdd.apk";
+        var trustHosts = true
+        var options = {};
+        $cordovaFileTransfer.download(downloadUrl, targetPath, options, trustHosts).then(function (result) {
+            // 打开下载下来的APP
+            $cordovaFileOpener2.open(targetPath, 'application/vnd.android.package-archive').then(function () {
+
+            }, function (err) {
+                Utils.alert("打开安装程序遇到错误,更新失败");
+            });
+            $ionicLoading.hide();
+        }, function (err) {
+            Utils.alert("下载异常,错误码:" + err.http_status);
+            $ionicLoading.hide();
+        }, function (progress) {
+            //文字显示下载百分比
+            $timeout(function () {
+                var downloadProgress = (progress.loaded / progress.total) * 100;
+                $ionicLoading.show({
+                    template: "已经下载：" + Math.floor(downloadProgress) + "%"
+                });
+                if (downloadProgress > 99) $ionicLoading.hide();
+            })
+        });
+    };
     return {
         geticloudphone: function () {
             return temp_icloudphone;
@@ -490,46 +493,46 @@
             }
             catch (exception) { Utils.alert("检测到推送服务异常,可稍后重试或联系客服!"); }
         },
-		appUpdate:function(){
-			var params = {};
+        appUpdate: function () {
+            var params = {};
             Utils.execWithoutToken("configs/getUpdate", params, function (data, status) {
-				if (status == 0) {
-		  			if (data.Data){
-                		$cordovaAppVersion.getAppVersion().then(function (version) {
-                    		var serverAppVersion=data.Data[0].new_ver;
-							if (itru_force!=data.Data[0].force){
-								var confirmPopup = $ionicPopup.confirm({
-                					title: '温馨提示:',
-                					template:'检测到重大更新,app升级后才能保证正常使用',
-                					cancelText: '退出',
-                					okText: '开始更新'
-            					});
-								confirmPopup.then(function (res) {
-                					if (res) _temp_download(data.Data[0].path);
-									else
-										ionic.Platform.exitApp();
-                				})
-							}
-							else{
-								if (version != serverAppVersion) {
-                    				var confirmPopup = $ionicPopup.confirm({
-                						title: '检测到更新',
-                						template: data.Data[0].content,
-                						cancelText: '以后再说',
-                						okText: '开始更新'
-            						});
-            						confirmPopup.then(function (res) {
-                						if (res) _temp_download(data.Data[0].path);
-                					})
-								}
-							};							
-												
-						});
-					}
-				}				
-			});			
-		},
-		checkUpdate: function (callback) {
+                if (status == 0) {
+                    if (data.Data) {
+                        $cordovaAppVersion.getAppVersion().then(function (version) {
+                            var serverAppVersion = data.Data[0].new_ver;
+                            if (itru_force != data.Data[0].force) {
+                                var confirmPopup = $ionicPopup.confirm({
+                                    title: '温馨提示:',
+                                    template: '检测到重大更新,app升级后才能保证正常使用',
+                                    cancelText: '退出',
+                                    okText: '开始更新'
+                                });
+                                confirmPopup.then(function (res) {
+                                    if (res) _temp_download(data.Data[0].path);
+                                    else
+                                        ionic.Platform.exitApp();
+                                })
+                            }
+                            else {
+                                if (version != serverAppVersion) {
+                                    var confirmPopup = $ionicPopup.confirm({
+                                        title: '检测到更新',
+                                        template: data.Data[0].content,
+                                        cancelText: '以后再说',
+                                        okText: '开始更新'
+                                    });
+                                    confirmPopup.then(function (res) {
+                                        if (res) _temp_download(data.Data[0].path);
+                                    })
+                                }
+                            };
+
+                        });
+                    }
+                }
+            });
+        },
+        checkUpdate: function (callback) {
             var params = {};
             Utils.execWithoutToken("configs/getUpdate", params, callback);
         },
@@ -740,5 +743,3 @@
         refreshAccessToken: _accessToken
     }
 });
-
-
