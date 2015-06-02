@@ -129,7 +129,7 @@
         time: '2015-09-08 10:00:55',
         content: '系统于今日 12:00发生故障，现已修复，不便之处请见谅'
     }];
-    if (itru_isTest) news = [{
+    if (itru_isTest()) news = [{
         id: 0,
         title: '版本信息',
         time: '',
@@ -502,8 +502,8 @@
                     		var serverAppVersion=data.Data[0].new_ver;
 							if (itru_force!=data.Data[0].force){
 								var confirmPopup = $ionicPopup.confirm({
-                					title: '发现新版本:V'+data.Data[0].app_new_ver,
-                					template: data.Data[0].content,
+                					title: '发现新版本V'+data.Data[0].app_new_ver,
+                					template:'此版本有较大更新,强烈建议您更新后使用.<br>'+data.Data[0].content,
                 					cancelText: '以后再说',
                 					okText: '开始更新'
             					});
@@ -621,7 +621,7 @@
         itru_familyId(-1);
         itru_userId(-1);        
         itru_reload = true;
-		itru_isTest=false;
+		itru_isTest(-1);
         $state.go("signin");
     };
     var _accessToken = function (callback) {
