@@ -102,6 +102,7 @@
             $scope.pattern = "[内测模式]";
 			itru_isTest(true) ;
             $scope.user.phone = "";
+			itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
             Utils.alert("秘密被你发现了,欢迎进入内测模式.");
         }
     }
