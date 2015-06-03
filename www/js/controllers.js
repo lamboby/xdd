@@ -225,13 +225,13 @@
         News.remove(item);
     };
     $scope.doRefresh = function () {
-        var item = {
-            id: 4,
-            title: '测试数据',
-            time: '2015-09-08 10:00:55',
-            content: '测试测试测试测试测试测试测试测试测试测试'
-        };
-        News.put(item);
+       // var item = {
+       //     id: 4,
+      //      title: '测试数据',
+      //      time: '2015-09-08 10:00:55',
+      //      content: '测试测试测试测试测试测试测试测试测试测试'
+     //   };
+      //  News.put(item);
         $scope.$broadcast('scroll.refreshComplete');
     }
 })
