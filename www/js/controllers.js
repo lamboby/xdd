@@ -225,13 +225,13 @@
         News.remove(item);
     };
     $scope.doRefresh = function () {
-        var item = {
-            id: 4,
-            title: '测试数据',
-            time: '2015-09-08 10:00:55',
-            content: '测试测试测试测试测试测试测试测试测试测试'
-        };
-        News.put(item);
+       // var item = {
+       //     id: 4,
+      //      title: '测试数据',
+      //      time: '2015-09-08 10:00:55',
+      //      content: '测试测试测试测试测试测试测试测试测试测试'
+     //   };
+      //  News.put(item);
         $scope.$broadcast('scroll.refreshComplete');
     }
 })
@@ -820,7 +820,8 @@
 
     $scope.changeStatus = function (card) {
         var statusStr = card.enabled == 0 ? "启用" : "禁用";
-        Utils.confirm("确定要" + statusStr + "卡吗?", function (res) {
+        Utils.confirm("银卡遗失后，可选择停用功能。找回后还可以重新启用。铜卡停用后必须通知园方更新播报器才能真正注销。"+
+		"同样流程可重新启用。<br>"+"确定要" + statusStr + "卡吗?", function (res) {
             if (res) {
                 Card.updateStatus(card, function (data, status) {
                     if (status != 0)
