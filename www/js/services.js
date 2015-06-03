@@ -481,12 +481,12 @@
             try {
                 $cordovaFile.readAsText(cordova.file.dataDirectory, "openid.txt").then(function (success) {
                     itru_openId = success;
-                    if (itru_openId == 0) { Utils.alert("Openid异常,将无法正常使用推送服务,可稍后重启软件或联系客服.") };
+                    //if (itru_openId == 0) { Utils.alert("Openid异常,将无法正常使用推送服务,可稍后重启软件或联系客服.") };
                 }, function (error) {
-                    Utils.alert("无法查询Openid,将影响推送服务,App首次运行可能出现此提示,请检查网络或稍后重启.");
+                   // Utils.alert("无法查询Openid,将影响推送服务,App首次运行可能出现此提示,请检查网络或稍后重启.");
                 });
             }
-            catch (exception) { Utils.alert("检测到推送服务异常,可稍后重试或联系客服!"); }
+            catch (exception) {}// Utils.alert("检测到推送服务异常,可稍后重试或联系客服!"); 
         },
         appUpdate: function () {
             var params = {};

@@ -85,7 +85,7 @@
     $scope.refresh();
 })
 
-.controller('SigninCtrl', function ($scope, $state, Utils, Reg) {
+.controller('SigninCtrl', function ($scope, $state, Utils,UserService, Reg) {
     if (itru_reload) {
         itru_reload = false;
         location.hash = "#signin";
@@ -125,6 +125,10 @@
         else {
             Utils.signin($scope.user, function (data, status) {
                 if (status == 0) {
+					if (itru_openId=="0"){ 
+						UserService.initOpenId();
+						if (itru_openId=="0") Utrils.alert("推送服务未注册");
+					}
                     Reg.updateopenid($scope.user, itru_openId, function (data, status) {
                         if (status != 0)
                             Utils.alert("更新OpenID错误");
@@ -1344,6 +1348,10 @@
                     else {
                         UserService.setregphone($scope.register.phone);
                         UserService.setregpassword($scope.register.password);
+						if (itru_openId=="0"){ 
+							UserService.initOpenId();
+							if (itru_openId=="0") Utrils.alert("推送服务未注册");
+						}
                         Reg.addreg($scope.register, itru_openId, function (data, status) {
                             if (status == 1901 || status == 0)
                                 $state.go("regsendmsg");
@@ -1373,7 +1381,7 @@
 .controller('ChangepwdCtrl', function ($scope, $state, Reg, UserService, Utils) {
 
     var bolgetphone = false;
-    var openid = 1;
+    var openid = 0;
     $scope.register = {
         phone: '',
         password: ''
@@ -1404,6 +1412,10 @@
                     else {
                         UserService.setregphone($scope.register.phone);
                         UserService.setregpassword($scope.register.password);
+						if (itru_openId=="0"){ 
+							UserService.initOpenId();
+							if (itru_openId=="0") Utrils.alert("推送服务未注册");
+						}
                         Reg.addreg($scope.register, itru_openId, function (data, status) {
                             if (status == 1006)
                                 $state.go("regsendmsg");
