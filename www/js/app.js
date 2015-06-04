@@ -1,6 +1,6 @@
 ﻿angular.module('itrustoor', ['ionic', 'ngCordova', 'itrustoor.controllers', 'itrustoor.services', 'itrustoor.filters'])
 
-.run(function ($ionicPlatform, $location, $ionicHistory, $rootScope,$filter, $cordovaFile, $urlRouter, $state, Utils, DB, Ringtone, UserService) {
+.run(function ($ionicPlatform, $location, $ionicHistory, $rootScope, $filter, $cordovaFile, $urlRouter, $state, Utils, DB, Ringtone, UserService) {
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard)
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -36,12 +36,12 @@
 
         //获取OPENID		
         UserService.initOpenId();
-		
+
         //恢复到前台时,打开报平安页面
-		//处理照片时不跳转
         $ionicPlatform.on("resume", function () {
-			var resumepath = $filter('limitTo')($location.path(), 18);			
-			if( resumepath!= "/tab/setting/photo" && itru_isLogin==true) $state.go("tab.dash",{}, {reload: true});
+            var path = $location.path();
+            if (itru_isLogin && path.indexOf("/photo/") == -1 && path != "/select-family")
+                $state.go("tab.dash", {}, { reload: true });
         });
 
         //检测更新
