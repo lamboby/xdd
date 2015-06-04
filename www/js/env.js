@@ -92,6 +92,7 @@
             window.localStorage.removeItem("ISTEST");
         else if (test != null && test != 'undefined')
             window.localStorage.setItem("ISTEST", test);
-        return window.localStorage.getItem("ISTEST");
+        var val = window.localStorage.getItem("ISTEST");
+        return val != null && val === 'true';
     }
 }

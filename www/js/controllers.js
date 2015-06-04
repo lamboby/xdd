@@ -85,7 +85,7 @@
     $scope.refresh();
 })
 
-.controller('SigninCtrl', function ($scope, $state, Utils,UserService, Reg) {
+.controller('SigninCtrl', function ($scope, $state, Utils, UserService, Reg) {
     if (itru_reload) {
         itru_reload = false;
         location.hash = "#signin";
@@ -96,22 +96,24 @@
         phone: '',
         password: ''
     };
+
     if (itru_isTest()) {
-		$scope.pattern = "[内测模式]";
-		itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
-	}
-	else
-		itru_serviceUrl = "http://svr.itrustoor.com:8080/api/";
-		
+        $scope.pattern = "[内测模式]";
+        itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
+    }
+    else
+        itru_serviceUrl = "http://svr.itrustoor.com:8080/api/";
+
     $scope.telchange = function () {
         if ($scope.user.phone == "0.01") {
             $scope.pattern = "[内测模式]";
             itru_isTest(true);
             $scope.user.phone = "";
-			itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
+            itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
             Utils.alert("秘密被你发现了,欢迎进入内测模式.");
         }
-    }
+    };
+
     $scope.signin = function () {
         if (itru_isTest())
             itru_serviceUrl = "http://test.itrustoor.com:8080/api/";
@@ -125,10 +127,10 @@
         else {
             Utils.signin($scope.user, function (data, status) {
                 if (status == 0) {
-					if (itru_openId=="0"){ 
-						UserService.initOpenId();
-						if (itru_openId=="0") Utrils.alert("推送服务未注册");
-					}
+                    if (itru_openId == "0") {
+                        UserService.initOpenId();
+                        if (itru_openId == "0") Utrils.alert("推送服务未注册");
+                    }
                     Reg.updateopenid($scope.user, itru_openId, function (data, status) {
                         if (status != 0)
                             Utils.alert("更新OpenID错误");
@@ -146,7 +148,7 @@
                     Utils.error(data, status, "登录失败");
             });
         }
-    }
+    };
 })
 
 .controller('AboutCtrl', function ($scope, $cordovaAppVersion, UserService, Utils, $cordovaAppVersion, $ionicPopup) {
@@ -229,13 +231,13 @@
         News.remove(item);
     };
     $scope.doRefresh = function () {
-       // var item = {
-       //     id: 4,
-      //      title: '测试数据',
-      //      time: '2015-09-08 10:00:55',
-      //      content: '测试测试测试测试测试测试测试测试测试测试'
-     //   };
-      //  News.put(item);
+        // var item = {
+        //     id: 4,
+        //      title: '测试数据',
+        //      time: '2015-09-08 10:00:55',
+        //      content: '测试测试测试测试测试测试测试测试测试测试'
+        //   };
+        //  News.put(item);
         $scope.$broadcast('scroll.refreshComplete');
     }
 })
@@ -824,15 +826,15 @@
 
     $scope.changeStatus = function (card) {
         var statusStr = card.enabled == 0 ? "启用" : "禁用";
-        Utils.confirm("银卡遗失后，可选择停用功能。找回后还可以重新启用。铜卡停用后必须通知园方更新播报器才能真正注销。"+
-		"同样流程可重新启用。<br>"+"确定要" + statusStr + "卡吗?", function (res) {
-            if (res) {
-                Card.updateStatus(card, function (data, status) {
-                    if (status != 0)
-                        Utils.error(data, status, statusStr + "卡失败");
-                });
-            }
-        });
+        Utils.confirm("银卡遗失后，可选择停用功能。找回后还可以重新启用。铜卡停用后必须通知园方更新播报器才能真正注销。" +
+		"同样流程可重新启用。<br>" + "确定要" + statusStr + "卡吗?", function (res) {
+		    if (res) {
+		        Card.updateStatus(card, function (data, status) {
+		            if (status != 0)
+		                Utils.error(data, status, statusStr + "卡失败");
+		        });
+		    }
+		});
     };
 })
 
@@ -1142,7 +1144,7 @@
     $scope.upload = function (img, showProgress, callback) {
         Utils.loading();
         var url = "http://" + itru_ossBucket + ".oss-cn-" + itru_ossChannel + ".aliyuncs.com";
-        var fileName = itru_userId() + "-" + new Date().getTime();
+        var fileName = $scope.user.userId + "-" + new Date().getTime();
 
         var options = new FileUploadOptions();
         options.fileKey = "file";
@@ -1218,11 +1220,12 @@
                             executer.updatePicture($scope.user.userId, photoUrl, function (data, status) {
                                 $scope.current.progress = "上 传";
                                 if (status == 0) {
-                                    itru_userPicture = photoUrl;
                                     $scope.user.picture = photoUrl;
                                     $scope.current.photo_path = "";
                                     $scope.current.origin_path = "";
                                     $scope.current.showProgress = false;
+                                    if ($scope.user.userId == itru_userId())
+                                        itru_userPicture = photoUrl;
                                     Utils.alert("上传成功");
                                 }
                                 else {
@@ -1348,10 +1351,10 @@
                     else {
                         UserService.setregphone($scope.register.phone);
                         UserService.setregpassword($scope.register.password);
-						if (itru_openId=="0"){ 
-							UserService.initOpenId();
-							if (itru_openId=="0") Utrils.alert("推送服务未注册");
-						}
+                        if (itru_openId == "0") {
+                            UserService.initOpenId();
+                            if (itru_openId == "0") Utrils.alert("推送服务未注册");
+                        }
                         Reg.addreg($scope.register, itru_openId, function (data, status) {
                             if (status == 1901 || status == 0)
                                 $state.go("regsendmsg");
@@ -1412,10 +1415,10 @@
                     else {
                         UserService.setregphone($scope.register.phone);
                         UserService.setregpassword($scope.register.password);
-						if (itru_openId=="0"){ 
-							UserService.initOpenId();
-							if (itru_openId=="0") Utrils.alert("推送服务未注册");
-						}
+                        if (itru_openId == "0") {
+                            UserService.initOpenId();
+                            if (itru_openId == "0") Utrils.alert("推送服务未注册");
+                        }
                         Reg.addreg($scope.register, itru_openId, function (data, status) {
                             if (status == 1006)
                                 $state.go("regsendmsg");
