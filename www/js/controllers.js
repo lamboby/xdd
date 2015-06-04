@@ -1387,7 +1387,6 @@
 .controller('ChangepwdCtrl', function ($scope, $state, Reg, UserService, Utils) {
 
     var bolgetphone = false;
-    var openid = 0;
     $scope.register = {
         phone: '',
         password: ''

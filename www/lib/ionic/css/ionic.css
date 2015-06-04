@@ -852,6 +852,8 @@
   content: "\f3d2"; }
 
 .ion-ios-arrow-right:before {
+	font-size:16px;
+	color:#a4a4a4;
   content: "\f3d3"; }
 
 .ion-ios-arrow-thin-down:before {
@@ -979,6 +981,7 @@
   content: "\f3fb"; }
 
 .ion-ios-checkmark:before {
+	color: #F00;
   content: "\f3ff"; }
 
 .ion-ios-checkmark-empty:before {
@@ -1000,6 +1003,7 @@
   content: "\f402"; }
 
 .ion-ios-close:before {
+	color:	#F00;
   content: "\f406"; }
 
 .ion-ios-close-empty:before {
@@ -1520,6 +1524,7 @@
   content: "\f4af"; }
 
 .ion-ios-star:before {
+	color:#06F;
   content: "\f4b3"; }
 
 .ion-ios-star-half:before {
@@ -1781,6 +1786,7 @@
   content: "\f211"; }
 
 .ion-person-stalker:before {
+	color:	#3C0;
   content: "\f212"; }
 
 .ion-pie-graph:before {
