@@ -127,7 +127,7 @@
                 if (status == 0) {
 					if (itru_openId=="0"){ 
 						UserService.initOpenId();
-						if (itru_openId=="0") Utrils.alert("推送服务未注册");
+						if (itru_openId=="0") Utils.alert("推送服务未注册");
 					}
                     Reg.updateopenid($scope.user, itru_openId, function (data, status) {
                         if (status != 0)
@@ -1350,7 +1350,7 @@
                         UserService.setregpassword($scope.register.password);
 						if (itru_openId=="0"){ 
 							UserService.initOpenId();
-							if (itru_openId=="0") Utrils.alert("推送服务未注册");
+							if (itru_openId=="0") Utils.alert("推送服务未注册");
 						}
                         Reg.addreg($scope.register, itru_openId, function (data, status) {
                             if (status == 1901 || status == 0)
@@ -1414,7 +1414,7 @@
                         UserService.setregpassword($scope.register.password);
 						if (itru_openId=="0"){ 
 							UserService.initOpenId();
-							if (itru_openId=="0") Utrils.alert("推送服务未注册");
+							if (itru_openId=="0") Utils.alert("推送服务未注册");
 						}
                         Reg.addreg($scope.register, itru_openId, function (data, status) {
                             if (status == 1006)
