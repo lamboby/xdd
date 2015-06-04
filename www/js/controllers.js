@@ -127,10 +127,11 @@
         else {
             Utils.signin($scope.user, function (data, status) {
                 if (status == 0) {
-                    if (itru_openId == "0") {
-                        UserService.initOpenId();
-                        if (itru_openId == "0") Utrils.alert("推送服务未注册");
-                    }
+					if (itru_openId=="0"){ 
+						UserService.initOpenId();
+						if (itru_openId=="0") Utils.alert("推送服务未注册");
+					}
+
                     Reg.updateopenid($scope.user, itru_openId, function (data, status) {
                         if (status != 0)
                             Utils.alert("更新OpenID错误");
@@ -1360,10 +1361,12 @@
                     else {
                         UserService.setregphone($scope.register.phone);
                         UserService.setregpassword($scope.register.password);
-                        if (itru_openId == "0") {
-                            UserService.initOpenId();
-                            if (itru_openId == "0") Utrils.alert("推送服务未注册");
-                        }
+
+						if (itru_openId=="0"){ 
+							UserService.initOpenId();
+							if (itru_openId=="0") Utils.alert("推送服务未注册");
+						}
+
                         Reg.addreg($scope.register, itru_openId, function (data, status) {
                             if (status == 1901 || status == 0)
                                 $state.go("regsendmsg");
@@ -1424,10 +1427,12 @@
                     else {
                         UserService.setregphone($scope.register.phone);
                         UserService.setregpassword($scope.register.password);
-                        if (itru_openId == "0") {
-                            UserService.initOpenId();
-                            if (itru_openId == "0") Utrils.alert("推送服务未注册");
-                        }
+
+						if (itru_openId=="0"){ 
+							UserService.initOpenId();
+							if (itru_openId=="0") Utils.alert("推送服务未注册");
+						}
+
                         Reg.addreg($scope.register, itru_openId, function (data, status) {
                             if (status == 1006)
                                 $state.go("regsendmsg");
