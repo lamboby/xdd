@@ -1076,7 +1076,7 @@
     });
 })
 
-.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaFileTransfer, Parent, Student, Oss, Utils) {
+.controller('TakePhotoCtrl', function ($scope, $state, $stateParams, $cordovaCamera, $cordovaFileTransfer, $cordovaFile, Parent, Student, Oss, Utils) {
     $scope.current = {
         photo_path: "",
         origin_path: "",
@@ -1103,7 +1103,6 @@
     }
 
     $scope.openCamera = function (type) {
-        //$cordovaCamera.cleanup().then(function (msg) { Utils.alert("success:" + msg); }, function (msg) { Utils.alert("error:" + msg); });
         var options = {
             quality: 50,
             destinationType: Camera.DestinationType.FILE_URI,
@@ -1115,9 +1114,19 @@
             saveToPhotoAlbum: false
         };
         $cordovaCamera.getPicture(options).then(function (imageData) {
-            if (type != 0)
-                $scope.user.picture = "";
-            $scope.user.picture = imageData;
+            if (type == 0) {
+                $scope.user.picture = imageData;
+            } else {
+                Utils.loading();
+                $cordovaFile.readAsDataURL(cordova.file.externalCacheDirectory, ".Pic.jpg").then(function (result) {
+                    $scope.user.picture = result;
+                    Utils.hideLoading();
+                },
+                function (error) {
+                    Utils.hideLoading();
+                    Utils.alert("error:" + error.code);
+                });
+            }
             $scope.current.photo_path = imageData;
         }, function (err) {
             if (err != "Camera cancelled." && err != "Selection cancelled.")
