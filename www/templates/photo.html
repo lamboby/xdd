@@ -1,7 +1,7 @@
 ﻿<ion-view view-title="选择成员拍照">
     <ion-content>
         <ion-list>
-            <div class="item item-divider" style="display:{{students.length > 0?'block':'none'}}">
+            <div class="item item-divider"  style="text-align:center; display:{{students.length > 0?'block':'none'}}">
                 学生
             </div>
             <a class="item item-icon-right" href="#/tab/setting/photo/{{student.stu_id}}/0" ng-repeat="student in students">
@@ -9,7 +9,7 @@
                 <i class="icon ion-ios-arrow-right"></i>
             </a>
 
-            <div class="item item-divider" style="display:{{parents.length > 0?'block':'none'}}">
+            <div class="item item-divider" style="text-align:center;display:{{parents.length > 0?'block':'none'}}">
                 家长
             </div>
             <a class="item item-icon-right" href="#/tab/setting/photo/{{parent.user_id}}/1" ng-repeat="parent in parents">
@@ -17,9 +17,7 @@
                 <i class="icon ion-ios-arrow-right"></i>
             </a>
         </ion-list>
-         <span class="no-data" >如果您的孩子在幼儿园,<br/>
-         					请给孩子及接送家长拍摄头部特写照片。<br/>
-                            上传后，该照片会在园方的电视上展示。<br/>
+         <span class="help-data" >&emsp;&emsp;如果您的孩子在幼儿园,请给孩子及接送家长拍摄头部特写照片。上传后，该照片会在园方的电视上展示。<br/>
                              
 		</span>
     </ion-content>
