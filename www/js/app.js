@@ -307,6 +307,24 @@
                 controller: 'HelpaddstrCtrl'
             }
         }
+    })
+	.state('tab.select-createstudent',{
+		url:'/setting/select-createstudent',
+		views:{
+			'tab-setting':{
+				templateUrl:'templates/select-createstudent.html',
+				controller:'SelectCreateStudentCtrl'
+			}
+		}
+	})
+	.state('tab.create-student-snail', {
+        url: '/setting/create-student-snail',
+        views: {
+            'tab-setting': {
+                templateUrl: 'templates/create-student-snail.html',
+                controller: 'CreateStudentSnailCtrl'
+            }
+        }
     });
     $urlRouterProvider.otherwise('/tab/dash');
 });

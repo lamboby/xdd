@@ -61,12 +61,20 @@
     margin-top: 20px;
     display: block;
 }
-.help-data {
-    
+.help-data {    
 	margin-left:8px;
 	margin-right:8px;
     text-align: left;
     color: #a4a4a4;
     margin-top: 80px;
+    display: block;
+}
+.radiolist-data {    
+	margin-left:40px;
+	margin-top:8px;
+	margin-right:8px;
+	margin-bottom:8px;
+    text-align: left;
+    color: #a4a4a4;
     display: block;
 }

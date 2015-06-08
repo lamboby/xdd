@@ -740,4 +740,17 @@
         },
         refreshAccessToken: _accessToken
     }
+})
+
+.factory("Snail", function ($filter, Utils) {
+    var students = [];
+
+    return {
+    	create: function (student, callback) {
+            var params = angular.copy(student);
+            params.fml_id = itru_familyId();
+            Utils.exec("snail/createStudent", params, callback);
+        },
+
+    };
 });

@@ -1458,8 +1458,49 @@
     }
 })
 
-.controller('HelpaddstrCtrl', function ($scope, $state) {
+.controller('HelpaddstrCtrl', function ($scope, $state,$window) {
     $scope.gocreatestudent = function () {
-        $state.go("tab.create-student");
+        //$state.go("tab.create-student");
+		$window.history.back();
     }
+})
+.controller('CreateStudentSnailCtrl', function ($scope, $state, $ionicModal, Snail,Utils) {
+     $scope.student = {
+        stu_name: "",
+        gender: 0,
+        phone: "",
+        pwd:""
+    };    
+	$scope.save = function () {
+        if (!$scope.student.stu_name)
+            Utils.alert("请输入姓名");
+        else if ($scope.student.stu_name.length > 5)
+            Utils.alert("姓名不能超过5个字符");
+        else if (!$scope.student.phone)
+            Utils.alert("无效手机号");
+        else if (!$scope.student.pwd)
+            Utils.alert("请输入密码");
+        else if ($scope.student.confirmpwd!=$scope.student.pwd)
+            Utils.alert("两次输入的密码不一致");
+        else {
+        	Snail.create($scope.student, function (data, status) {
+                if (status == 0)
+                    $state.go("tab.student");
+				else if (status=1006)
+					Utils.alert("手机号已存在");
+                else
+                    Utils.error(data, status, "添加学生失败");
+            });
+        }
+    }
+})
+.controller('SelectCreateStudentCtrl',function($scope,$state,$location){
+	$scope.student={
+		type:"coppercard"};	
+	$scope.submit=function(){
+		if ($scope.student.type=="coppercard")
+			$state.go("tab.create-student")
+		else if($scope.student.type=="snailcard")
+			$state.go("tab.create-student-snail");
+	}
 });
