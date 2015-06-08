@@ -1,0 +1,42 @@
+﻿<ion-view view-title="添加蜗牛卡学生">
+<ion-nav-buttons side="right">
+		<a class="button button-clear icon ion-ios-help-outline" href="#/tab/setting/helpaddstu"></a>
+    </ion-nav-buttons>
+    <ion-content>
+        <form ng-submit="save()" novalidate>
+            <br />
+            <label class="item item-input">
+                <span class="input-label">姓名</span>
+                <input type="text" placeholder="姓名" ng-model="student.stu_name" required>
+            </label>
+
+            <label class="item item-input">
+                <span class="input-label">手机</span>
+                <input type="number" placeholder="输入手机号" ng-model="student.phone" required maxlength="11" minlength="11">
+            </label>
+            <label class="item item-input">
+                <span class="input-label">密码</span>
+                <input type="password" placeholder="输入密码" ng-model="student.pwd" required>
+            </label>
+            <label class="item item-input">
+                <span class="input-label">确认密码</span>
+                <input type="password" placeholder="再输入一次密码" ng-model="student.confirmpwd" required>
+            </label>
+
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    性别
+                </div>
+                <select ng-model="student.gender">
+                    <option value="0" selected>男</option>
+                    <option value="1">女</option>
+                </select>
+            </label>
+
+           
+            <div class="padding">
+                <button class="button button-block button-balanced" type="submit">保 存</button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>
