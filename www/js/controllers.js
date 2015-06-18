@@ -471,22 +471,23 @@
         $scope.student.birthday = new Date($scope.student.birthday);
         $scope.current.birthdayStr = $filter('date')($scope.student.birthday, 'yyyy-MM-dd');
     }
-
-    School.allGrades($scope.student.sch_id, function (data, status) {
-        if (status == 0) {
-            $scope.grades = data.Data[0].grade;
-            if ($scope.grades && $scope.grades.length > 0) {
-                for (i = 0 ; i < $scope.grades.length; i++) {
-                    if ($scope.grades[i].grade_id == $scope.student.grade_id) {
-                        $scope.classes = $scope.grades[i].class;
-                        break;
-                    }
-                }
-            }
-        }
-        else
-            Utils.error(data, status, "获取年级列表失败");
-    });
+	if ($scope.student.grade_id!=0){
+		School.allGrades($scope.student.sch_id, function (data, status) {
+			if (status == 0) {
+				$scope.grades = data.Data[0].grade;
+				if ($scope.grades && $scope.grades.length > 0) {
+					for (i = 0 ; i < $scope.grades.length; i++) {
+						if ($scope.grades[i].grade_id == $scope.student.grade_id) {
+							$scope.classes = $scope.grades[i].class;
+							break;
+						}
+					}
+				}
+			}
+			else
+				Utils.error(data, status, "获取年级列表失败");
+		});
+	};
 
     $ionicModal.fromTemplateUrl('school-modal.html', {
         scope: $scope,
@@ -612,12 +613,12 @@
             Utils.alert("请输入姓名");
         else if ($scope.student.stu_name.length > 20)
             Utils.alert("姓名不能超过20个字符");
-        else if (!$scope.student.sch_id)
-            Utils.alert("请选择学校");
-        else if (!$scope.student.grade_id)
-            Utils.alert("请选择年级");
-        else if (!$scope.student.class_id)
-            Utils.alert("请选择班级");
+       // else if (!$scope.student.sch_id)
+       //     Utils.alert("请选择学校");
+       // else if (!$scope.student.grade_id)
+       //     Utils.alert("请选择年级");
+       // else if (!$scope.student.class_id)
+       //     Utils.alert("请选择班级");
         else if ($scope.current.birthdayStr && !Utils.checkDate($scope.current.birthdayStr))
             Utils.alert("生日的格式不正确");
         else {

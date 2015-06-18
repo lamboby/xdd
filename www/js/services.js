@@ -27,7 +27,7 @@
                                     data.Data[i].user_id = itru_userId();
 
                                 DB.insert("attends", ["user_id", "stu_id", "stu_name", "att_time", "sch_id", "sch_name",
-                                    "add_time", "type", "kind", "error", "entex_name", "entex_type"], data.Data, function () {
+                                    "add_time", "type", "kind", "error", "entex_name", "entex_type","cuid","cu_name"], data.Data, function () {
                                         DB.query("select 1 display_type,* from attends where strftime('%Y-%m-%d',att_time) = ? and user_id = ?", [date, itru_userId()], function (results) {
                                             callback(results.rows, status);
                                             Ringtone.play(itru_ringtone());
@@ -69,7 +69,7 @@
                 if (!itru_isDbInit()) {
                     tx.executeSql('drop table if exists attends');
                     tx.executeSql('CREATE TABLE IF NOT EXISTS ATTENDS (user_id,stu_id,stu_name,att_time,sch_id,' +
-                        'sch_name,add_time,type,kind,error,entex_name,entex_type)', [], function (tx, results) {
+                        'sch_name,add_time,type,kind,error,entex_name,entex_type,cuid,cu_name)', [], function (tx, results) {
                             itru_isDbInit(true);
                         });
                 }
@@ -198,7 +198,9 @@
                 grade_id: student.grade_id,
                 class_id: student.class_id,
                 ssid: student.ssid,
-                sid: student.stu_sid
+                sid: student.stu_sid,
+				pwd:student.stu_pwd
+				
             };
             Utils.exec("students/update", params, callback);
         },

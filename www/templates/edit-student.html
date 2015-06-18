@@ -11,31 +11,39 @@
                 <span class="input-label">手机</span>
                 <input type="text" placeholder="手机" ng-model="student.phone" required>
             </label>
+            
+	          
 
-            <label class="item item-input">
+            <label class="item item-input" style='display:{{student.grade_id == 0 ? "none" :""}}'>
                 <span class="input-label">学校</span>
                 <input type="text" placeholder="学校" ng-model="student.sch_name" ng-click="showModal()" required>
             </label>
-
-            <label class="item item-input item-select">
+            
+            <label class="item item-input item-select" style="display:{{student.grade_id == 0 ? 'none':'block'}}">
                 <div class="input-label">
                     年级
                 </div>
                 <select ng-options="grade.grade_id as grade.name for grade in grades" ng-model="student.grade_id" ng-change="selectGrade()"></select>
             </label>
 
-            <label class="item item-input item-select">
+            <label class="item item-input item-select" style="display:{{student.class_id == 0 ? 'none':'block'}}">
                 <div class="input-label">
                     班级
                 </div>
                 <select ng-options="class.class_id as class.name for class in classes" ng-model="student.class_id" ng-change="selectClass()"></select>
             </label>
+            <label class="item item-input"  style="display:{{student.grade_id == 0 ? '':'none'}}">
+                <div class="input-label">密码</div>
+                <input type="text" placeholder="密码" ng-model="student.stu_pwd" required>
+            </label>
 
-            <label class="item item-input">
+            <label class="item item-input"  >
                 <span class="input-label">学号</span>
                 <input type="text" placeholder="学号" ng-model="student.stu_sid" required>
             </label>
-
+			
+            
+            
             <label class="item item-input item-select">
                 <div class="input-label">
                     性别
